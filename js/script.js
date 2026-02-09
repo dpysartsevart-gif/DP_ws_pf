@@ -1,5 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     
+    // === MOBILE BANNER LOGIC ===
+    const banner = document.getElementById('mobile-banner');
+    const closeBanner = document.getElementById('close-banner');
+    
+    // Check if mobile
+    if (window.innerWidth <= 1000) {
+        if(banner) banner.classList.add('active');
+    }
+    
+    if(closeBanner) {
+        closeBanner.addEventListener('click', () => {
+            if(banner) banner.classList.remove('active');
+            safePlay('snd-select');
+        });
+    }
+
     // === PRELOADER & CURSOR ===
     const preloader = document.getElementById('gallery-preloader');
     const barFill = document.querySelector('.bar-fill');
@@ -29,27 +45,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let mouseX = 0, mouseY = 0;
     let circleX = 0, circleY = 0;
 
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
-        const bg = document.getElementById('parallax-bg');
-        if(bg) {
-            const moveX = (window.innerWidth / 2 - mouseX) * 0.02; 
-            const moveY = (window.innerHeight / 2 - mouseY) * 0.02;
-            bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    // Custom cursor only for desktop
+    if (window.matchMedia("(min-width: 1000px)").matches) {
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
+            const bg = document.getElementById('parallax-bg');
+            if(bg) {
+                const moveX = (window.innerWidth / 2 - mouseX) * 0.02; 
+                const moveY = (window.innerHeight / 2 - mouseY) * 0.02;
+                bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            }
+        });
+
+        function animateCursor() {
+            circleX += (mouseX - circleX) * 0.15; 
+            circleY += (mouseY - circleY) * 0.15;
+            if(circle) { circle.style.left = `${circleX}px`; circle.style.top = `${circleY}px`; }
+            requestAnimationFrame(animateCursor);
         }
-    });
-
-    function animateCursor() {
-        circleX += (mouseX - circleX) * 0.15; 
-        circleY += (mouseY - circleY) * 0.15;
-        if(circle) { circle.style.left = `${circleX}px`; circle.style.top = `${circleY}px`; }
-        requestAnimationFrame(animateCursor);
+        animateCursor();
     }
-    animateCursor();
 
-    const interactables = document.querySelectorAll('a, .menu-item, .project-slot, .back-hint, .shop-btn, .dlc-btn, .buy-btn, .vp-link, .wireframe-trigger, .scroll-container, .projects-scroll-area');
+    const interactables = document.querySelectorAll('a, .menu-item, .project-slot, .back-hint, .shop-btn, .dlc-btn, .buy-btn, .vp-link, .wireframe-trigger, .scroll-container, .projects-scroll-area, .mobile-nav-btn, .banner-btn');
     interactables.forEach(el => {
         el.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
         el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
@@ -63,6 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const vpContent = document.getElementById('viewport-content');
     const achievementPopup = document.getElementById('achievement-popup');
     const donateBtn = document.getElementById('donate-btn');
+    
+    // MOBILE ELEMENTS
+    const sidebar = document.querySelector('.gallery-sidebar');
+    const viewport = document.querySelector('.gallery-viewport');
+    const mobileBackBtn = document.getElementById('btn-back-to-list');
+    const menuBackBtns = document.querySelectorAll('.menu-back-btn');
 
     let currentMenuIndex = 0;
     let inSubMenu = false;
@@ -144,6 +169,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = document.getElementById(screenId);
         if(target) { target.style.display = 'flex'; setTimeout(() => target.classList.add('active-screen'), 10); }
         inSubMenu = true;
+        
+        // Mobile Gallery Reset: Show list, hide viewport
+        if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
+            if(sidebar) sidebar.style.display = 'flex';
+            if(viewport) viewport.style.display = 'none';
+        }
     }
 
     function goBack() {
@@ -152,6 +183,22 @@ document.addEventListener('DOMContentLoaded', () => {
         menu.style.display = 'flex'; setTimeout(() => menu.classList.add('active-screen'), 10);
         inSubMenu = false; safePlay('snd-select');
         if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
+    }
+
+    // MOBILE BACK BUTTON (List -> Menu)
+    menuBackBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            goBack();
+        });
+    });
+
+    // MOBILE BACK BUTTON (Viewport -> List)
+    if(mobileBackBtn) {
+        mobileBackBtn.addEventListener('click', () => {
+            if(viewport) viewport.style.display = 'none';
+            if(sidebar) sidebar.style.display = 'flex';
+            safePlay('snd-select');
+        });
     }
 
     function loadImages(id) {
@@ -221,11 +268,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     projectSlots.forEach(slot => {
+        // Desktop Hover
         slot.addEventListener('mouseenter', () => {
+            if(window.innerWidth > 1000) {
+                projectSlots.forEach(s => s.classList.remove('selected'));
+                slot.classList.add('selected');
+                safePlay('snd-hover');
+                loadImages(slot.dataset.id);
+            }
+        });
+
+        // Click (Both)
+        slot.addEventListener('click', () => {
             projectSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
-            safePlay('snd-hover');
+            safePlay('snd-select');
             loadImages(slot.dataset.id);
+
+            // MOBILE LOGIC: Switch to Viewport
+            if(window.innerWidth <= 1000) {
+                if(sidebar) sidebar.style.display = 'none';
+                if(viewport) viewport.style.display = 'flex';
+                if(vpContent) vpContent.scrollTop = 0;
+            }
         });
     });
 

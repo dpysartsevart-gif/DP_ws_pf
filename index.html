@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dmytro Pysartsev — 3D Artist</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,6 +10,16 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+    <div id="mobile-banner">
+        <div class="banner-content">
+            <div class="banner-icon">⚠️</div>
+            <h3>SYSTEM WARNING</h3>
+            <p>This interface is designed for DESKTOP rendering.</p>
+            <p style="font-size: 12px; color: #888; margin-top: 5px;">Mobile experience is limited. For full immersion, access via PC terminal.</p>
+            <div class="banner-btn" id="close-banner">PROCEED ANYWAY</div>
+        </div>
+    </div>
 
     <div id="gallery-preloader" class="hidden">
         <div class="loader-content">
@@ -88,6 +98,8 @@
                     <h2>PROJECT FILES</h2>
                 </div>
                 
+                <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
+
                 <div class="projects-scroll-area"> 
                     <div class="projects-list">
                         <div class="project-slot" data-id="queen">
@@ -96,11 +108,11 @@
                         </div>
                         <div class="project-slot" data-id="jinx">
                             <div class="slot-thumb jinx-thumb"></div>
-                            <div class="slot-text"><span class="p-title">JINX (FANART)</span><span class="p-desc">Realism / Actually not in arcane style ;) / 2023-24</span></div>
+                            <div class="slot-text"><span class="p-title">JINX (FANART)</span><span class="p-desc">Realism / 2024</span></div>
                         </div>
                         <div class="project-slot" data-id="wod">
                             <div class="slot-thumb wod-thumb"></div>
-                            <div class="slot-text"><span class="p-title">WINGS OF DEATH</span><span class="p-desc">High Poly / Fantasy / 2025</span></div>
+                            <div class="slot-text"><span class="p-title">WINGS OF DEATH</span><span class="p-desc">High Poly / 2025</span></div>
                         </div>
                         <div class="project-slot" data-id="scifi">
                             <div class="slot-thumb sci-thumb"></div>
@@ -108,15 +120,15 @@
                         </div>
                         <div class="project-slot" data-id="sequoia">
                             <div class="slot-thumb seq-thumb"></div>
-                            <div class="slot-text"><span class="p-title">LF SEQUOIA</span><span class="p-desc">Music Video / UE5 / 2023</span></div>
+                            <div class="slot-text"><span class="p-title">LF SEQUOIA</span><span class="p-desc">Music Video / 2023</span></div>
                         </div>
                         <div class="project-slot" data-id="boy">
                             <div class="slot-thumb boy-thumb"></div>
-                            <div class="slot-text"><span class="p-title">THE BOY</span><span class="p-desc">UE5 / Realism / Environment / 2024</span></div>
+                            <div class="slot-text"><span class="p-title">THE BOY</span><span class="p-desc">Environment / 2024</span></div>
                         </div>
                         <div class="project-slot" data-id="mermaid">
                             <div class="slot-thumb mer-thumb"></div>
-                            <div class="slot-text"><span class="p-title">MERMAID</span><span class="p-desc">Creature / Sculpt / 2023</span></div>
+                            <div class="slot-text"><span class="p-title">MERMAID</span><span class="p-desc">Sculpt / 2023</span></div>
                         </div>
                         <div class="project-slot" data-id="halloween">
                             <div class="slot-thumb hal-thumb"></div>
@@ -124,7 +136,7 @@
                         </div>
                         <div class="project-slot" data-id="wolverine">
                             <div class="slot-thumb wolv-thumb"></div>
-                            <div class="slot-text"><span class="p-title">WOLVERINE</span><span class="p-desc">Gamedev / Anatomy / 2022</span></div>
+                            <div class="slot-text"><span class="p-title">WOLVERINE</span><span class="p-desc">Anatomy / 2022</span></div>
                         </div>
                     </div>
                 </div>
@@ -134,8 +146,8 @@
             <div class="gallery-viewport">
                 <div class="header-spacer"></div>
 
-                <div class="mobile-back-btn" id="btn-back-to-list">
-                    ◀ BACK TO PROJECT LIST
+                <div class="mobile-nav-btn" id="btn-back-to-list">
+                    ◀ BACK TO LIST
                 </div>
 
                 <div class="viewport-frame">
@@ -153,6 +165,8 @@
 
         <div id="shop-screen" class="screen hidden">
             <h2>ITEM SHOP (INVENTORY)</h2>
+            <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
+
             <div class="shop-container scroll-container">
                 <div class="shop-item inactive">
                     <div class="shop-icon icon-brush"></div>
@@ -175,6 +189,8 @@
 
         <div id="options-screen" class="screen hidden">
             <h2>SYSTEM CONFIG</h2>
+            <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
+
             <div class="scroll-container">
                 <ul class="settings-list">
                     <li class="setting-category">--- CORE SYSTEMS ---</li>
@@ -211,6 +227,8 @@
 
         <div id="credits-screen" class="screen hidden">
             <h2>CREDITS</h2>
+            <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
+
             <div class="text-content scrollable">
                 <p class="role-title">DMYTRO PYSARTSEV</p>
                 <p class="role-sub">CLASS: 3D CHARACTER ARTIST | LEVEL: SENIOR</p>
@@ -262,13 +280,15 @@
                     </ul>
                 </div>
 
-                <p style="margin-top: 30px; font-size: 14px; color: #666;">Special thanks to coffee and mechanical keyboards.</p>
+                <p style="margin-top: 30px; font-size: 14px; color: #666;">© 2026 DMYTRO PYSARTSEV. ALL RIGHTS RESERVED.</p>
             </div>
             <div class="back-hint">[ESC] BACK</div>
         </div>
 
         <div id="dlc-screen" class="screen hidden dlc-centered">
             
+            <div class="mobile-nav-btn menu-back-btn" style="position: absolute; top: 100px;">◀ MAIN MENU</div>
+
             <div class="coffee-hud">
                 <div class="hud-row">
                     <span class="hud-label">CAFFEINE LEVEL</span>
@@ -313,16 +333,5 @@
     </div>
 
     <script src="js/script.js"></script>
-<div style="
-        position: fixed; 
-        bottom: 45px; /* ПІДНЯВ ВИЩЕ (було 10px) */
-        right: 20px; 
-        color: #444; 
-        font-size: 10px; 
-        z-index: 1000; 
-        pointer-events: none;
-        font-family: 'Oxanium', monospace;">
-        © 2026 DMYTRO PYSARTSEV. ALL RIGHTS RESERVED.
-    </div>
 </body>
 </html>
