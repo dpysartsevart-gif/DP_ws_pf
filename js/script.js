@@ -1,14 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // === MOBILE BANNER LOGIC ===
+    // === 1. ЗМІННІ ТА ЕЛЕМЕНТИ ===
+    const preloader = document.getElementById('gallery-preloader');
+    const barFill = document.querySelector('.bar-fill');
+    const pctText = document.querySelector('.loader-percentage');
+    
+    const dot = document.querySelector('.cursor-dot');
+    const circle = document.querySelector('.cursor-circle');
+    
     const banner = document.getElementById('mobile-banner');
     const closeBanner = document.getElementById('close-banner');
     
-    // Check if mobile
+    const screens = document.querySelectorAll('.screen');
+    const menuItems = document.querySelectorAll('.menu-item');
+    const dlcBtn = document.querySelector('.dlc-btn');
+    const projectSlots = document.querySelectorAll('.project-slot');
+    const vpContent = document.getElementById('viewport-content');
+    const achievementPopup = document.getElementById('achievement-popup');
+    const donateBtn = document.getElementById('donate-btn');
+    
+    // Елементи для мобільної навігації
+    const sidebar = document.querySelector('.gallery-sidebar');
+    const viewport = document.querySelector('.gallery-viewport');
+    const mobileBackBtn = document.getElementById('btn-back-to-list');
+    const menuBackBtns = document.querySelectorAll('.menu-back-btn');
+
+    // Елементи для Email Popup (Десктоп)
+    const emailPopup = document.getElementById('email-popup');
+    const btnEmailConfirm = document.getElementById('btn-email-confirm');
+    const btnEmailCancel = document.getElementById('btn-email-cancel');
+
+    let currentMenuIndex = 0;
+    let inSubMenu = false;
+    let isDlcActive = false;
+    let emailPopupTimer; // Таймер для анімації попапу
+
+    // === 2. МОБІЛЬНИЙ БАНЕР ===
     if (window.innerWidth <= 1000) {
         if(banner) banner.classList.add('active');
     }
-    
     if(closeBanner) {
         closeBanner.addEventListener('click', () => {
             if(banner) banner.classList.remove('active');
@@ -16,13 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === PRELOADER & CURSOR ===
-    const preloader = document.getElementById('gallery-preloader');
-    const barFill = document.querySelector('.bar-fill');
-    const pctText = document.querySelector('.loader-percentage');
-    const dot = document.querySelector('.cursor-dot');
-    const circle = document.querySelector('.cursor-circle');
-    
+    // === 3. PRELOADER ===
     function runGalleryPreloader(callback) {
         if(!preloader) { callback(); return; }
         preloader.classList.remove('hidden');
@@ -42,15 +66,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50);
     }
 
+    // === 4. КУРСОР (ТІЛЬКИ ДЛЯ PC) ===
     let mouseX = 0, mouseY = 0;
     let circleX = 0, circleY = 0;
 
-    // Custom cursor only for desktop
+    // Перевіряємо ширину екрану для курсора
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
+            
+            // Рух крапки
+            if(dot) { 
+                dot.style.left = `${mouseX}px`; 
+                dot.style.top = `${mouseY}px`; 
+            }
+            
+            // Паралакс фону
             const bg = document.getElementById('parallax-bg');
             if(bg) {
                 const moveX = (window.innerWidth / 2 - mouseX) * 0.02; 
@@ -59,41 +91,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Плавний рух кола
         function animateCursor() {
             circleX += (mouseX - circleX) * 0.15; 
             circleY += (mouseY - circleY) * 0.15;
-            if(circle) { circle.style.left = `${circleX}px`; circle.style.top = `${circleY}px`; }
+            if(circle) { 
+                circle.style.left = `${circleX}px`; 
+                circle.style.top = `${circleY}px`; 
+            }
             requestAnimationFrame(animateCursor);
         }
-        animateCursor();
+        animateCursor(); // ЗАПУСК АНІМАЦІЇ
     }
 
+    // Ефекти наведення
     const interactables = document.querySelectorAll('a, .menu-item, .project-slot, .back-hint, .shop-btn, .dlc-btn, .buy-btn, .vp-link, .wireframe-trigger, .scroll-container, .projects-scroll-area, .mobile-nav-btn, .banner-btn');
     interactables.forEach(el => {
         el.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
         el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
     });
 
-    // === CORE LOGIC ===
-    const screens = document.querySelectorAll('.screen');
-    const menuItems = document.querySelectorAll('.menu-item');
-    const dlcBtn = document.querySelector('.dlc-btn');
-    const projectSlots = document.querySelectorAll('.project-slot');
-    const vpContent = document.getElementById('viewport-content');
-    const achievementPopup = document.getElementById('achievement-popup');
-    const donateBtn = document.getElementById('donate-btn');
-    
-    // MOBILE ELEMENTS
-    const sidebar = document.querySelector('.gallery-sidebar');
-    const viewport = document.querySelector('.gallery-viewport');
-    const mobileBackBtn = document.getElementById('btn-back-to-list');
-    const menuBackBtns = document.querySelectorAll('.menu-back-btn');
+    // === 5. ЗВУКИ І ДОСЯГНЕННЯ ===
+    function safePlay(id) {
+        const audio = document.getElementById(id);
+        if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+    }
 
-    let currentMenuIndex = 0;
-    let inSubMenu = false;
-    let isDlcActive = false;
-
-    // Achievement Logic
     const totalProjects = 9; 
     let viewedProjects = new Set();
     let explorerUnlocked = false;
@@ -133,11 +156,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function safePlay(id) {
-        const audio = document.getElementById(id);
-        if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+    // === 6. ЛОГІКА EMAIL POPUP (FIXED) ===
+    function closeEmailPopup() {
+        if(emailPopup) {
+            emailPopup.classList.remove('active-screen');
+            // Приховуємо повністю після завершення анімації CSS (0.3s)
+            clearTimeout(emailPopupTimer);
+            emailPopupTimer = setTimeout(() => { 
+                emailPopup.style.display = 'none'; 
+            }, 300);
+        }
     }
 
+    if(btnEmailConfirm) {
+        btnEmailConfirm.addEventListener('click', () => {
+            safePlay('snd-gamestart');
+            window.location.href = "mailto:DPysartsevArt@gmail.com";
+            closeEmailPopup();
+        });
+    }
+
+    if(btnEmailCancel) {
+        btnEmailCancel.addEventListener('click', () => {
+            safePlay('snd-select');
+            closeEmailPopup();
+        });
+    }
+
+    // === 7. ДАНІ ПРОЕКТІВ ===
     const projectData = {
         'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
@@ -150,8 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'halloween': ['Halloween1.jpg', 'Halloween2.jpg']
     };
 
-    document.addEventListener('click', () => { }, { once: true });
-
+    // === 8. НАВІГАЦІЯ ===
     function showScreen(screenId) {
         if(screenId === 'gallery-screen' && !inSubMenu) {
             runGalleryPreloader(() => { activateScreen(screenId); });
@@ -164,13 +209,14 @@ document.addEventListener('DOMContentLoaded', () => {
         screens.forEach(s => {
             s.classList.remove('active-screen');
             if (s.id === 'dlc-screen') s.classList.add('dlc-centered'); else s.classList.remove('dlc-centered');
-            if (s.id !== screenId) s.style.display = 'none';
+            // Не ховаємо emailPopup, якщо він не активний
+            if (s.id !== screenId && s.id !== 'email-popup') s.style.display = 'none';
         });
         const target = document.getElementById(screenId);
         if(target) { target.style.display = 'flex'; setTimeout(() => target.classList.add('active-screen'), 10); }
         inSubMenu = true;
         
-        // Mobile Gallery Reset: Show list, hide viewport
+        // Mobile Reset
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if(sidebar) sidebar.style.display = 'flex';
             if(viewport) viewport.style.display = 'none';
@@ -178,6 +224,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function goBack() {
+        // Закриваємо попап пошти, якщо він є
+        if(emailPopup && emailPopup.classList.contains('active-screen')) {
+            closeEmailPopup();
+            return; // Не йдемо далі, просто закриваємо попап
+        }
+
         screens.forEach(s => { s.classList.remove('active-screen'); if(s.id !== 'main-menu') s.style.display = 'none'; });
         const menu = document.getElementById('main-menu');
         menu.style.display = 'flex'; setTimeout(() => menu.classList.add('active-screen'), 10);
@@ -185,14 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
     }
 
-    // MOBILE BACK BUTTON (List -> Menu)
-    menuBackBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            goBack();
-        });
-    });
-
-    // MOBILE BACK BUTTON (Viewport -> List)
+    menuBackBtns.forEach(btn => btn.addEventListener('click', goBack));
     if(mobileBackBtn) {
         mobileBackBtn.addEventListener('click', () => {
             if(viewport) viewport.style.display = 'none';
@@ -233,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // === 9. MENU ITEMS CLICK ===
     menuItems.forEach((item, index) => {
         item.addEventListener('mouseenter', () => {
             if(inSubMenu) return;
@@ -243,13 +289,27 @@ document.addEventListener('DOMContentLoaded', () => {
             currentMenuIndex = index;
             safePlay('snd-hover');
         });
+
         item.addEventListener('click', () => {
             const target = item.dataset.target;
             const action = item.dataset.action;
             safePlay('snd-select');
+
+            // NEW GAME LOGIC
             if(action === 'email') {
-                safePlay('snd-gamestart');
-                setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; }, 1000);
+                if (window.innerWidth <= 1000) {
+                    // Mobile: Direct mailto
+                    safePlay('snd-gamestart');
+                    setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; }, 500);
+                } else {
+                    // Desktop: Show Popup
+                    if(emailPopup) {
+                        clearTimeout(emailPopupTimer);
+                        emailPopup.style.display = 'flex'; // Показуємо (було display:none)
+                        // Затримка, щоб спрацювала анімація
+                        setTimeout(() => { emailPopup.classList.add('active-screen'); }, 10);
+                    }
+                }
             } else if (target) {
                 showScreen(target);
             }
@@ -268,7 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     projectSlots.forEach(slot => {
-        // Desktop Hover
         slot.addEventListener('mouseenter', () => {
             if(window.innerWidth > 1000) {
                 projectSlots.forEach(s => s.classList.remove('selected'));
@@ -277,15 +336,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadImages(slot.dataset.id);
             }
         });
-
-        // Click (Both)
         slot.addEventListener('click', () => {
             projectSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
             safePlay('snd-select');
             loadImages(slot.dataset.id);
-
-            // MOBILE LOGIC: Switch to Viewport
             if(window.innerWidth <= 1000) {
                 if(sidebar) sidebar.style.display = 'none';
                 if(viewport) viewport.style.display = 'flex';
@@ -294,13 +349,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelectorAll('.back-hint').forEach(btn => {
-        btn.addEventListener('click', goBack);
-    });
+    document.querySelectorAll('.back-hint').forEach(btn => btn.addEventListener('click', goBack));
 
     document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape' && inSubMenu) goBack();
-        if(!inSubMenu) {
+        if(e.key === 'Escape') {
+            goBack(); // Універсальна функція "Назад" (закриває і попапи)
+        }
+        
+        if(!inSubMenu && (!emailPopup || !emailPopup.classList.contains('active-screen'))) {
             if(e.key === 'ArrowUp') {
                 if(isDlcActive) { isDlcActive = false; dlcBtn.classList.remove('active-dlc'); currentMenuIndex = menuItems.length - 1; } 
                 else { currentMenuIndex = (currentMenuIndex > 0) ? currentMenuIndex - 1 : 0; }
