@@ -351,3 +351,111 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 
 /* Hide buttons on desktop */
 .mobile-nav-btn { display: none; }
+
+/* =========================================
+   MOBILE ADAPTATION (MAX-WIDTH: 1000px)
+   ========================================= */
+@media (max-width: 1000px) {
+    /* 1. ФОН: Виправляємо чорну лінію (Dynamic Viewport Height) */
+    .bg-layer {
+        height: 100vh; /* Fallback */
+        height: 100dvh; /* Сучасний стандарт для мобільних */
+        position: fixed;
+        bottom: 0;
+    }
+
+    /* 2. ЗАГАЛЬНІ ВІДСТУПИ: Робимо вікна ширшими */
+    .ui-layer { padding: 10px; padding-top: 15px; }
+    .screen { padding: 10px; padding-top: 15px; }
+    
+    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
+    h1.glitch { font-size: 36px; letter-spacing: 1px; margin-bottom: 5px; line-height: 1; }
+    .role-subtitle { font-size: 14px; margin-bottom: 10px; }
+    
+    /* ХОВАЄМО ЗАЙВЕ */
+    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
+    
+    /* HUD (Батарейка) - трохи вище і менше */
+    .coffee-hud { top: 10px; right: 10px; transform: scale(0.7); transform-origin: top right; }
+
+    /* МЕНЮ: Відступи */
+    .menu-list { margin-top: 10px; width: 100%; }
+    .menu-item { font-size: 24px; margin-bottom: 12px; padding: 5px 0; }
+    
+    /* ВИПРАВЛЕННЯ DLC КНОПКИ (Щоб не налізала) */
+    .dlc-wrapper { 
+        position: relative !important; /* Більше не фіксована */
+        bottom: auto !important; 
+        left: auto !important;
+        margin-top: 30px; 
+        width: 100%;
+        display: flex;
+        justify-content: center; /* По центру під меню */
+    }
+    .dlc-btn { font-size: 18px; padding: 15px; border: 1px solid #333; background: rgba(0,0,0,0.5); width: 100%; text-align: center; }
+
+    /* ГАЛЕРЕЯ: Максимальний розмір */
+    .gallery-layout { flex-direction: column !important; gap: 0; }
+    
+    /* Сайдбар і Вьюпорт - майже на весь екран */
+    .gallery-sidebar { 
+        width: 100%; 
+        height: 82vh; /* Висота збільшена */
+        display: flex; 
+    }
+    .projects-scroll-area { height: 100%; padding-right: 5px; }
+
+    .gallery-viewport { display: none; width: 100%; height: 82vh; margin-top: 0; }
+    .viewport-frame { height: 100%; }
+    
+    /* NO SPACERS ON MOBILE */
+    .header-spacer, .back-hint { display: none; }
+    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 0; }
+    h2 { font-size: 24px; margin-bottom: 15px; margin-top: 5px; }
+
+    /* MOBILE BUTTONS STYLE */
+    .mobile-nav-btn {
+        display: block !important;
+        background: #111;
+        color: var(--primary-color);
+        text-align: center;
+        padding: 15px; /* Більша кнопка для пальця */
+        border: 1px solid var(--primary-color);
+        margin-bottom: 15px;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-radius: 4px;
+        font-size: 16px;
+        pointer-events: auto;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    
+    /* Ця кнопка в DLC меню теж має бути нормальною */
+    .screen.dlc-centered .mobile-nav-btn {
+        position: relative !important;
+        top: auto !important;
+        margin-bottom: 30px;
+    }
+
+    /* ІНШІ ВІКНА (Shop, Options, Credits) - РОЗТЯГУЄМО */
+    .shop-container, .text-content, .scroll-container { 
+        width: 100%; 
+        max-width: 100%; 
+        max-height: 80vh; /* Висота збільшена */
+        padding: 20px; 
+        margin-bottom: 0;
+        background: rgba(16, 16, 16, 0.95); /* Більш щільний фон */
+    }
+    
+    .settings-list { width: 100%; padding-left: 0; border: none; }
+    .setting-item { font-size: 16px; padding: 8px 0; }
+    
+    /* Вмикаємо банер */
+    #mobile-banner.active { display: flex; }
+    
+    /* Повертаємо курсор */
+    * { cursor: auto !important; }
+}
+
+/* Hide buttons on desktop */
+.mobile-nav-btn { display: none; }
