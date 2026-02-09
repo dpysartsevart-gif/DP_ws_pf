@@ -71,14 +71,26 @@ body {
 /* HEADER */
 .header-top-row { display: flex; align-items: center; gap: 20px; margin-bottom: 5px; pointer-events: auto; }
 
+/* --- ВИПРАВЛЕНИЙ СТИЛЬ ІМЕНІ (H1) --- */
 h1.glitch {
     font-family: 'Teko', sans-serif;
-    font-size: 56px; line-height: 0.9; letter-spacing: 2px; color: var(--text-main); 
-    text-shadow: 0 0 10px rgba(163, 203, 245, 0.1); 
-    margin-bottom: 5px; text-transform: uppercase; position: relative; cursor: default; pointer-events: auto; transition: all 0.3s ease;
+    font-size: 64px; /* Трохи збільшив для солідності */
+    line-height: 0.9; 
+    letter-spacing: 2px; 
+    color: #ffffff; /* ЧИСТИЙ БІЛИЙ КОЛІР */
+    margin-bottom: 5px; 
+    text-transform: uppercase; 
+    position: relative; 
+    cursor: default; 
+    pointer-events: auto; 
+    transition: all 0.3s ease;
+    text-shadow: 0 0 15px rgba(0,0,0,0.5); /* Легка тінь для читабельності */
 }
+
 h1.glitch:hover {
-    color: rgba(163, 203, 245, 0.3); -webkit-text-stroke: 1px rgba(163, 203, 245, 0.5); text-shadow: 0 0 10px rgba(163, 203, 245, 0.3);
+    color: var(--primary-color); /* При наведенні стає ЖОВТИМ */
+    text-shadow: 0 0 20px rgba(247, 213, 62, 0.6); /* Додається світіння */
+    -webkit-text-stroke: 0px; /* Прибираємо дивну обводку */
 }
 
 .scene-3d-mini { width: 30px; height: 30px; perspective: 300px; pointer-events: none; }
@@ -196,7 +208,7 @@ h2 {
 .jinx-thumb { background-image: url('../assets/images/icons/jinxrbg_icon.jpg'); background-position: top; }
 .project-slot:hover .jinx-thumb, .project-slot.selected .jinx-thumb { background-image: url('../assets/images/icons/jinxr_icon.jpg') !important; }
 
-/* WINDOWS */
+/* CREDITS & SHOP & OPTIONS */
 .shop-container, .text-content, .scroll-container {
     max-width: 800px; background: var(--ui-bg); 
     padding: 30px; border: 1px solid var(--ui-border); border-radius: var(--ui-radius); 
@@ -207,13 +219,12 @@ h2 {
     margin-bottom: 20px; 
 }
 
-/* GLOBAL SCROLLBAR STYLES (Повернув сюди!) */
+/* GLOBAL SCROLLBAR STYLES */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #f7d53e 0%, #f7d53e 40%, rgba(247, 213, 62, 0) 100%); border-radius: 5px; }
 ::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #ffe066 0%, #ffe066 50%, rgba(255, 224, 102, 0) 100%); }
 
-/* Також дублюємо для специфічних класів, щоб напевно */
 .shop-container::-webkit-scrollbar, .text-content::-webkit-scrollbar, .scroll-container::-webkit-scrollbar, .projects-scroll-area::-webkit-scrollbar, .vp-content::-webkit-scrollbar { width: 6px; }
 .shop-container::-webkit-scrollbar-track, .text-content::-webkit-scrollbar-track, .scroll-container::-webkit-scrollbar-track, .projects-scroll-area::-webkit-scrollbar-track, .vp-content::-webkit-scrollbar-track { background: transparent; }
 .shop-container::-webkit-scrollbar-thumb, .text-content::-webkit-scrollbar-thumb, .scroll-container::-webkit-scrollbar-thumb, .projects-scroll-area::-webkit-scrollbar-thumb, .vp-content::-webkit-scrollbar-thumb { 
@@ -331,7 +342,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 @media (max-width: 1000px) {
     .ui-layer { padding: 15px; padding-top: 20px; }
     .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
-    h1.glitch { font-size: 36px; letter-spacing: 1px; margin-bottom: 5px; }
+    h1.glitch { font-size: 32px; letter-spacing: 1px; margin-bottom: 5px; }
     .role-subtitle { font-size: 12px; margin-bottom: 10px; }
     
     /* HIDE DECORATIONS */
@@ -340,8 +351,8 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     .dlc-wrapper { bottom: auto; top: auto; position: relative !important; margin-top: 10px; width: 100%; display: flex; justify-content: center; }
 
     /* MENU */
-    .menu-list { margin-top: 5px; }
-    .menu-item { font-size: 20px; margin-bottom: 8px; }
+    .menu-list { margin-top: 5px; width: 100%; padding-left: 10px; }
+    .menu-item { font-size: 24px; margin-bottom: 10px; padding: 5px 0; }
     
     /* GALLERY RESTRUCTURE */
     .gallery-layout { flex-direction: column !important; gap: 0; }
@@ -353,13 +364,13 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     
     /* NO SPACERS ON MOBILE */
     .header-spacer, .back-hint { display: none; }
-    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 0; }
-    h2 { font-size: 22px; margin-bottom: 15px; }
+    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 0; padding-left: 5px; }
+    h2 { font-size: 24px; margin-bottom: 10px; margin-top: 5px; }
 
     /* MOBILE BUTTONS STYLE */
     .mobile-nav-btn {
         display: block !important;
-        background: #222;
+        background: #111;
         color: var(--primary-color);
         text-align: center;
         padding: 15px;
@@ -375,11 +386,15 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 
     /* OTHER WINDOWS (MAXIMIZED) */
     .shop-container, .text-content, .scroll-container { 
-        width: 100%; max-width: 100%; height: 95dvh; max-height: 95dvh; padding: 15px; margin-bottom: 10px;
+        width: 100%; max-width: 100%; height: 95dvh; max-height: 95dvh; padding: 15px; margin-bottom: 0;
     }
     
-    .settings-list { width: 100%; }
-    .setting-item { font-size: 14px; }
+    .project-slot { padding: 15px; }
+    .slot-thumb { width: 100px; height: 60px; }
+    .p-title { font-size: 18px; }
+    
+    .settings-list { width: 100%; padding-left: 0; border: none; }
+    .setting-item { font-size: 16px; padding: 10px 0; }
     
     .dlc-btn { width: 100%; text-align: center; background: rgba(0,0,0,0.5); border: 1px solid #444; padding: 15px; font-size: 18px; }
     
