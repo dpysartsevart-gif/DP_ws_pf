@@ -369,96 +369,114 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
    MOBILE ADAPTATION (MAX-WIDTH: 1000px)
    ========================================= */
 @media (max-width: 1000px) {
-    /* 1. ФОН */
+    /* 1. ФОН: ВИПРАВЛЕННЯ ЧОРНОЇ СМУГИ */
+    /* Робимо фон трохи більшим за екран, щоб перекрити будь-які "стрибки" браузера */
     .bg-layer {
-        height: 100vh; height: 100dvh; position: fixed; bottom: 0; left: 0; width: 100vw;
+        position: fixed;
+        top: -10vh; 
+        left: -10vw;
+        width: 120vw;
+        height: 120vh; 
+        background-size: cover;
+        background-position: center;
     }
 
-    /* 2. МАКСИМАЛЬНЕ ЗБІЛЬШЕННЯ ІНТЕРФЕЙСУ (+30%) */
+    /* ЗАГАЛЬНІ ВІДСТУПИ */
     .ui-layer { padding: 10px; padding-top: 15px; }
     .screen { padding: 10px; padding-top: 15px; }
     
-    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; padding-left: 5px;}
-    
-    /* Гігантський заголовок */
-    h1.glitch { font-size: 48px; letter-spacing: 1px; margin-bottom: 5px; line-height: 0.9; }
-    .role-subtitle { font-size: 16px; margin-bottom: 15px; }
+    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
+    h1.glitch { font-size: 36px; letter-spacing: 1px; margin-bottom: 5px; line-height: 1; }
+    .role-subtitle { font-size: 14px; margin-bottom: 10px; }
     
     /* ХОВАЄМО ЗАЙВЕ */
-    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .copyright-fixed { display: none !important; }
+    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
     
-    /* HUD (Батарейка) - трохи менше, щоб не заважала заголовку */
-    .coffee-hud { top: 15px; right: 15px; transform: scale(0.6); transform-origin: top right; }
+    /* HUD (Батарейка) */
+    .coffee-hud { top: 10px; right: 10px; transform: scale(0.7); transform-origin: top right; }
 
-    /* МЕНЮ - ВЕЛИКЕ І ЗРУЧНЕ */
-    .menu-list { margin-top: 20px; width: 100%; padding-left: 5px; }
-    .menu-item { 
-        font-size: 34px; /* Збільшено з 24px */
-        margin-bottom: 15px; 
-        padding: 5px 0; 
-    } 
+    /* МЕНЮ */
+    .menu-list { margin-top: 10px; width: 100%; }
+    .menu-item { font-size: 24px; margin-bottom: 12px; padding: 5px 0; }
     
-    /* DLC КНОПКА - ЦЕНТРУВАННЯ */
+    /* 2. DLC КНОПКА: ПОВЕРТАЄМО ВНИЗ */
     .dlc-wrapper { 
-        position: relative !important; 
-        bottom: auto !important; 
-        left: 0 !important; /* Фікс зміщення */
-        margin-top: 40px; /* Більший відступ від меню */
-        width: 100%; 
-        display: flex; 
+        position: fixed !important; /* Фіксуємо на екрані */
+        bottom: 40px !important;    /* Відступ від самого низу */
+        left: 50% !important;       /* Центруємо по горизонталі */
+        transform: translateX(-50%); /* Коригуємо центр */
+        width: 90%;                 /* Ширина кнопки */
+        margin-top: 0;
+        display: flex;
         justify-content: center;
+        z-index: 500;
     }
     .dlc-btn { 
-        font-size: 22px; /* Більший текст */
-        padding: 20px; 
-        background: rgba(0,0,0,0.6); 
-        width: 95%; /* Майже на всю ширину */
+        font-size: 18px; 
+        padding: 15px; 
+        border: 1px solid #333; 
+        background: rgba(16, 16, 16, 0.9); /* Темний фон, щоб текст під ним не заважав */
+        width: 100%; 
         text-align: center; 
-        border: 1px solid #444; 
+        box-shadow: 0 0 15px rgba(0,0,0,0.8); /* Тінь, щоб відділити від фону */
     }
 
     /* ГАЛЕРЕЯ */
     .gallery-layout { flex-direction: column !important; gap: 0; }
-    .gallery-sidebar { width: 100%; height: 90dvh; display: flex; }
-    .projects-scroll-area { height: 100%; padding-right: 2px; }
+    .gallery-sidebar { width: 100%; height: 82vh; display: flex; }
+    .projects-scroll-area { height: 100%; padding-right: 5px; }
 
-    .gallery-viewport { display: none; width: 100%; height: 90dvh; margin-top: 0; }
-    .viewport-frame { height: 100%; margin-top: 0; }
+    .gallery-viewport { display: none; width: 100%; height: 82vh; margin-top: 0; }
+    .viewport-frame { height: 100%; }
     
-    /* ВІКНА (Shop, Options, Credits) */
-    .shop-container, .text-content, .scroll-container { 
-        width: 100%; max-width: 100%; height: 90dvh; max-height: 90dvh; 
-        padding: 20px; margin-bottom: 0; background: rgba(16, 16, 16, 0.95);
-    }
-    
-    /* ЗБІЛЬШЕНІ ЕЛЕМЕНТИ СПИСКУ */
-    .project-slot { padding: 20px 10px; margin-bottom: 10px; }
-    .slot-thumb { width: 120px; height: 70px; } /* Більші картинки */
-    .p-title { font-size: 22px; }
-    .p-desc { font-size: 14px; }
+    /* ПРИБИРАЄМО СПЕЙСЕРИ */
+    .header-spacer, .back-hint { display: none; }
+    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 0; }
+    h2 { font-size: 24px; margin-bottom: 15px; margin-top: 5px; }
 
-    .settings-list { width: 100%; padding-left: 0; border: none; }
-    .setting-item { font-size: 20px; padding: 15px 0; }
-
-    /* КНОПКИ НАВІГАЦІЇ */
+    /* МОБІЛЬНІ КНОПКИ */
     .mobile-nav-btn {
         display: block !important;
-        background: #111; color: var(--primary-color); text-align: center;
-        padding: 20px; /* Жирні кнопки */
-        border: 1px solid var(--primary-color); 
+        background: #111;
+        color: var(--primary-color);
+        text-align: center;
+        padding: 15px;
+        border: 1px solid var(--primary-color);
         margin-bottom: 15px;
-        font-weight: bold; text-transform: uppercase; border-radius: 4px; 
-        font-size: 18px;
-        pointer-events: auto; width: 100%;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-radius: 4px;
+        font-size: 16px;
+        pointer-events: auto;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
     
-    /* ПРИХОВУВАННЯ */
-    .header-spacer, .back-hint { display: none; }
-    .sidebar-header-container { height: auto; margin-bottom: 15px; padding-top: 0; padding-left: 5px; }
-    h2 { font-size: 32px; margin-bottom: 15px; margin-top: 5px; }
+    /* Кнопка "Main Menu" всередині DLC екрану */
+    .screen.dlc-centered .mobile-nav-btn {
+        position: relative !important;
+        top: auto !important;
+        margin-bottom: 30px;
+    }
+
+    /* ВІКНА (Shop, Options, Credits) */
+    .shop-container, .text-content, .scroll-container { 
+        width: 100%; 
+        max-width: 100%; 
+        max-height: 75vh; /* Трохи менше, щоб не налізало на кнопку DLC */
+        padding: 20px; 
+        margin-bottom: 0;
+        background: rgba(16, 16, 16, 0.95);
+    }
     
+    .settings-list { width: 100%; padding-left: 0; border: none; }
+    .setting-item { font-size: 16px; padding: 8px 0; }
+    
+    /* БАНЕР */
     #mobile-banner.active { display: flex; }
+    
+    /* КУРСОР */
     * { cursor: auto !important; }
 }
 
+/* Ховаємо мобільні кнопки на ПК */
 .mobile-nav-btn { display: none; }
