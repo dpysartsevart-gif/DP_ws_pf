@@ -88,8 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         function animateCursor() {
-            circleX += (mouseX - circleX) * 0.15; 
-            circleY += (mouseY - circleY) * 0.15;
+            circleX += (mouseX - circleX) * 0.3; // Швидше (було 0.15)
+            circleY += (mouseY - circleY) * 0.3;
             if(circle) { circle.style.left = `${circleX}px`; circle.style.top = `${circleY}px`; }
             requestAnimationFrame(animateCursor);
         }
@@ -185,7 +185,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === ДАНІ ===
+    // === ДАНІ І АЧІВКИ ===
+    const totalProjects = 9; 
+    let viewedProjects = new Set();
+    let explorerUnlocked = false;
+    let supporterUnlocked = false;
+
+    function showAchievement(title, desc, icon) {
+        if(achievementPopup) {
+            const achTitle = achievementPopup.querySelector('.ach-title');
+            const achDesc = document.getElementById('ach-desc');
+            const achIcon = document.getElementById('ach-icon');
+            if(achTitle) achTitle.innerText = title;
+            if(achDesc) achDesc.innerText = desc;
+            if(achIcon) achIcon.innerText = icon;
+            
+            achievementPopup.classList.add('show');
+            safePlay('snd-achievement');
+            setTimeout(() => { achievementPopup.classList.remove('show'); }, 5000);
+        }
+    }
+
+    if(donateBtn) {
+        donateBtn.addEventListener('click', () => {
+            if(!supporterUnlocked) {
+                supporterUnlocked = true;
+                setTimeout(() => {
+                    showAchievement("ACHIEVEMENT UNLOCKED", "ARTIST SUPPORTER (Thank you!)", "❤️");
+                }, 500);
+            }
+        });
+    }
+
     const projectData = {
         'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
@@ -199,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function loadImages(id) {
-        // ACHIEVEMENT CHECK
+        // ACHIEVEMENT CHECK (Повернуто!)
         if(id && !viewedProjects.has(id)) {
             viewedProjects.add(id);
             if(viewedProjects.size === 9 && !explorerUnlocked) {
@@ -333,7 +364,4 @@ document.addEventListener('DOMContentLoaded', () => {
         if(dlcBtn) dlcBtn.classList.remove('active-dlc');
         if(isDlcActive) dlcBtn.classList.add('active-dlc'); else menuItems[currentMenuIndex].classList.add('active');
     }
-    
-    // Support Achievement
-    let viewedProjects = new Set(); 
 });
