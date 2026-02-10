@@ -292,18 +292,16 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .ach-desc { color: #fff; font-size: 12px; font-family: 'Share Tech Mono', monospace; }
 
 /* =========================================
-   MOBILE FULLSCREEN FIXES (REPLACE OLD MOBILE CSS)
+   MOBILE FULLSCREEN FIXES
    ========================================= */
 
 @media (max-width: 1000px) {
-    /* 1. Глобальні налаштування екрану: Прибираємо зайві відступи */
+    /* Налаштування екрану: жодних скролів body, тільки контент */
     html, body { 
         height: 100%; margin: 0; overflow: hidden; background: #000; 
     }
     
-    .bg-layer { position: fixed; inset: 0; width: 100vw; height: 100dvh; background-size: cover; z-index: 0; }
-
-    /* Розтягуємо шар інтерфейсу на весь екран */
+    /* Інтерфейс на весь екран без відступів */
     .ui-layer { 
         padding: 0 !important; 
         width: 100vw; 
@@ -312,39 +310,37 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         flex-direction: column;
     }
 
-    /* Екрани займають весь простір */
+    /* ЕКРАНИ (Shop, Credits, Gallery) */
     .screen {
-        position: fixed; /* Фіксуємо, щоб не їздило */
+        position: fixed; 
         top: 0; left: 0;
         width: 100% !important;
         height: 100% !important;
-        padding: 15px !important;
-        padding-top: 20px !important;
+        padding: 20px !important;
+        padding-top: 30px !important;
         box-sizing: border-box;
-        background: rgba(0,0,0,0.85); /* Затемнення фону */
+        background: rgba(10,10,10,0.95); /* Майже чорний фон */
         z-index: 10;
-        display: none; /* JS увімкне потрібний */
+        display: none;
     }
-    
-    .screen.active-screen { display: flex !important; }
+    .screen.active-screen { display: flex !important; flex-direction: column; }
 
-    /* 2. РОБИМО ВІКНА ВЕЛИКИМИ (Credits, Shop, Options) */
+    /* РОЗТЯГУЄМО ВІКНА НА ВЕСЬ ЕКРАН */
     .shop-container, .text-content, .scroll-container {
         width: 100% !important;
         max-width: none !important;
         height: auto !important;
-        flex-grow: 1; /* Займає все вільне місце */
+        flex-grow: 1; /* Займає весь доступний простір */
         max-height: none !important;
         margin: 0 !important;
-        border: none !important; /* Прибираємо рамки */
+        border: none !important;
         background: transparent !important;
-        border-radius: 0 !important;
         padding: 0 !important;
-        padding-bottom: 80px !important; /* Місце для футера */
+        padding-bottom: 80px !important; /* Відступ під футер */
         overflow-y: auto !important;
     }
     
-    /* DLC Центрування та розмір */
+    /* DLC Екран */
     .screen.dlc-centered {
         justify-content: center !important;
         align-items: center !important;
@@ -357,128 +353,67 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         border: 2px solid var(--primary-color) !important;
         padding: 20px !important;
         border-radius: 8px !important;
+        margin-top: 20px !important;
     }
 
-    /* 3. ГАЛЕРЕЯ: Список проектів */
-    .gallery-layout {
-        padding: 0 !important;
-        flex-direction: column !important;
-    }
-    
+    /* ГАЛЕРЕЯ: Список */
+    .gallery-layout { padding: 0 !important; flex-direction: column !important; }
     .gallery-sidebar {
-        width: 100% !important;
-        height: 100% !important;
-        padding: 15px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        background: transparent;
+        width: 100% !important; height: 100% !important;
+        padding: 0 !important;
+        display: flex !important; flex-direction: column !important;
     }
-
     .projects-scroll-area {
         flex-grow: 1 !important;
         height: auto !important;
         overflow-y: auto !important;
-        padding-bottom: 50px !important;
+        padding-bottom: 60px !important;
         padding-right: 0 !important;
     }
 
-    /* 4. ГАЛЕРЕЯ: ПЕРЕГЛЯД ЗОБРАЖЕНЬ (ВИПРАВЛЕНО) */
+    /* ГАЛЕРЕЯ: Перегляд */
     .gallery-viewport {
-        position: fixed !important; /* Поверх усього */
-        top: 0; left: 0;
-        width: 100% !important;
-        height: 100% !important;
-        background: #000 !important; /* Чорний фон перекриває список */
-        z-index: 5000 !important; /* Найвищий пріоритет */
-        display: none; /* JS змінить на flex */
-        flex-direction: column;
-        padding: 15px !important;
+        position: fixed !important; top: 0; left: 0;
+        width: 100% !important; height: 100% !important;
+        background: #000 !important; z-index: 5000 !important;
+        display: none; flex-direction: column; padding: 15px !important;
     }
-    
     .gallery-viewport.active-screen { display: flex !important; }
-
     .viewport-frame {
-        width: 100% !important;
-        height: 100% !important;
-        border: none !important;
-        background: transparent !important;
-        display: flex !important;
-        flex-direction: column !important;
-        margin-top: 0 !important;
+        width: 100% !important; height: 100% !important;
+        border: none !important; background: transparent !important;
+        display: flex !important; flex-direction: column !important; margin-top: 0 !important;
     }
-
     #viewport-content {
-        flex-grow: 1 !important;
-        overflow-y: auto !important;
-        padding-bottom: 50px !important;
-        -webkit-overflow-scrolling: touch;
-        display: block !important; /* Гарантуємо відображення */
+        flex-grow: 1 !important; overflow-y: auto !important;
+        padding-bottom: 50px !important; display: block !important;
     }
-
-    /* Картинки на весь екран */
-    .vp-content img, .vp-content video, .vp-content iframe {
-        width: 100% !important;
-        height: auto !important;
-        max-width: none !important;
-        margin-bottom: 20px !important;
-        display: block !important;
+    .vp-content img, .vp-content video {
+        width: 100% !important; height: auto !important;
+        max-width: none !important; margin-bottom: 20px !important; display: block !important;
     }
     
-    /* HEADER FIX у Галереї */
+    /* Хедер галереї (назва і кнопка Artstation) */
     .gallery-header-flex {
-        flex-direction: row; 
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        margin-bottom: 15px;
+        flex-direction: row; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px;
     }
     .gallery-header-flex h2 {
-        font-size: 18px !important;
-        border: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        width: auto !important;
+        font-size: 18px !important; border: none !important; margin: 0 !important; width: auto !important;
     }
 
-    /* 5. UI Елементи */
-    .menu-item {
-        font-size: 32px !important;
-        padding: 15px 0 !important;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        width: 100%;
-    }
-    
+    /* КНОПКИ ТА ШРИФТИ */
+    .menu-item { font-size: 32px !important; padding: 15px 0 !important; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%; }
     h2 { font-size: 28px !important; margin-bottom: 20px !important; border-bottom: 2px solid var(--primary-color) !important; }
-
+    
     .mobile-nav-btn {
-        font-size: 16px !important;
-        padding: 15px !important;
-        margin-bottom: 15px !important;
-        width: 100%;
-        background: #111;
-        border: 1px solid var(--primary-color);
-        z-index: 500;
-        text-align: center;
-        flex-shrink: 0;
-        display: block !important;
+        font-size: 16px !important; padding: 15px !important; margin-bottom: 15px !important;
+        width: 100%; background: #111; border: 1px solid var(--primary-color);
+        z-index: 500; text-align: center; display: block !important;
     }
 
-    /* Ховаємо зайве */
-    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .back-hint, .header-spacer { 
-        display: none !important; 
-    }
+    /* Приховуємо зайве */
+    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .back-hint, .header-spacer { display: none !important; }
     
-    /* Preloader поверх усього */
+    /* Preloader завжди зверху */
     #gallery-preloader { z-index: 999999 !important; background: #000 !important; }
-    
-    /* Відступ для DLC кнопки Main Menu щоб не наїжджала */
-    #dlc-screen .mobile-nav-btn {
-        margin-bottom: 30px !important;
-    }
-    .coffee-hud {
-        position: relative !important;
-        top: auto !important; right: auto !important;
-        transform: scale(1) !important;
-        margin-bottom: 20px !important;
-    }
 }
