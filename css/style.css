@@ -337,79 +337,70 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .banner-btn { margin-top: 20px; border: 1px solid var(--primary-color); padding: 10px 20px; color: var(--primary-color); font-weight: bold; display: inline-block; cursor: pointer; }
 
 /* =========================================
-   FIX: COPYRIGHT & ICONS & MOBILE
+   MOBILE ADAPTATION (MAX-WIDTH: 1000px)
    ========================================= */
-
-/* 1. ГАРАНТОВАНИЙ ПОКАЗ COPYRIGHT (Для всіх пристроїв) */
-.copyright-footer {
-    display: block !important;
-    position: fixed !important;
-    z-index: 99999 !important; /* Поверх усього */
-    color: #444;
-    font-family: 'Oxanium', monospace;
-    font-size: 10px;
-    pointer-events: none;
-    
-    /* Десктоп за замовчуванням */
-    bottom: 45px; 
-    right: 20px;
-    left: auto;
-    transform: none;
-    text-align: right;
-    width: auto;
-}
-
-/* 2. МОБІЛЬНА АДАПТАЦІЯ (Перезаписуємо налаштування) */
 @media (max-width: 1000px) {
-    /* Фон на весь екран */
-    html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
-    .bg-layer { position: fixed; inset: 0; width: 100vw; height: 100dvh; background-size: cover; background-position: center; z-index: 0; }
+    .ui-layer { padding: 15px; padding-top: 20px; }
+    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
+    h1.glitch { font-size: 32px; letter-spacing: 1px; margin-bottom: 5px; }
+    .role-subtitle { font-size: 12px; margin-bottom: 10px; }
     
-    .ui-layer { padding: 15px; height: 100%; overflow: hidden; }
-    .screen { padding: 10px; height: 100%; overflow-y: auto; }
+    /* HIDE DECORATIONS */
+    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .copyright-fixed { display: none !important; }
+    .coffee-hud { top: 20px; right: 20px; transform: scale(0.8); transform-origin: top right; }
+    .dlc-wrapper { bottom: auto; top: auto; position: relative !important; margin-top: 10px; width: 100%; display: flex; justify-content: center; }
+
+    /* MENU */
+    .menu-list { margin-top: 5px; width: 100%; padding-left: 10px; }
+    .menu-item { font-size: 24px; margin-bottom: 10px; padding: 5px 0; }
     
-    /* Кнопка DLC - ВНИЗУ, але над Copyright */
-    .dlc-wrapper { 
-        position: fixed !important;
-        bottom: 50px !important; /* Місце для тексту знизу */
-        left: 50% !important; transform: translateX(-50%);
-        width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0;
-    }
+    /* GALLERY RESTRUCTURE */
+    .gallery-layout { flex-direction: column !important; gap: 0; }
+    .gallery-sidebar { width: 100%; height: 95dvh; display: flex; }
+    .projects-scroll-area { height: 100%; padding-right: 2px; }
+
+    .gallery-viewport { display: none; width: 100%; height: 95dvh; margin-top: 0; }
+    .viewport-frame { height: 100%; margin-top: 0; }
     
-    /* Copyright - В САМОМУ НИЗУ ПО ЦЕНТРУ */
-    .copyright-footer {
-        bottom: 15px !important;
-        left: 50% !important;
-        right: auto !important;
-        transform: translateX(-50%) !important;
-        text-align: center !important;
-        width: 100% !important;
-        color: #666 !important; /* Трохи світліше для читабельності */
+    /* NO SPACERS ON MOBILE */
+    .header-spacer, .back-hint { display: none; }
+    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 0; padding-left: 5px; }
+    h2 { font-size: 24px; margin-bottom: 10px; margin-top: 5px; }
+
+    /* MOBILE BUTTONS STYLE */
+    .mobile-nav-btn {
+        display: block !important;
+        background: #111;
+        color: var(--primary-color);
+        text-align: center;
+        padding: 15px;
+        border: 1px solid var(--primary-color);
+        margin-bottom: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-radius: 4px;
+        font-size: 16px;
+        pointer-events: auto;
+        width: 100%;
     }
 
-    /* Інші важливі мобільні стилі */
-    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
-    h1.glitch { font-size: 36px; line-height: 1; }
-    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .header-spacer, .back-hint { display: none !important; }
-    
-    .gallery-layout { flex-direction: column !important; gap: 0; }
-    .gallery-sidebar { width: 100%; height: auto; display: flex; flex-grow: 1; padding-bottom: 120px; }
-    .projects-scroll-area { height: 100%; padding-right: 5px; }
-    .gallery-viewport { display: none; width: 100%; height: 100%; margin-top: 0; }
-    
-    /* Кнопка Назад */
-    .mobile-nav-btn {
-        display: block !important; background: #111; color: var(--primary-color); text-align: center;
-        padding: 12px; border: 1px solid var(--primary-color); margin-bottom: 20px;
-        font-weight: bold; font-size: 16px; border-radius: 4px; z-index: 100; pointer-events: auto;
+    /* OTHER WINDOWS (MAXIMIZED) */
+    .shop-container, .text-content, .scroll-container { 
+        width: 100%; max-width: 100%; height: 95dvh; max-height: 95dvh; padding: 15px; margin-bottom: 0;
     }
     
-    /* Стилі для DLC екрану */
-    .screen.dlc-centered { display: flex !important; flex-direction: column !important; padding-top: 20px !important; align-items: center; justify-content: flex-start !important; }
-    .screen.dlc-centered .mobile-nav-btn { order: 1; width: 100%; margin-bottom: 20px; }
-    .coffee-hud { position: relative !important; top: auto !important; right: auto !important; transform: scale(1) !important; order: 2; margin-bottom: 30px; align-self: center; }
-    .screen.dlc-centered .text-content.centered { order: 3; width: 100%; margin-top: 0; }
+    .project-slot { padding: 15px; }
+    .slot-thumb { width: 100px; height: 60px; }
+    .p-title { font-size: 18px; }
     
-    #mobile-banner.active { display: flex; }
+    .settings-list { width: 100%; padding-left: 0; border: none; }
+    .setting-item { font-size: 16px; padding: 10px 0; }
+    
+    .dlc-btn { width: 100%; text-align: center; background: rgba(0,0,0,0.5); border: 1px solid #444; padding: 15px; font-size: 18px; }
+    
+    /* RESTORE CURSOR */
     * { cursor: auto !important; }
 }
+
+/* Hide buttons on desktop */
+.mobile-nav-btn { display: none; }
