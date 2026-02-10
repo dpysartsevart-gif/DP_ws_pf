@@ -31,17 +31,12 @@ body {
     z-index: 1; filter: brightness(0.5); transition: transform 0.1s ease-out; 
 }
 
-/* ВИПРАВЛЕННЯ: FIXED, щоб не було білої смуги справа */
 .scanlines {
-    position: fixed; /* Було absolute */
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
+    position: absolute; inset: 0;
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    background-size: 100% 2px, 3px 100%;
-    pointer-events: none;
-    z-index: 2;
+    background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 2;
 }
+
 /* DUST EFFECT */
 .dust-container {
     position: absolute; inset: 0; pointer-events: none; z-index: 3; overflow: hidden;
@@ -79,22 +74,12 @@ body {
 /* ЗАГОЛОВОК (TEKO) */
 h1.glitch {
     font-family: 'Teko', sans-serif;
-    font-size: 64px; /* Збільшений */
-    line-height: 0.9; 
-    letter-spacing: 2px; 
-    color: #ffffff; 
-    margin-bottom: 5px; 
-    text-transform: uppercase; 
-    position: relative; 
-    cursor: default; 
-    pointer-events: auto; 
-    transition: all 0.3s ease;
-    text-shadow: 0 0 15px rgba(0,0,0,0.5);
+    font-size: 56px; line-height: 0.9; letter-spacing: 2px; color: var(--text-main); 
+    text-shadow: 0 0 10px rgba(163, 203, 245, 0.1); 
+    margin-bottom: 5px; text-transform: uppercase; position: relative; cursor: default; pointer-events: auto; transition: all 0.3s ease;
 }
-
 h1.glitch:hover {
-    color: var(--primary-color);
-    text-shadow: 0 0 20px rgba(247, 213, 62, 0.6);
+    color: rgba(163, 203, 245, 0.3); -webkit-text-stroke: 1px rgba(163, 203, 245, 0.5); text-shadow: 0 0 10px rgba(163, 203, 245, 0.3);
 }
 
 .scene-3d-mini { width: 30px; height: 30px; perspective: 300px; pointer-events: none; }
@@ -115,22 +100,19 @@ h1.glitch:hover {
 
 .role-subtitle { font-size: 16px; color: var(--primary-color); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; text-shadow: 0 0 5px rgba(247, 213, 62, 0.4); }
 
-/* --- ЗАГОЛОВКИ --- */
 h2 { 
     font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; 
     border-bottom: 2px solid var(--primary-color); display: block; width: 100%; 
     padding-bottom: 5px; margin-bottom: 25px; text-transform: uppercase; line-height: 1; 
 }
 
-/* SIDEBAR HEADER */
 .sidebar-header-container h2 { margin-bottom: 0; width: 100%; }
 .sidebar-header-container {
-    width: 100%; display: block; 
-    padding-top: 0; padding-bottom: 0; margin-bottom: 20px; 
-    flex-shrink: 0; box-sizing: border-box; height: auto;
+    height: 60px; width: 100%; display: block; padding-top: 25px; padding-bottom: 5px; margin-bottom: 25px; flex-shrink: 0; box-sizing: border-box;
 }
-
-.header-spacer { display: none; }
+.header-spacer {
+    height: 60px; width: 100%; margin-bottom: 25px; border-bottom: 2px solid transparent; flex-shrink: 0; display: block; 
+}
 
 .menu-list { list-style: none; margin-top: 20px; pointer-events: auto; }
 .menu-item {
@@ -140,11 +122,15 @@ h2 {
 .menu-item.active { color: #fff; transform: translateX(20px); text-shadow: 0 0 8px #b5cced; }
 .menu-item.active::before { content: "▶"; color: var(--primary-color); font-size: 12px; margin-right: 15px; transform: translateY(-2px); }
 
-/* --- GALLERY LAYOUT --- */
+/* --- GALLERY --- */
 .gallery-layout { display: flex !important; flex-direction: row !important; height: 100%; gap: 60px; align-items: flex-start; } 
 .gallery-sidebar { width: 500px; display: flex; flex-direction: column; pointer-events: auto; flex-shrink: 0; }
 
 .projects-scroll-area { flex-grow: 0; height: 70vh; overflow-y: auto; padding-right: 25px; }
+.projects-scroll-area::-webkit-scrollbar { width: 6px; }
+.projects-scroll-area::-webkit-scrollbar-track { background: transparent; }
+.projects-scroll-area::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #f7d53e 0%, #f7d53e 40%, rgba(247, 213, 62, 0) 100%); border-radius: 5px; }
+.projects-scroll-area::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #ffe066 0%, #ffe066 50%, rgba(255, 224, 102, 0) 100%); }
 
 .project-slot {
     padding: 10px; border: 1px solid #333; background: rgba(0,0,0,0.5); margin-bottom: 8px; cursor: pointer; 
@@ -158,67 +144,21 @@ h2 {
 .p-title { font-size: 16px; color: #fff; font-weight: bold; }
 .p-desc { font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-top: 2px; }
 
-/* --- VIEWPORT --- */
 .gallery-viewport { flex-grow: 1; max-width: 1200px; pointer-events: auto; display: flex; flex-direction: column; }
-
-/* NEW EXTERNAL HEADER FOR VIEWPORT */
-.vp-header-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid var(--primary-color); /* YELLOW LINE */
-    margin-bottom: 20px; /* Same margin as sidebar-header-container */
-    padding-bottom: 5px;
-    width: 100%;
-}
-.vp-header-wrapper h2 {
-    border-bottom: none; /* No individual border */
-    margin-bottom: 0;
-    padding-bottom: 0;
-    width: auto;
-}
-
 .viewport-frame { 
-    height: 70vh; 
-    background: linear-gradient(to bottom, rgba(16, 16, 16, 0.6) 0%, rgba(16, 16, 16, 0.2) 100%);
-    display: flex; flex-direction: column; 
-    border: 1px solid #444; border-radius: 6px; 
-    box-shadow: 0 0 20px rgba(0,0,0,0.3); 
-    overflow: hidden; 
-    margin-top: 0; /* NO MARGIN because we have an external header now! */
+    height: 70vh; background: linear-gradient(to bottom, rgba(16, 16, 16, 0.6) 0%, rgba(16, 16, 16, 0.2) 100%);
+    display: flex; flex-direction: column; border: 1px solid #444; border-radius: 6px; box-shadow: 0 0 20px rgba(0,0,0,0.3); overflow: hidden; 
 }
-
-/* Old internal header is gone */
-.vp-header { display: none; } /* Backup hide if HTML wasn't updated perfectly */
-
-.vp-link { 
-    font-size: 14px; 
-    color: #aaa; 
-    text-decoration: none; 
-    border: 1px solid #555; 
-    padding: 5px 15px; 
-    transition: 0.2s; 
-    border-radius: 4px; 
-    font-weight: bold;
-    letter-spacing: 1px;
+.vp-header { 
+    background: transparent; color: var(--primary-color); padding: 15px 20px; font-weight: bold; letter-spacing: 2px; font-size: 14px;
+    border-bottom: none; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
 }
-.vp-link:hover { 
-    color: var(--primary-color); 
-    border-color: var(--primary-color); 
-    background: rgba(247, 213, 62, 0.1);
-}
-
+.vp-header::before { content: "📂"; margin-right: 10px; font-size: 12px; filter: grayscale(1); }
+.vp-link { font-size: 12px; color: #aaa; text-decoration: none; border: 1px solid #555; padding: 2px 8px; transition: 0.2s; border-radius: 4px; }
+.vp-link:hover { color: var(--primary-color); border-color: var(--primary-color); }
 .vp-footer { background: transparent; color: #666; padding: 10px 20px; font-size: 10px; border-top: none; text-align: right; flex-shrink: 0; }
 
-/* CONTENT & SCROLLBAR */
-.vp-content { 
-    flex-grow: 1; 
-    overflow-y: auto; 
-    padding: 0; 
-    text-align: center; 
-    display: block; 
-    min-height: 0; 
-}
+.vp-content { flex-grow: 1; overflow-y: auto; padding: 0; text-align: center; display: block; }
 .vp-content img, .vp-content video, .vp-content iframe {
     max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto 10px auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
@@ -227,17 +167,17 @@ h2 {
 
 /* ICONS */
 .wod-thumb { background-image: url('../assets/images/icons/wod_icon.jpg'); }
-.seq-thumb { background-image: url('../assets/images/icons/sequoia2_icon.jpg'); }
+.seq-thumb { background-image: url('../assets/images/icons/sequoia_icon2.jpg'); }
 .mer-thumb { background-image: url('../assets/images/icons/Mermeid_icon.jpg'); } 
 .sci-thumb { background-image: url('../assets/images/icons/sf_icon.jpg'); }
-.wolv-thumb { background-image: url('../assets/images/icons/wolverine2_icon.jpg'); }
+.wolv-thumb { background-image: url('../assets/images/icons/wolverine_icon2.jpg'); }
 .boy-thumb { background-image: url('../assets/images/icons/boy_icon.jpg'); } 
-.queen-thumb { background-image: url('../assets/images/icons/queen2_icon.jpg'); }
+.queen-thumb { background-image: url('../assets/images/icons/queen_icon2.jpg'); }
 .hal-thumb { background-image: url('../assets/images/icons/Halloween_icon.jpg'); }
 .jinx-thumb { background-image: url('../assets/images/icons/jinxrbg_icon.jpg'); background-position: top; }
 .project-slot:hover .jinx-thumb, .project-slot.selected .jinx-thumb { background-image: url('../assets/images/icons/jinxr_icon.jpg') !important; }
 
-/* WINDOWS */
+/* CREDITS & SHOP & OPTIONS */
 .shop-container, .text-content, .scroll-container {
     max-width: 800px; background: var(--ui-bg); 
     padding: 30px; border: 1px solid var(--ui-border); border-radius: var(--ui-radius); 
@@ -247,16 +187,9 @@ h2 {
     pointer-events: auto; 
     margin-bottom: 20px; 
 }
-
-/* GLOBAL SCROLLBAR STYLES */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #f7d53e 0%, #f7d53e 40%, rgba(247, 213, 62, 0) 100%); border-radius: 5px; }
-::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #ffe066 0%, #ffe066 50%, rgba(255, 224, 102, 0) 100%); }
-
-.shop-container::-webkit-scrollbar, .text-content::-webkit-scrollbar, .scroll-container::-webkit-scrollbar, .projects-scroll-area::-webkit-scrollbar, .vp-content::-webkit-scrollbar { width: 6px; }
-.shop-container::-webkit-scrollbar-track, .text-content::-webkit-scrollbar-track, .scroll-container::-webkit-scrollbar-track, .projects-scroll-area::-webkit-scrollbar-track, .vp-content::-webkit-scrollbar-track { background: transparent; }
-.shop-container::-webkit-scrollbar-thumb, .text-content::-webkit-scrollbar-thumb, .scroll-container::-webkit-scrollbar-thumb, .projects-scroll-area::-webkit-scrollbar-thumb, .vp-content::-webkit-scrollbar-thumb { 
+.shop-container::-webkit-scrollbar, .text-content::-webkit-scrollbar, .scroll-container::-webkit-scrollbar { width: 6px; }
+.shop-container::-webkit-scrollbar-track, .text-content::-webkit-scrollbar-track, .scroll-container::-webkit-scrollbar-track { background: transparent; }
+.shop-container::-webkit-scrollbar-thumb, .text-content::-webkit-scrollbar-thumb, .scroll-container::-webkit-scrollbar-thumb { 
     background: linear-gradient(to bottom, #f7d53e 0%, #f7d53e 40%, rgba(247, 213, 62, 0) 100%); border-radius: 5px; 
 }
 
@@ -294,7 +227,6 @@ h2 {
 .dlc-btn { font-size: 16px; color: #666; cursor: pointer; transition: 0.3s; padding: 8px; font-weight: bold; letter-spacing: 1px; }
 .dlc-btn.active-dlc, .dlc-btn:hover { color: var(--primary-color); text-shadow: 0 0 5px var(--primary-color); }
 .buy-btn { display: inline-block; background: var(--primary-color); color: #000; padding: 15px 30px; text-decoration: none; font-weight: bold; margin-top: 20px; border: 2px solid var(--primary-color); transition: 0.2s; pointer-events: auto;}
-.buy-btn.secondary { background: transparent; color: #888; border-color: #444; }
 .buy-btn:hover { background: transparent; color: var(--primary-color); }
 .centered { text-align: center; }
 
@@ -338,124 +270,57 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .ach-title { font-size: 12px; color: #888; letter-spacing: 1px; }
 .ach-desc { font-size: 16px; font-weight: bold; color: #f7d53e; }
 
-/* COPYRIGHT FIXED */
-.copyright-fixed {
-    position: fixed; bottom: 45px; right: 20px; color: #444; font-size: 10px; z-index: 1000; pointer-events: none; font-family: 'Oxanium', monospace;
-}
+/* SCROLLBAR (FALLBACK) */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #f7d53e 0%, #f7d53e 40%, rgba(247, 213, 62, 0) 100% ); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #ffe066 0%, #ffe066 50%, rgba(255, 224, 102, 0) 100%); }
 
-/* FIX: POPUP CURSOR & CENTER */
-#email-popup {
-    position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh;
-    z-index: 99999; background: rgba(0, 0, 0, 0.85);
-    display: none; align-items: center; justify-content: center;
-    pointer-events: auto; 
-    cursor: auto !important; /* ПРИМУСОВИЙ СИСТЕМНИЙ КУРСОР */
-}
-.popup-content { background: #111; border: 2px solid var(--primary-color); padding: 40px; text-align: center; max-width: 500px; box-shadow: 0 0 30px rgba(247,213,62,0.2); pointer-events: auto; }
-.email-box { background: #222; padding: 15px; margin: 20px 0; border: 1px dashed #555; color: #a3cbf5; font-size: 20px; user-select: text; cursor: text; }
-.popup-buttons { display: flex; gap: 20px; justify-content: center; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
 
 /* BANNER STYLE */
 #mobile-banner {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; text-align: center;
+    display: none; /* За замовчуванням приховано */
+    position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; text-align: center;
 }
-#mobile-banner.active { display: flex; }
+#mobile-banner.active { display: flex; } /* Показуватиметься через JS */
 
 .banner-content { background: #111; border: 2px solid var(--primary-color); padding: 30px; max-width: 90%; border-radius: 10px; box-shadow: 0 0 30px rgba(247, 213, 62, 0.3); }
 .banner-icon { font-size: 40px; margin-bottom: 15px; }
 .banner-btn { margin-top: 20px; border: 1px solid var(--primary-color); padding: 10px 20px; color: var(--primary-color); font-weight: bold; display: inline-block; cursor: pointer; }
 
 /* =========================================
-   COPYRIGHT STYLES (Desktop Default)
+   EMAIL POPUP STYLES
    ========================================= */
-.copyright-footer {
-    position: fixed; 
-    bottom: 45px; 
-    right: 20px; 
-    color: #444; 
-    font-size: 10px; 
-    z-index: 1000; 
-    pointer-events: none;
+.popup-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 20000;
+    display: flex; align-items: center; justify-content: center;
+}
+.popup-content {
+    background: #111; border: 2px solid var(--primary-color); padding: 30px;
+    max-width: 500px; text-align: center; box-shadow: 0 0 30px rgba(247, 213, 62, 0.2);
     font-family: 'Oxanium', monospace;
 }
-
-/* =========================================
-   MOBILE ADAPTATION (MAX-WIDTH: 1000px)
-   ========================================= */
-@media (max-width: 1000px) {
-    /* ... (попередні стилі фону та вікон залишаються такими ж) ... */
-
-    /* 1. ФОН */
-    html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
-    .bg-layer { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background-size: cover; background-position: center; z-index: 0; }
-    
-    /* UI */
-    .ui-layer { padding: 15px; padding-top: 15px; height: 100%; overflow: hidden; }
-    .screen { padding: 10px; height: 100%; overflow-y: auto; }
-    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
-    h1.glitch { font-size: 36px; letter-spacing: 1px; margin-bottom: 5px; line-height: 1; }
-    .role-subtitle { font-size: 14px; margin-bottom: 10px; }
-    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
-
-    /* MENU */
-    .menu-list { margin-top: 15px; width: 100%; }
-    .menu-item { font-size: 26px; margin-bottom: 15px; padding: 5px 0; }
-
-    /* 2. DLC КНОПКА (ПІДНІМАЄМО ВИЩЕ) */
-    .dlc-wrapper { 
-        position: fixed !important;
-        bottom: 60px !important; /* ПІДНЯВ до 60px, щоб знизу вліз текст */
-        left: 50% !important; transform: translateX(-50%);
-        width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0;
-    }
-    .dlc-btn { 
-        font-size: 18px; padding: 15px; border: 2px solid var(--primary-color); 
-        background: rgba(16, 16, 16, 0.95); width: 100%; text-align: center; 
-        box-shadow: 0 5px 20px rgba(0,0,0,0.8); color: var(--primary-color); font-weight: bold;
-    }
-
-    /* 3. COPYRIGHT (ПО ЦЕНТРУ ЗНИЗУ) */
-    .copyright-footer {
-        bottom: 20px !important; /* В самому низу */
-        right: auto !important; left: 50% !important; transform: translateX(-50%);
-        width: 100%; text-align: center;
-        font-size: 10px; color: #666;
-    }
-
-    /* ІНШІ СТИЛІ (Без змін) */
-    .gallery-layout { flex-direction: column !important; gap: 0; }
-    .gallery-sidebar { width: 100%; height: auto; display: flex; flex-grow: 1; padding-bottom: 120px; /* Більше відступ знизу, щоб кнопка не перекривала останні проекти */ }
-    .projects-scroll-area { height: 100%; padding-right: 5px; }
-    .gallery-viewport { display: none; width: 100%; height: 100%; margin-top: 0; }
-    .viewport-frame { height: 100%; }
-    .header-spacer, .back-hint { display: none; }
-    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 0; }
-    h2 { font-size: 24px; margin-bottom: 15px; margin-top: 5px; }
-
-    .mobile-nav-btn {
-        display: block !important; background: #111; color: var(--primary-color); text-align: center;
-        padding: 12px; border: 1px solid var(--primary-color); margin-bottom: 20px;
-        font-weight: bold; text-transform: uppercase; border-radius: 4px; font-size: 16px;
-        pointer-events: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.5); position: relative; z-index: 100; flex-shrink: 0;
-    }
-
-    .screen.dlc-centered {
-        display: flex !important; flex-direction: column !important; justify-content: flex-start !important;
-        padding-top: 20px !important; align-items: center;
-    }
-    .screen.dlc-centered .mobile-nav-btn { width: 100%; order: 1; margin-bottom: 20px; top: auto !important; left: auto !important; position: relative !important; }
-    .coffee-hud { position: relative !important; top: auto !important; right: auto !important; transform: scale(1) !important; order: 2; margin-bottom: 30px; align-self: center; }
-    .screen.dlc-centered .text-content.centered { order: 3; width: 100%; margin-top: 0; }
-
-    .shop-container, .text-content, .scroll-container { 
-        width: 100%; max-width: 100%; max-height: 75vh; padding: 20px; margin-bottom: 0; background: rgba(16, 16, 16, 0.95);
-    }
-    .settings-list { width: 100%; padding-left: 0; border: none; }
-    .setting-item { font-size: 16px; padding: 8px 0; }
-    #mobile-banner.active { display: flex; }
-    * { cursor: auto !important; }
+.popup-content h3 { color: var(--primary-color); font-size: 24px; margin-bottom: 15px; letter-spacing: 1px; }
+.popup-content p { color: #ccc; margin-bottom: 15px; font-size: 16px; }
+.email-address {
+    font-size: 20px !important; color: #fff !important; font-weight: bold;
+    background: #222; padding: 10px; border-radius: 4px; border: 1px dashed #555;
+    margin-bottom: 25px !important;
 }
-.mobile-nav-btn { display: none; }
+.popup-buttons { display: flex; gap: 20px; justify-content: center; }
+.popup-btn {
+    padding: 10px 30px; border: 1px solid var(--primary-color); background: transparent;
+    color: var(--primary-color); font-weight: bold; font-family: 'Oxanium', monospace;
+    font-size: 16px; cursor: pointer; transition: 0.2s;
+}
+.popup-btn:hover { background: var(--primary-color); color: #000; }
+.popup-btn.cancel { border-color: #666; color: #888; }
+.popup-btn.cancel:hover { background: #333; color: #fff; border-color: #fff; }
+
+@media (max-width: 1000px) {
+    #email-popup { display: none !important; }
+}
 
 /* =========================================
    FIX: COPYRIGHT & ICONS & MOBILE
@@ -533,40 +398,4 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     
     #mobile-banner.active { display: flex; }
     * { cursor: auto !important; }
-}
-
-/* =========================================
-   EMAIL POPUP STYLES (NEW)
-   ========================================= */
-.popup-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 20000;
-    display: flex; align-items: center; justify-content: center;
-}
-.popup-content {
-    background: #111; border: 2px solid var(--primary-color); padding: 30px;
-    max-width: 500px; text-align: center; box-shadow: 0 0 30px rgba(247, 213, 62, 0.2);
-    font-family: 'Oxanium', monospace;
-}
-.popup-content h3 {
-    color: var(--primary-color); font-size: 24px; margin-bottom: 15px; letter-spacing: 1px;
-}
-.popup-content p { color: #ccc; margin-bottom: 15px; font-size: 16px; }
-.email-address {
-    font-size: 20px !important; color: #fff !important; font-weight: bold;
-    background: #222; padding: 10px; border-radius: 4px; border: 1px dashed #555;
-    margin-bottom: 25px !important;
-}
-.popup-buttons { display: flex; gap: 20px; justify-content: center; }
-.popup-btn {
-    padding: 10px 30px; border: 1px solid var(--primary-color); background: transparent;
-    color: var(--primary-color); font-weight: bold; font-family: 'Oxanium', monospace;
-    font-size: 16px; cursor: pointer; transition: 0.2s;
-}
-.popup-btn:hover { background: var(--primary-color); color: #000; }
-.popup-btn.cancel { border-color: #666; color: #888; }
-.popup-btn.cancel:hover { background: #333; color: #fff; border-color: #fff; }
-
-/* Приховуємо попап на мобільних (там прямий клік) */
-@media (max-width: 1000px) {
-    #email-popup { display: none !important; }
 }
