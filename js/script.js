@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('.gallery-sidebar');
     const viewport = document.querySelector('.gallery-viewport');
     
-    // Кнопки "Назад" (всі типи)
+    // Кнопки "Назад"
     const allBackBtns = document.querySelectorAll('#btn-back-to-list, .menu-back-btn, .back-hint');
 
     let currentMenuIndex = 0;
@@ -254,17 +254,25 @@ document.addEventListener('DOMContentLoaded', () => {
             currentMenuIndex = index;
             safePlay('snd-hover');
         });
+        
         item.addEventListener('click', () => {
             const target = item.dataset.target;
             const action = item.dataset.action;
-            safePlay('snd-select');
             
-            // --- ВИПРАВЛЕННЯ ДЛЯ NEW GAME (Без затримки) ---
+            // --- ЛОГІКА ДЛЯ NEW GAME (EMAIL) ---
             if(action === 'email') {
-                safePlay('snd-gamestart'); // Звук грає
-                // Відкриваємо пошту миттєво, інакше браузер заблокує
-                window.location.href = "mailto:DPysartsevArt@gmail.com"; 
+                // Граємо ТІЛЬКИ звук старту (без звуку кліку, щоб не було каші)
+                safePlay('snd-gamestart'); 
+                
+                // Чекаємо 800мс, щоб звук встиг програти, а браузер "розслабився"
+                setTimeout(() => { 
+                    window.location.href = "mailto:DPysartsevArt@gmail.com"; 
+                }, 800);
+            
             } else if (target) {
+                // Для всіх інших пунктів граємо стандартний звук
+                safePlay('snd-select');
+                
                 if(target === 'gallery-screen') {
                     runGalleryPreloader(() => { navigateTo(target); });
                 } else {
