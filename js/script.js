@@ -1,10 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // === 1. HISTORY API (Для свайпу назад на мобільному) ===
-    // Ініціалізуємо історію
+    
+    // === 0. HISTORY API (ДОДАНО: Щоб працював свайп на мобільному) ===
     history.replaceState({ screen: 'main-menu', mode: 'list' }, '', '');
-
-    // Слухаємо кнопку "Назад" у браузері/телефоні
     window.addEventListener('popstate', (event) => {
         if (event.state) {
             restoreState(event.state);
@@ -16,54 +13,45 @@ document.addEventListener('DOMContentLoaded', () => {
     function navigateTo(screenId, subMode = 'list') {
         const urlHash = screenId === 'main-menu' ? '' : `#${screenId.replace('-screen', '')}`;
         history.pushState({ screen: screenId, mode: subMode }, '', urlHash);
-        updateUI(screenId, subMode);
+        showScreen(screenId, subMode); // Викликаємо вашу функцію showScreen
     }
 
     function restoreState(state) {
-        updateUI(state.screen, state.mode);
+        // Відновлюємо стан, але якщо це галерея - враховуємо режим
+        showScreen(state.screen, state.mode); 
     }
 
-    function updateUI(screenId, subMode) {
-        // Ховаємо всі екрани
-        screens.forEach(s => {
-            s.classList.remove('active-screen');
-            if (s.id === 'dlc-screen') s.classList.add('dlc-centered'); else s.classList.remove('dlc-centered');
-            if (s.id !== screenId) s.style.display = 'none';
-        });
-
-        // Показуємо потрібний
-        const target = document.getElementById(screenId);
-        if(target) { 
-            target.style.display = screenId === 'dlc-screen' ? 'flex' : 'flex'; 
-            setTimeout(() => target.classList.add('active-screen'), 10); 
-        }
-
-        // Мобільна логіка (Галерея)
-        if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
-            if (subMode === 'viewport') {
-                if(sidebar) sidebar.style.display = 'none';
-                if(viewport) viewport.style.display = 'flex';
-                if(vpContent) vpContent.scrollTop = 0;
-            } else {
-                if(sidebar) sidebar.style.display = 'flex';
-                if(viewport) viewport.style.display = 'none';
-            }
-        }
-
-        // Скидання стану меню
-        inSubMenu = (screenId !== 'main-menu');
-        if(!inSubMenu) {
-            if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
-            projectSlots.forEach(s => s.classList.remove('selected'));
-        }
-    }
-
-
-    // === MOBILE BANNER ===
+    // === 1. ВАШІ ЗМІННІ ===
+    const preloader = document.getElementById('gallery-preloader');
+    const barFill = document.querySelector('.bar-fill');
+    const pctText = document.querySelector('.loader-percentage');
+    const dot = document.querySelector('.cursor-dot');
+    const circle = document.querySelector('.cursor-circle');
     const banner = document.getElementById('mobile-banner');
     const closeBanner = document.getElementById('close-banner');
+    const screens = document.querySelectorAll('.screen');
+    const menuItems = document.querySelectorAll('.menu-item');
+    const dlcBtn = document.querySelector('.dlc-btn');
+    const projectSlots = document.querySelectorAll('.project-slot');
+    const vpContent = document.getElementById('viewport-content');
+    const achievementPopup = document.getElementById('achievement-popup');
+    const donateBtn = document.getElementById('donate-btn');
     
-    // Показуємо банер тільки на мобільних
+    const sidebar = document.querySelector('.gallery-sidebar');
+    const viewport = document.querySelector('.gallery-viewport');
+    const mobileBackBtn = document.getElementById('btn-back-to-list');
+    const menuBackBtns = document.querySelectorAll('.menu-back-btn');
+
+    // Елементи для Email Popup (Десктоп)
+    const emailPopup = document.getElementById('email-popup');
+    const btnEmailConfirm = document.getElementById('btn-email-confirm');
+    const btnEmailCancel = document.getElementById('btn-email-cancel');
+
+    let currentMenuIndex = 0;
+    let inSubMenu = false;
+    let isDlcActive = false;
+
+    // === 2. МОБІЛЬНИЙ БАНЕР ===
     if (window.innerWidth <= 1000) {
         if(banner) banner.classList.add('active');
     }
@@ -74,13 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === PRELOADER & CURSOR ===
-    const preloader = document.getElementById('gallery-preloader');
-    const barFill = document.querySelector('.bar-fill');
-    const pctText = document.querySelector('.loader-percentage');
-    const dot = document.querySelector('.cursor-dot');
-    const circle = document.querySelector('.cursor-circle');
-    
+    // === 3. PRELOADER ===
     function runGalleryPreloader(callback) {
         if(!preloader) { callback(); return; }
         preloader.classList.remove('hidden');
@@ -100,10 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50);
     }
 
+    // === 4. КУРСОР ===
     let mouseX = 0, mouseY = 0;
     let circleX = 0, circleY = 0;
-
-    // Desktop Cursor
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
@@ -116,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             }
         });
-
         function animateCursor() {
             circleX += (mouseX - circleX) * 0.15; 
             circleY += (mouseY - circleY) * 0.15;
@@ -132,23 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
         el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
     });
 
-    // === DOM ELEMENTS ===
-    const screens = document.querySelectorAll('.screen');
-    const menuItems = document.querySelectorAll('.menu-item');
-    const dlcBtn = document.querySelector('.dlc-btn');
-    const projectSlots = document.querySelectorAll('.project-slot');
-    const vpContent = document.getElementById('viewport-content');
-    const achievementPopup = document.getElementById('achievement-popup');
-    const donateBtn = document.getElementById('donate-btn');
-    const sidebar = document.querySelector('.gallery-sidebar');
-    const viewport = document.querySelector('.gallery-viewport');
-    const allBackBtns = document.querySelectorAll('#btn-back-to-list, .menu-back-btn, .back-hint');
+    // === 5. ЗВУКИ ===
+    function safePlay(id) {
+        const audio = document.getElementById(id);
+        if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+    }
 
-    let currentMenuIndex = 0;
-    let inSubMenu = false;
-    let isDlcActive = false;
-
-    // Achievement Logic
     const totalProjects = 9; 
     let viewedProjects = new Set();
     let explorerUnlocked = false;
@@ -188,11 +157,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function safePlay(id) {
-        const audio = document.getElementById(id);
-        if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+    // === 6. ЛОГІКА EMAIL POPUP (ПОВЕРНУТО!) ===
+    function closeEmailPopup() {
+        if(emailPopup) {
+            emailPopup.style.display = 'none';
+        }
     }
 
+    if(btnEmailConfirm) {
+        btnEmailConfirm.addEventListener('click', () => {
+            safePlay('snd-gamestart');
+            window.location.href = "mailto:DPysartsevArt@gmail.com";
+            closeEmailPopup();
+        });
+    }
+
+    if(btnEmailCancel) {
+        btnEmailCancel.addEventListener('click', () => {
+            safePlay('snd-select');
+            closeEmailPopup();
+        });
+    }
+
+    // === 7. ДАНІ ПРОЕКТІВ ===
     const projectData = {
         'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
@@ -205,7 +192,72 @@ document.addEventListener('DOMContentLoaded', () => {
         'halloween': ['Halloween1.jpg', 'Halloween2.jpg']
     };
 
-    document.addEventListener('click', () => { }, { once: true });
+    // === 8. НАВІГАЦІЯ (ОНОВЛЕНО ДЛЯ ІСТОРІЇ) ===
+    function showScreen(screenId, subMode) { // Додав subMode для мобільного
+        if(screenId === 'gallery-screen' && !inSubMenu) {
+            runGalleryPreloader(() => { activateScreen(screenId, subMode); });
+        } else {
+            activateScreen(screenId, subMode);
+        }
+    }
+
+    function activateScreen(screenId, subMode) {
+        screens.forEach(s => {
+            s.classList.remove('active-screen');
+            if (s.id === 'dlc-screen') s.classList.add('dlc-centered'); else s.classList.remove('dlc-centered');
+            if (s.id !== screenId && s.id !== 'email-popup') s.style.display = 'none';
+        });
+        const target = document.getElementById(screenId);
+        if(target) { target.style.display = 'flex'; setTimeout(() => target.classList.add('active-screen'), 10); }
+        inSubMenu = true;
+        
+        // Mobile Reset
+        if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
+            if(subMode === 'viewport') {
+                if(sidebar) sidebar.style.display = 'none';
+                if(viewport) viewport.style.display = 'flex';
+                if(vpContent) vpContent.scrollTop = 0;
+            } else {
+                if(sidebar) sidebar.style.display = 'flex';
+                if(viewport) viewport.style.display = 'none';
+            }
+        }
+    }
+
+    function goBack() {
+        // Якщо відкритий попап пошти - закриваємо тільки його
+        if(emailPopup && emailPopup.style.display === 'flex') {
+            closeEmailPopup();
+            return;
+        }
+
+        // Інакше йдемо назад через історію (щоб і на мобільному свайп працював)
+        if(history.state && history.state.screen !== 'main-menu') {
+            history.back();
+            return;
+        }
+
+        // Фолбек, якщо історії немає (стара логіка)
+        screens.forEach(s => { s.classList.remove('active-screen'); if(s.id !== 'main-menu') s.style.display = 'none'; });
+        const menu = document.getElementById('main-menu');
+        menu.style.display = 'flex'; setTimeout(() => menu.classList.add('active-screen'), 10);
+        inSubMenu = false; safePlay('snd-select');
+        if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
+    }
+
+    // Оновлюємо кнопки назад
+    menuBackBtns.forEach(btn => btn.addEventListener('click', () => {
+        safePlay('snd-select');
+        history.back(); 
+    }));
+    
+    if(mobileBackBtn) {
+        mobileBackBtn.addEventListener('click', () => {
+            safePlay('snd-select');
+            // На мобільному назад з галереї - це теж історія
+            history.back();
+        });
+    }
 
     function loadImages(id) {
         checkExplorer(id);
@@ -239,8 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === INTERACTION (КЛІКИ МЕНЮ) ===
-
+    // === 9. MENU ITEMS CLICK ===
     menuItems.forEach((item, index) => {
         item.addEventListener('mouseenter', () => {
             if(inSubMenu) return;
@@ -251,39 +302,30 @@ document.addEventListener('DOMContentLoaded', () => {
             currentMenuIndex = index;
             safePlay('snd-hover');
         });
-        
+
         item.addEventListener('click', () => {
             const target = item.dataset.target;
             const action = item.dataset.action;
-            
-            // Завжди граємо звук кліку (як ви і хотіли)
             safePlay('snd-select');
 
-            // --- ОСЬ ТУТ ВИПРАВЛЕННЯ ДЛЯ ПОШТИ ---
+            // NEW GAME LOGIC (ПОВЕРНУТО)
             if(action === 'email') {
-                safePlay('snd-gamestart'); 
-                
-                // Трюк: Замість навігації вікном, ми створюємо "віртуальне" посилання і клікаємо його
-                setTimeout(() => { 
-                    const mailLink = document.createElement('a');
-                    mailLink.href = "mailto:DPysartsevArt@gmail.com";
-                    mailLink.style.display = 'none'; // Робимо його невидимим
-                    document.body.appendChild(mailLink);
-                    mailLink.click(); // Імітуємо клік користувача
-                    document.body.removeChild(mailLink); // Прибираємо сміття
-                }, 1000);
-
-            } else if (target) {
-                if(target === 'gallery-screen') {
-                    runGalleryPreloader(() => { navigateTo(target); });
+                if (window.innerWidth <= 1000) {
+                    safePlay('snd-gamestart');
+                    setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; }, 500);
                 } else {
-                    navigateTo(target);
+                    // Desktop: Show Popup
+                    if(emailPopup) {
+                        emailPopup.style.display = 'flex'; // Відкриваємо вікно!
+                    }
                 }
+            } else if (target) {
+                // Використовуємо navigateTo для історії
+                navigateTo(target);
             }
         });
     });
 
-    // Решта коду без змін...
     if(dlcBtn) {
         dlcBtn.addEventListener('mouseenter', () => {
             if(inSubMenu) return;
@@ -307,32 +349,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadImages(slot.dataset.id);
             }
         });
-
         slot.addEventListener('click', () => {
             projectSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
             safePlay('snd-select');
             loadImages(slot.dataset.id);
-
-            // MOBILE LOGIC
+            // Mobile: push to history for viewport
             if(window.innerWidth <= 1000) {
                 navigateTo('gallery-screen', 'viewport');
             }
         });
     });
 
-    allBackBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            safePlay('snd-select');
-            history.back();
-        });
-    });
+    // Back buttons handled above with history.back()
 
     document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape' && inSubMenu) {
-            history.back();
+        if(e.key === 'Escape') {
+            goBack(); // Це закриє попап або поверне назад
         }
-        if(!inSubMenu) {
+        
+        if(!inSubMenu && (!emailPopup || emailPopup.style.display !== 'flex')) {
             if(e.key === 'ArrowUp') {
                 if(isDlcActive) { isDlcActive = false; dlcBtn.classList.remove('active-dlc'); currentMenuIndex = menuItems.length - 1; } 
                 else { currentMenuIndex = (currentMenuIndex > 0) ? currentMenuIndex - 1 : 0; }
