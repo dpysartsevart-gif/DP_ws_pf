@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // === 1. HISTORY API (Щоб працював свайп на телефоні) ===
+    // === 1. HISTORY API (Для свайпу назад на мобільному) ===
+    // Ініціалізуємо історію
     history.replaceState({ screen: 'main-menu', mode: 'list' }, '', '');
 
+    // Слухаємо кнопку "Назад" у браузері/телефоні
     window.addEventListener('popstate', (event) => {
         if (event.state) {
             restoreState(event.state);
@@ -22,14 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUI(screenId, subMode) {
-        // Сховати всі екрани
+        // Ховаємо всі екрани
         screens.forEach(s => {
             s.classList.remove('active-screen');
             if (s.id === 'dlc-screen') s.classList.add('dlc-centered'); else s.classList.remove('dlc-centered');
             if (s.id !== screenId) s.style.display = 'none';
         });
 
-        // Показати потрібний
+        // Показуємо потрібний
         const target = document.getElementById(screenId);
         if(target) { 
             target.style.display = screenId === 'dlc-screen' ? 'flex' : 'flex'; 
@@ -48,10 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Скидання стану
+        // Скидання стану меню
         inSubMenu = (screenId !== 'main-menu');
         if(!inSubMenu) {
-            // Тут звук НЕ граємо (бо це повернення назад), тільки скидаємо вибір
             if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
             projectSlots.forEach(s => s.classList.remove('selected'));
         }
@@ -61,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // === MOBILE BANNER ===
     const banner = document.getElementById('mobile-banner');
     const closeBanner = document.getElementById('close-banner');
+    
+    // Показуємо банер тільки на мобільних
     if (window.innerWidth <= 1000) {
         if(banner) banner.classList.add('active');
     }
@@ -100,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let mouseX = 0, mouseY = 0;
     let circleX = 0, circleY = 0;
 
+    // Desktop Cursor
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
@@ -235,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === INTERACTION (LOGIC RESTORED TO TURN 8 VERSION) ===
+    // === INTERACTION (КЛІКИ МЕНЮ) ===
 
     menuItems.forEach((item, index) => {
         item.addEventListener('mouseenter', () => {
@@ -248,22 +252,28 @@ document.addEventListener('DOMContentLoaded', () => {
             safePlay('snd-hover');
         });
         
-        // Ось тут повернуто логіку 1-в-1 як було раніше
         item.addEventListener('click', () => {
             const target = item.dataset.target;
             const action = item.dataset.action;
             
-            // 1. Граємо звук кліку ЗАВЖДИ
+            // Завжди граємо звук кліку (як ви і хотіли)
             safePlay('snd-select');
 
+            // --- ОСЬ ТУТ ВИПРАВЛЕННЯ ДЛЯ ПОШТИ ---
             if(action === 'email') {
-                // 2. Якщо це New Game - граємо звук гри і чекаємо
                 safePlay('snd-gamestart'); 
+                
+                // Трюк: Замість навігації вікном, ми створюємо "віртуальне" посилання і клікаємо його
                 setTimeout(() => { 
-                    window.location.href = "mailto:DPysartsevArt@gmail.com"; 
+                    const mailLink = document.createElement('a');
+                    mailLink.href = "mailto:DPysartsevArt@gmail.com";
+                    mailLink.style.display = 'none'; // Робимо його невидимим
+                    document.body.appendChild(mailLink);
+                    mailLink.click(); // Імітуємо клік користувача
+                    document.body.removeChild(mailLink); // Прибираємо сміття
                 }, 1000);
+
             } else if (target) {
-                // 3. Якщо це розділ - переходимо
                 if(target === 'gallery-screen') {
                     runGalleryPreloader(() => { navigateTo(target); });
                 } else {
@@ -273,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Решта коду без змін...
     if(dlcBtn) {
         dlcBtn.addEventListener('mouseenter', () => {
             if(inSubMenu) return;
