@@ -5,10 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     window.addEventListener('popstate', (event) => {
         if (event.state) {
-            // Якщо є історія - відкриваємо збережений екран
             showScreen(event.state.screen); 
         } else {
-            // Інакше в меню
             showScreen('main-menu');
         }
     });
@@ -28,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const vpContent = document.getElementById('viewport-content');
     const achievementPopup = document.getElementById('achievement-popup');
     const donateBtn = document.getElementById('donate-btn');
+    
     const sidebar = document.querySelector('.gallery-sidebar');
     const viewport = document.querySelector('.gallery-viewport');
     const mobileBackBtn = document.getElementById('btn-back-to-list');
@@ -71,9 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50);
     }
 
-    // === КУРСОР ===
+    // === КУРСОР (FIX: Збільшена швидкість до 0.3) ===
     let mouseX = 0, mouseY = 0;
     let circleX = 0, circleY = 0;
+
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
@@ -86,9 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             }
         });
+
         function animateCursor() {
-            circleX += (mouseX - circleX) * 0.15; 
-            circleY += (mouseY - circleY) * 0.15;
+            // Збільшив швидкість з 0.15 до 0.3 для кращого відгуку
+            circleX += (mouseX - circleX) * 0.3; 
+            circleY += (mouseY - circleY) * 0.3;
             if(circle) { circle.style.left = `${circleX}px`; circle.style.top = `${circleY}px`; }
             requestAnimationFrame(animateCursor);
         }
@@ -138,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        // Свайп назад
         if(history.state && history.state.screen !== 'main-menu') {
             history.back();
             return;
