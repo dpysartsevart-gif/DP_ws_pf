@@ -292,70 +292,139 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .ach-desc { color: #fff; font-size: 12px; font-family: 'Share Tech Mono', monospace; }
 
 /* =========================================
-   MOBILE FIXES (ADD TO END OF STYLE.CSS)
+   MOBILE FULLSCREEN FIXES (REPLACE OLD MOBILE CSS)
    ========================================= */
 
 @media (max-width: 1000px) {
-
-    /* 1. Preloader Fix */
-    #gallery-preloader {
-        z-index: 999999 !important; /* Поверх усього */
-        background: #000 !important;
+    /* 1. Глобальні налаштування екрану */
+    html, body { 
+        height: 100%; margin: 0; overflow: hidden; background: #000; 
+    }
+    
+    .ui-layer { 
+        padding: 0 !important; /* Прибираємо відступи */
+        width: 100vw; 
+        height: 100dvh; 
     }
 
-    /* 2. Збільшення UI (Меню та кнопки) */
-    .menu-item {
-        font-size: 36px !important; /* Було 24 */
-        margin-bottom: 20px !important;
-        padding: 10px 0 !important;
-    }
-    
-    .mobile-nav-btn {
-        font-size: 20px !important;
-        padding: 20px !important;
-        margin-bottom: 20px !important;
-        background: #000 !important; /* Щоб не просвічувало */
-        z-index: 500 !important;
-    }
-
-    h2 { font-size: 32px !important; margin-bottom: 20px !important; }
-    
-    .project-slot { padding: 20px !important; }
-    .p-title { font-size: 20px !important; }
-    
-    /* 3. FIX: DLC Overlap (Виправляємо накладання кнопки) */
-    /* Змушуємо кнопку "Main Menu" бути в потоці, а не absolutely positioned */
-    #dlc-screen .mobile-nav-btn {
-        position: relative !important;
-        top: auto !important;
-        left: auto !important;
-        margin-bottom: 20px !important;
-        order: -1; /* Ставимо на початок флекс-контейнера */
-        width: 100% !important;
-    }
-    
-    .screen.dlc-centered {
-        justify-content: flex-start !important; /* Вирівнювання зверху */
+    .screen {
+        padding: 15px !important; /* Невеликий внутрішній відступ для тексту */
         padding-top: 20px !important;
-        overflow-y: auto !important; /* Дозволити скрол якщо контент великий */
+        width: 100% !important;
+        height: 100dvh !important; /* На весь екран */
+        display: none; /* JS сам перемкне на flex */
+        box-sizing: border-box;
     }
 
-    /* 4. FIX: Gallery Scroll (Виправляємо скрол списку проектів) */
+    /* 2. Вікна (Shop, Options, Credits) на весь екран */
+    .shop-container, .text-content, .scroll-container {
+        width: 100% !important;
+        max-width: none !important;
+        height: 100% !important; /* Тягнемо на всю висоту */
+        max-height: none !important;
+        margin: 0 !important;
+        border: none !important; /* Прибираємо рамки, щоб виглядало як ОС */
+        background: transparent !important; /* Фон вже є у body/screen */
+        border-radius: 0 !important;
+        padding: 0 !important;
+        padding-bottom: 80px !important; /* Місце для футера/кнопок знизу */
+    }
+
+    /* 3. Галерея: Список проектів */
+    .gallery-layout {
+        padding: 0 !important;
+    }
+    
     .gallery-sidebar {
-        height: 100dvh !important; /* На всю висоту екрану */
-        overflow: hidden !important; /* Ховаємо скрол контейнера */
+        width: 100% !important;
+        height: 100dvh !important;
+        padding: 15px !important;
         display: flex !important;
         flex-direction: column !important;
     }
 
     .projects-scroll-area {
+        flex-grow: 1 !important;
         height: auto !important;
-        flex-grow: 1 !important; /* Займає вільне місце */
-        overflow-y: auto !important; /* Вмикаємо скрол ТІЛЬКИ тут */
-        padding-bottom: 100px !important; /* Відступ знизу для футера */
-        -webkit-overflow-scrolling: touch; /* Плавний скрол на iOS */
+        overflow-y: auto !important;
+        padding-bottom: 50px !important;
+        padding-right: 0 !important;
+    }
+
+    /* 4. Галерея: Перегляд картинок (Viewport) */
+    /* Це критичний фікс, щоб картинки з'являлися */
+    .gallery-viewport {
+        display: none; /* Спочатку сховано, JS увімкне */
+        position: fixed !important; /* Поверх усього */
+        top: 0; left: 0;
+        width: 100vw !important;
+        height: 100dvh !important;
+        background: #000 !important; /* Чорний фон, щоб перекрити список */
+        z-index: 2000 !important;
+        flex-direction: column;
+        padding: 15px !important;
+    }
+
+    .viewport-frame {
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        background: transparent !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    #viewport-content {
+        flex-grow: 1 !important;
+        overflow-y: auto !important; /* Скрол для картинок */
+        padding-bottom: 50px !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Картинки на весь екран */
+    .vp-content img, .vp-content video, .vp-content iframe {
+        width: 100% !important;
+        height: auto !important;
+        max-width: none !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* 5. UI Елементи */
+    .menu-item {
+        font-size: 32px !important;
+        padding: 15px 0 !important;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        width: 100%;
+    }
+
+    .mobile-nav-btn {
+        font-size: 18px !important;
+        padding: 15px !important;
+        margin-bottom: 15px !important;
+        width: 100%;
+        background: rgba(16,16,16,0.9);
+        border: 1px solid var(--primary-color);
+        z-index: 500;
+        text-align: center;
+        flex-shrink: 0; /* Щоб кнопка не зникала при скролі */
+    }
+
+    /* Виправляємо баг з накладанням в DLC */
+    .screen.dlc-centered {
+        justify-content: flex-start !important;
+        padding: 20px !important;
     }
     
-    /* 5. FIX: Banner z-index */
-    #mobile-banner { z-index: 9999999 !important; }
+    #dlc-screen .mobile-nav-btn {
+        position: relative !important;
+        order: -1;
+    }
+
+    /* Ховаємо зайве */
+    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .back-hint, .bg-layer { 
+        display: none !important; 
+    }
+    
+    /* Preloader поверх усього */
+    #gallery-preloader { z-index: 999999 !important; background: #000 !important; }
 }

@@ -30,29 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnEmailCancel = document.getElementById('btn-email-cancel');
     const donateBtn = document.getElementById('donate-btn');
     const backHints = document.querySelectorAll('.back-hint');
-    
-    // НОВЕ: Кнопки магазину
     const shopBtns = document.querySelectorAll('.shop-btn');
 
     let currentMenuIndex = 0;
     let inSubMenu = false;
     let isDlcActive = false;
 
-    // === МОБІЛЬНИЙ БАНЕР ===
-    if (window.innerWidth <= 1000 && banner) banner.classList.add('active');
-    if(closeBanner) {
-        closeBanner.addEventListener('click', () => {
-            if(banner) banner.classList.remove('active');
-            safePlay('snd-select');
-        });
-    }
-
     // === PRELOADER ===
     function runGalleryPreloader(callback) {
         if(!preloader) { callback(); return; }
         preloader.classList.remove('hidden');
         preloader.style.display = 'flex';
-        
         let loadPct = 0;
         const interval = setInterval(() => {
             loadPct += Math.floor(Math.random() * 15) + 5; 
@@ -70,14 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50);
     }
 
-    // === КУРСОР ===
-    let mouseX = 0, mouseY = 0;
-    let circleX = 0, circleY = 0;
+    // === MOBILE BANNER ===
+    if (window.innerWidth <= 1000 && banner) banner.classList.add('active');
+    if(closeBanner) closeBanner.addEventListener('click', () => { if(banner) banner.classList.remove('active'); safePlay('snd-select'); });
 
+    // === CURSOR (Desktop Only) ===
+    let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            mouseX = e.clientX; mouseY = e.clientY;
             if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
             const bg = document.getElementById('parallax-bg');
             if(bg) {
@@ -86,29 +75,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             }
         });
-
         function animateCursor() {
-            circleX += (mouseX - circleX) * 0.15; 
-            circleY += (mouseY - circleY) * 0.15;
+            circleX += (mouseX - circleX) * 0.15; circleY += (mouseY - circleY) * 0.15;
             if(circle) { circle.style.left = `${circleX}px`; circle.style.top = `${circleY}px`; }
             requestAnimationFrame(animateCursor);
         }
         animateCursor();
     }
 
-    const interactables = document.querySelectorAll('a, .menu-item, .project-slot, .back-hint, .shop-btn, .dlc-btn, .buy-btn, .vp-link, .wireframe-trigger, .scroll-container, .projects-scroll-area, .mobile-nav-btn, .banner-btn');
-    interactables.forEach(el => {
-        el.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
-        el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
-    });
-
-    // === ЗВУКИ ===
+    // === SOUNDS ===
     function safePlay(id) {
         const audio = document.getElementById(id);
         if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
     }
 
-    // === ЛОГІКА ЕКРАНІВ ===
+    // === SCREEN LOGIC ===
     function showScreen(screenId) {
         if(screenId === 'gallery-screen' && !inSubMenu) {
             runGalleryPreloader(() => { activateScreen(screenId); });
@@ -135,39 +116,43 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => target.classList.add('active-screen'), 10); 
         }
         
-        if (screenId === 'main-menu') inSubMenu = false;
-        else inSubMenu = true;
+        inSubMenu = (screenId !== 'main-menu');
         
+        // Скидаємо галерею при вході
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if(sidebar) sidebar.style.display = 'flex';
-            if(viewport) viewport.style.display = 'none';
+            if(viewport) viewport.style.display = 'none'; // Ховаємо картинки, показуємо список
         }
     }
 
     function goBack() {
         if(emailPopup && emailPopup.style.display === 'flex') { closeEmailPopup(); return; }
+        
+        // Якщо ми в мобільній галереї переглядаємо картинки - кнопка назад має повертати до списку
+        if(viewport && viewport.style.display === 'flex' && window.innerWidth <= 1000) {
+             viewport.style.display = 'none';
+             sidebar.style.display = 'flex';
+             safePlay('snd-select');
+             return;
+        }
+
         if(history.state && history.state.screen !== 'main-menu') { history.back(); return; }
 
-        screens.forEach(s => { 
-            s.classList.remove('active-screen'); 
-            if(s.id !== 'main-menu') { s.style.display = 'none'; s.classList.add('hidden'); }
-        });
-        
+        screens.forEach(s => { s.classList.remove('active-screen'); if(s.id !== 'main-menu') { s.style.display = 'none'; s.classList.add('hidden'); } });
         const menu = document.getElementById('main-menu');
-        menu.classList.remove('hidden'); 
-        menu.style.display = 'flex'; 
-        setTimeout(() => menu.classList.add('active-screen'), 10);
+        menu.classList.remove('hidden'); menu.style.display = 'flex'; setTimeout(() => menu.classList.add('active-screen'), 10);
         
-        inSubMenu = false; 
-        safePlay('snd-select');
+        inSubMenu = false; safePlay('snd-select');
         if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
         projectSlots.forEach(s => s.classList.remove('selected'));
         updateVisuals(); 
     }
 
-    // === КЛІКИ ===
+    // === NAVIGATION CLICKS ===
     menuBackBtns.forEach(btn => btn.addEventListener('click', () => { safePlay('snd-select'); history.back(); }));
     backHints.forEach(hint => { hint.addEventListener('click', () => { safePlay('snd-select'); goBack(); }); });
+    
+    // Кнопка "BACK TO LIST" в галереї
     if(mobileBackBtn) {
         mobileBackBtn.addEventListener('click', () => {
             if(viewport) viewport.style.display = 'none';
@@ -176,20 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // POPUP
-    function closeEmailPopup() { if(emailPopup) emailPopup.style.display = 'none'; }
-    if(btnEmailConfirm) btnEmailConfirm.addEventListener('click', () => {
-        safePlay('snd-gamestart'); 
-        // Ачівка New Journey
-        showAchievement("ACHIEVEMENT UNLOCKED", "NEW JOURNEY (Started a new project)", "🚀");
-        setTimeout(() => { 
-            window.location.href = "mailto:DPysartsevArt@gmail.com"; 
-            closeEmailPopup(); 
-        }, 2000);
-    });
-    if(btnEmailCancel) btnEmailCancel.addEventListener('click', () => { safePlay('snd-select'); closeEmailPopup(); });
-
-    // === DATA ===
+    // === DATA & LOADING ===
     const projectData = {
         'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
@@ -201,36 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'queen': ['Queen1.jpg', 'Queen2.jpg', 'Queen3.jpg', 'Queen4.jpg', 'Queen5.jpg', 'Queen6.jpg', 'Queen7.jpg', 'Queen8.jpg', 'Queen9.jpg', 'Queen10.jpg'],
         'halloween': ['Halloween1.jpg', 'Halloween2.jpg']
     };
-    
-    // === ACHIEVEMENTS ===
-    let viewedProjects = new Set();
-    let explorerUnlocked = false;
-    let supporterUnlocked = false;
-    let munchkinUnlocked = false;
-
-    function showAchievement(title, desc, icon) {
-        if(achievementPopup) {
-            const t = achievementPopup.querySelector('.ach-title');
-            const d = achievementPopup.querySelector('.ach-desc');
-            const i = achievementPopup.querySelector('.ach-icon');
-            if(t) t.innerText = title;
-            if(d) d.innerText = desc;
-            if(i) i.innerText = icon;
-            achievementPopup.classList.add('show');
-            safePlay('snd-achievement');
-            setTimeout(() => { achievementPopup.classList.remove('show'); }, 5000);
-        }
-    }
-
-    function checkExplorer(id) {
-        if(id && !viewedProjects.has(id)) {
-            viewedProjects.add(id);
-            if(viewedProjects.size === 9 && !explorerUnlocked) {
-                explorerUnlocked = true;
-                showAchievement("ACHIEVEMENT UNLOCKED", "EXPLORER (Viewed all projects)", "🏆");
-            }
-        }
-    }
 
     function loadImages(id) {
         checkExplorer(id);
@@ -262,7 +204,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === MENU ===
+    // === GALLERY INTERACTION ===
+    projectSlots.forEach(slot => {
+        slot.addEventListener('click', () => {
+            projectSlots.forEach(s => s.classList.remove('selected'));
+            slot.classList.add('selected');
+            safePlay('snd-select');
+            loadImages(slot.dataset.id);
+            
+            // MOBILE SWITCH: LIST -> IMAGES
+            if(window.innerWidth <= 1000) {
+                if(sidebar) sidebar.style.display = 'none';
+                if(viewport) {
+                    viewport.style.display = 'flex'; // Показуємо блок картинок
+                    viewport.classList.add('active-screen'); 
+                }
+                if(vpContent) vpContent.scrollTop = 0; // Скрол вгору
+            }
+        });
+        
+        slot.addEventListener('mouseenter', () => {
+            if(window.innerWidth > 1000) {
+                projectSlots.forEach(s => s.classList.remove('selected'));
+                slot.classList.add('selected');
+                safePlay('snd-hover');
+                loadImages(slot.dataset.id);
+            }
+        });
+    });
+
+    // === ACHIEVEMENTS ===
+    let viewedProjects = new Set();
+    let explorerUnlocked = false;
+    let munchkinUnlocked = false;
+    let supporterUnlocked = false;
+
+    function showAchievement(title, desc, icon) {
+        if(achievementPopup) {
+            const t = achievementPopup.querySelector('.ach-title');
+            const d = achievementPopup.querySelector('.ach-desc');
+            const i = achievementPopup.querySelector('.ach-icon');
+            if(t) t.innerText = title; if(d) d.innerText = desc; if(i) i.innerText = icon;
+            achievementPopup.classList.add('show');
+            safePlay('snd-achievement');
+            setTimeout(() => { achievementPopup.classList.remove('show'); }, 5000);
+        }
+    }
+    
+    function checkExplorer(id) {
+        if(id && !viewedProjects.has(id)) {
+            viewedProjects.add(id);
+            if(viewedProjects.size === 9 && !explorerUnlocked) {
+                explorerUnlocked = true;
+                showAchievement("ACHIEVEMENT UNLOCKED", "EXPLORER (Viewed all projects)", "🏆");
+            }
+        }
+    }
+
+    // === MAIN MENU & BUTTONS ===
     menuItems.forEach((item, index) => {
         item.addEventListener('mouseenter', () => {
             if(inSubMenu) return;
@@ -273,12 +272,10 @@ document.addEventListener('DOMContentLoaded', () => {
             currentMenuIndex = index;
             safePlay('snd-hover');
         });
-
         item.addEventListener('click', () => {
             const target = item.dataset.target;
             const action = item.dataset.action;
             safePlay('snd-select');
-
             if(action === 'email') {
                 if (window.innerWidth <= 1000) {
                     safePlay('snd-gamestart'); 
@@ -292,7 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // DLC
     if(dlcBtn) {
         dlcBtn.addEventListener('mouseenter', () => {
             if(inSubMenu) return;
@@ -308,57 +304,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (donateBtn) {
-        donateBtn.addEventListener('click', () => {
-            if (!supporterUnlocked) {
-                supporterUnlocked = true;
-                showAchievement("ACHIEVEMENT UNLOCKED", "ARTIST SUPPORTER (Coffee bought)", "☕");
-            }
-        });
-    }
-    
-    // === ЛОГІКА МАГАЗИНУ (MUNCHKIN) ===
+    if(donateBtn) donateBtn.addEventListener('click', () => {
+        if (!supporterUnlocked) { supporterUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "ARTIST SUPPORTER (Coffee bought)", "☕"); }
+    });
+
     shopBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Перевіряємо, чи кнопка НЕ має класу inactive (тобто товар доступний)
             const item = btn.closest('.shop-item');
             if (item && !item.classList.contains('inactive')) {
                 safePlay('snd-select');
-                if(!munchkinUnlocked) {
-                    munchkinUnlocked = true;
-                    showAchievement("ACHIEVEMENT UNLOCKED", "MUNCHKIN (Bought a shop item)", "🛒");
-                }
-            } else {
-                // Якщо товар закритий
-                safePlay('snd-select'); // Можна додати звук помилки 'snd-error' якщо є
+                if(!munchkinUnlocked) { munchkinUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "MUNCHKIN (Bought a shop item)", "🛒"); }
             }
         });
     });
-
-    // Gallery Click
-    projectSlots.forEach(slot => {
-        slot.addEventListener('mouseenter', () => {
-            if(window.innerWidth > 1000) {
-                projectSlots.forEach(s => s.classList.remove('selected'));
-                slot.classList.add('selected');
-                safePlay('snd-hover');
-                loadImages(slot.dataset.id);
-            }
-        });
-        slot.addEventListener('click', () => {
-            projectSlots.forEach(s => s.classList.remove('selected'));
-            slot.classList.add('selected');
-            safePlay('snd-select');
-            loadImages(slot.dataset.id);
-            if(window.innerWidth <= 1000) {
-                if(sidebar) sidebar.style.display = 'none';
-                if(viewport) viewport.style.display = 'flex';
-                if(vpContent) vpContent.scrollTop = 0;
-            }
-        });
+    
+    // POPUP LOGIC
+    function closeEmailPopup() { if(emailPopup) emailPopup.style.display = 'none'; }
+    if(btnEmailConfirm) btnEmailConfirm.addEventListener('click', () => {
+        safePlay('snd-gamestart'); showAchievement("ACHIEVEMENT UNLOCKED", "NEW JOURNEY (Started a new project)", "🚀");
+        setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; closeEmailPopup(); }, 2000);
     });
+    if(btnEmailCancel) btnEmailCancel.addEventListener('click', () => { safePlay('snd-select'); closeEmailPopup(); });
 
-    // Keys
+    // KEYBOARD NAV
     document.addEventListener('keydown', (e) => {
         if(e.key === 'Escape') goBack();
         if(!inSubMenu && (!emailPopup || emailPopup.style.display !== 'flex')) {
@@ -371,12 +339,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(!isDlcActive) { if(currentMenuIndex < menuItems.length - 1) currentMenuIndex++; else isDlcActive = true; }
                 updateVisuals(); safePlay('snd-hover');
             }
-            if(e.key === 'Enter') {
-                if(isDlcActive) dlcBtn.click(); else menuItems[currentMenuIndex].click();
-            }
+            if(e.key === 'Enter') { if(isDlcActive) dlcBtn.click(); else menuItems[currentMenuIndex].click(); }
         }
     });
-
     function updateVisuals() {
         menuItems.forEach(i => i.classList.remove('active'));
         if(dlcBtn) dlcBtn.classList.remove('active-dlc');
