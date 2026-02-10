@@ -1,21 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // === 1. HISTORY API & NAVIGATION LOGIC ===
-    // Ініціалізація історії при завантаженні
     history.replaceState({ screen: 'main-menu', mode: 'list' }, '', '');
 
-    // Слухаємо кнопку "Назад" у браузері (або свайп на телефоні)
     window.addEventListener('popstate', (event) => {
         if (event.state) {
             restoreState(event.state);
         } else {
-            // Якщо історії немає, повертаємось в меню
             restoreState({ screen: 'main-menu', mode: 'list' });
         }
     });
 
     function navigateTo(screenId, subMode = 'list') {
-        // Додаємо запис в історію браузера
         const urlHash = screenId === 'main-menu' ? '' : `#${screenId.replace('-screen', '')}`;
         history.pushState({ screen: screenId, mode: subMode }, '', urlHash);
         updateUI(screenId, subMode);
@@ -25,9 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUI(state.screen, state.mode);
     }
 
-    // Головна функція оновлення інтерфейсу (без запису в історію)
     function updateUI(screenId, subMode) {
-        // 1. Перемикання екранів
+        // Перемикання екранів
         screens.forEach(s => {
             s.classList.remove('active-screen');
             if (s.id === 'dlc-screen') s.classList.add('dlc-centered'); else s.classList.remove('dlc-centered');
@@ -37,11 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = document.getElementById(screenId);
         if(target) { 
             target.style.display = screenId === 'dlc-screen' ? 'flex' : 'flex'; 
-            // Невеликий таймаут для анімації opacity
             setTimeout(() => target.classList.add('active-screen'), 10); 
         }
 
-        // 2. Логіка для Галереї на мобільному (Список vs Проект)
+        // Логіка Галереї (Мобільна)
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if (subMode === 'viewport') {
                 if(sidebar) sidebar.style.display = 'none';
@@ -53,12 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 3. Скидання стану меню
+        // Скидання стану меню
         inSubMenu = (screenId !== 'main-menu');
         if(!inSubMenu) {
             safePlay('snd-select');
             if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
-            // Скидаємо вибір
             projectSlots.forEach(s => s.classList.remove('selected'));
         }
     }
@@ -68,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const banner = document.getElementById('mobile-banner');
     const closeBanner = document.getElementById('close-banner');
     
+    // Показуємо банер тільки якщо це перший візит (можна додати localStorage, але поки просто перевірка ширини)
     if (window.innerWidth <= 1000) {
         if(banner) banner.classList.add('active');
     }
@@ -148,8 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // MOBILE ELEMENTS
     const sidebar = document.querySelector('.gallery-sidebar');
     const viewport = document.querySelector('.gallery-viewport');
-    
-    // Усі кнопки "Назад" тепер просто викликають історію браузера
     const allBackBtns = document.querySelectorAll('#btn-back-to-list, .menu-back-btn, .back-hint');
 
     let currentMenuIndex = 0;
@@ -264,11 +256,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = item.dataset.target;
             const action = item.dataset.action;
             safePlay('snd-select');
+            
+            // --- ВИПРАВЛЕННЯ ДЛЯ NEW GAME ---
             if(action === 'email') {
                 safePlay('snd-gamestart');
-                setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; }, 1000);
+                // Зменшили затримку до 300мс, щоб браузер не блокував
+                setTimeout(() => { 
+                    window.location.href = "mailto:DPysartsevArt@gmail.com"; 
+                }, 300);
             } else if (target) {
-                // Preloader only for Gallery
                 if(target === 'gallery-screen') {
                     runGalleryPreloader(() => { navigateTo(target); });
                 } else {
@@ -312,25 +308,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // MOBILE LOGIC: Navigate to Viewport
             if(window.innerWidth <= 1000) {
-                // Push sub-state for viewport
                 navigateTo('gallery-screen', 'viewport');
             }
         });
     });
 
-    // 4. Back Buttons (Unified)
-    // Всі кнопки "Назад" тепер просто викликають історію браузера
+    // 4. Back Buttons
     allBackBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             safePlay('snd-select');
-            history.back(); // Це емулює свайп або натискання кнопки "Назад" у браузері
+            history.back();
         });
     });
 
     // 5. Keyboard Navigation
     document.addEventListener('keydown', (e) => {
         if(e.key === 'Escape' && inSubMenu) {
-            history.back(); // ESC теж викликає назад
+            history.back();
         }
         if(!inSubMenu) {
             if(e.key === 'ArrowUp') {
