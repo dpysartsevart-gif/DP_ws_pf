@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const preloader = document.getElementById('gallery-preloader');
     const barFill = document.querySelector('.bar-fill');
     const pctText = document.querySelector('.loader-percentage');
+    const loaderText = document.querySelector('.loader-text'); // Текст завантаження
+    
     const dot = document.querySelector('.cursor-dot');
     const circle = document.querySelector('.cursor-circle');
     const banner = document.getElementById('mobile-banner');
@@ -36,32 +38,49 @@ document.addEventListener('DOMContentLoaded', () => {
     let inSubMenu = false;
     let isDlcActive = false;
 
-    // === PRELOADER (Запуск) ===
-    // Якщо ми на мобільному - імітуємо завантаження одразу, щоб прибрати 0%
-    if (window.innerWidth <= 1000) {
-        if (preloader) {
-            preloader.classList.remove('hidden');
-            let loadPct = 0;
-            const interval = setInterval(() => {
-                loadPct += 10;
-                if(loadPct > 100) loadPct = 100;
-                if(barFill) barFill.style.width = `${loadPct}%`;
-                if(pctText) pctText.textContent = `${loadPct}%`;
-                if(loadPct === 100) {
-                    clearInterval(interval);
+    // === SYSTEM BOOT (ЗАВАНТАЖЕННЯ ПРИ СТАРТІ) ===
+    function runSystemBoot() {
+        if (!preloader) return;
+        
+        // Показуємо прелоадер
+        preloader.classList.remove('hidden');
+        preloader.style.display = 'flex';
+        if(loaderText) loaderText.innerText = "SYSTEM INITIALIZATION...";
+        
+        let loadPct = 0;
+        // Швидкість завантаження (можна змінити 40 на менше число, щоб було швидше)
+        const interval = setInterval(() => {
+            loadPct += Math.floor(Math.random() * 10) + 2; 
+            if(loadPct > 100) loadPct = 100;
+            
+            if(barFill) barFill.style.width = `${loadPct}%`;
+            if(pctText) pctText.textContent = `${loadPct}%`;
+            
+            if(loadPct === 100) {
+                clearInterval(interval);
+                if(loaderText) loaderText.innerText = "ACCESS GRANTED";
+                setTimeout(() => {
+                    preloader.style.opacity = '0'; // Плавне зникнення
                     setTimeout(() => {
                         preloader.classList.add('hidden');
                         preloader.style.display = 'none';
+                        preloader.style.opacity = '1'; // Скидаємо для майбутніх запусків
                     }, 500);
-                }
-            }, 50);
-        }
+                }, 500);
+            }
+        }, 40);
     }
 
+    // Запускаємо завантаження одразу
+    runSystemBoot();
+
+    // === PRELOADER ДЛЯ ГАЛЕРЕЇ ===
     function runGalleryPreloader(callback) {
         if(!preloader) { callback(); return; }
         preloader.classList.remove('hidden');
         preloader.style.display = 'flex';
+        if(loaderText) loaderText.innerText = "LOADING PROJECT DATA...";
+        
         let loadPct = 0;
         const interval = setInterval(() => {
             loadPct += Math.floor(Math.random() * 15) + 5; 
@@ -76,12 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     callback();
                 }, 300);
             }
-        }, 50);
+        }, 30);
     }
 
     // === MOBILE BANNER ===
     if (window.innerWidth <= 1000 && banner) {
-        banner.classList.add('active');
+        // Показуємо банер трохи пізніше, після завантаження
+        setTimeout(() => { banner.classList.add('active'); }, 2500);
     }
     if(closeBanner) {
         closeBanner.addEventListener('click', () => { 
@@ -129,12 +149,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function activateScreen(screenId) {
         screens.forEach(s => {
             s.classList.remove('active-screen');
-            // Приховуємо інші екрани
             if (s.id !== screenId && s.id !== 'email-popup') {
                 s.style.display = 'none';
                 s.classList.add('hidden');
             }
-            // DLC Style check
             if (s.id === 'dlc-screen') s.classList.add('dlc-centered'); 
             else s.classList.remove('dlc-centered');
         });
@@ -161,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function goBack() {
         if(emailPopup && emailPopup.style.display === 'flex') { closeEmailPopup(); return; }
         
-        // Якщо ми в галереї на мобільному і дивимось картинку
+        // Mobile Gallery Back Logic
         if(window.innerWidth <= 1000 && viewport && viewport.classList.contains('active-screen')) {
              viewport.classList.remove('active-screen');
              viewport.style.display = 'none';
@@ -186,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateVisuals(); 
     }
 
-    // === CLICK HANDLERS ===
+    // === CLICKS ===
     menuBackBtns.forEach(btn => btn.addEventListener('click', () => { safePlay('snd-select'); history.back(); }));
     backHints.forEach(hint => { hint.addEventListener('click', () => { safePlay('snd-select'); goBack(); }); });
     
@@ -201,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === DATA & LOADING ===
+    // === DATA ===
     const projectData = {
         'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
@@ -246,14 +264,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === GALLERY INTERACTION ===
     projectSlots.forEach(slot => {
-        // Click
         slot.addEventListener('click', () => {
             projectSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
             safePlay('snd-select');
             loadImages(slot.dataset.id);
-            
-            // Mobile: Switch to Viewport
             if(window.innerWidth <= 1000) {
                 if(sidebar) sidebar.style.display = 'none';
                 if(viewport) {
@@ -263,8 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(vpContent) vpContent.scrollTop = 0;
             }
         });
-        
-        // Hover
         slot.addEventListener('mouseenter', () => {
             if(window.innerWidth > 1000) {
                 projectSlots.forEach(s => s.classList.remove('selected'));
@@ -303,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === MAIN MENU & BUTTONS ===
+    // === MENU ===
     menuItems.forEach((item, index) => {
         item.addEventListener('mouseenter', () => {
             if(inSubMenu) return;
