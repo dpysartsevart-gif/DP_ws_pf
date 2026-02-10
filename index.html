@@ -21,14 +21,16 @@
         </div>
     </div>
 
-    <div id="email-popup" class="popup-overlay" style="display: none;">
+    <div id="email-popup">
         <div class="popup-content">
-            <h3>INITIALIZE CONTACT PROTOCOL?</h3>
-            <p>This action will open your default email client.</p>
-            <p class="email-address">DPysartsevArt@gmail.com</p>
+            <h3 style="color:#f7d53e; font-size: 32px; margin-bottom: 20px;">NEW GAME INITIALIZATION</h3>
+            <p style="font-size: 18px; line-height: 1.6; color: #fff;">Are you ready to start a new project?</p>
+            <br>
+            <p style="font-size: 14px; color: #888;">DESTINATION ADDRESS (COPYABLE):</p>
+            <div class="email-box">DPysartsevArt@gmail.com</div>
             <div class="popup-buttons">
-                <button id="btn-email-cancel" class="popup-btn cancel">CANCEL</button>
-                <button id="btn-email-confirm" class="popup-btn confirm">CONFIRM</button>
+                <div class="buy-btn" id="btn-email-confirm">[ ACCEPT MISSION ]</div>
+                <div class="buy-btn secondary" id="btn-email-cancel">[ CANCEL ]</div>
             </div>
         </div>
     </div>
@@ -48,7 +50,7 @@
         <div class="ach-icon" id="ach-icon">🏆</div>
         <div class="ach-text">
             <div class="ach-title">ACHIEVEMENT UNLOCKED</div>
-            <div class="ach-desc" id="ach-desc">EXPLORER</div>
+            <div class="ach-desc" id="ach-desc">EXPLORER (Viewed all projects)</div>
         </div>
     </div>
 
@@ -59,6 +61,7 @@
 
     <div class="bg-layer" id="parallax-bg"></div>
     <div class="scanlines"></div>
+    
     <div class="dust-container">
         <div class="dust-speck" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
         <div class="dust-speck" style="top: 30%; left: 80%; animation-delay: 2s;"></div>
@@ -69,7 +72,6 @@
     </div>
 
     <div class="ui-layer">
-        
         <div id="main-menu" class="screen active-screen">
             <div class="header">
                 <div class="header-top-row">
@@ -117,9 +119,7 @@
                 </div>
                 <div class="back-hint">[ESC] BACK</div>
             </div>
-            
             <div class="gallery-viewport">
-                <div class="header-spacer"></div>
                 <div class="mobile-nav-btn" id="btn-back-to-list">◀ BACK TO LIST</div>
                 <div class="viewport-frame">
                     <div class="vp-header">
@@ -218,6 +218,29 @@
                 </div>
                 
                 <div class="bio-section">
+                    <p class="section-header">/// ORIGIN STORY & BUFFS</p>
+                    <ul class="cv-list">
+                        <li><strong>GEODESY & CARTOGRAPHY:</strong> Master's Degree providing structural accuracy and spatial thinking. <span style="color:#f7d53e">(Technical/Engineering Bonus +10)</span>.</li>
+                        <li><strong>WOODWORKING CRAFT:</strong> Deep understanding of texture, material behavior, and physical craftsmanship. <span style="color:#f7d53e">(Tactile Bonus +10)</span>.</li>
+                    </ul>
+                </div>
+
+                <div class="bio-section">
+                    <p class="section-header">/// RESISTANCES</p>
+                    <ul class="cv-list">
+                         <li style="display: flex; justify-content: space-between; max-width: 350px;">
+                            <span>CRUNCH</span> <span style="color:#f7d53e; font-weight: bold;">IMMUNE (HIGH RES)</span>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; max-width: 350px;">
+                            <span>STRESS</span> <span style="color:#f7d53e; font-weight: bold;">FULL</span>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; max-width: 350px;">
+                            <span>LOW ENERGY</span> <span style="color:#4caf50; font-weight: bold;">NEVER</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bio-section">
                     <p class="section-header">/// DEVELOPMENT TEAM</p>
                     <ul class="cv-list">
                          <li><strong>PRODUCER:</strong> <span style="color:#f7d53e;">DMYTRO PYSARTSEV</span> (Vision & Management)</li>
@@ -248,10 +271,9 @@
             </div>
             <div class="back-hint" style="text-align: center;">[ESC] BACK</div>
         </div>
-
     </div> 
 
-    <div class="copyright-footer">
+    <div class="copyright-fixed">
         © 2026 DMYTRO PYSARTSEV. ALL RIGHTS RESERVED.
     </div>
 

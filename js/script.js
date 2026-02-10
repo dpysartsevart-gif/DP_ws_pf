@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50);
     }
 
-    // === КУРСОР (FIX: Збільшена швидкість до 0.3) ===
+    // === КУРСОР ===
     let mouseX = 0, mouseY = 0;
     let circleX = 0, circleY = 0;
 
@@ -88,9 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         function animateCursor() {
-            // Збільшив швидкість з 0.15 до 0.3 для кращого відгуку
-            circleX += (mouseX - circleX) * 0.3; 
-            circleY += (mouseY - circleY) * 0.3;
+            circleX += (mouseX - circleX) * 0.15; 
+            circleY += (mouseY - circleY) * 0.15;
             if(circle) { circle.style.left = `${circleX}px`; circle.style.top = `${circleY}px`; }
             requestAnimationFrame(animateCursor);
         }
