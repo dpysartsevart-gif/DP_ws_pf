@@ -36,7 +36,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let inSubMenu = false;
     let isDlcActive = false;
 
-    // === PRELOADER ===
+    // === PRELOADER (Запуск) ===
+    // Якщо ми на мобільному - імітуємо завантаження одразу, щоб прибрати 0%
+    if (window.innerWidth <= 1000) {
+        if (preloader) {
+            preloader.classList.remove('hidden');
+            let loadPct = 0;
+            const interval = setInterval(() => {
+                loadPct += 10;
+                if(loadPct > 100) loadPct = 100;
+                if(barFill) barFill.style.width = `${loadPct}%`;
+                if(pctText) pctText.textContent = `${loadPct}%`;
+                if(loadPct === 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        preloader.classList.add('hidden');
+                        preloader.style.display = 'none';
+                    }, 500);
+                }
+            }, 50);
+        }
+    }
+
     function runGalleryPreloader(callback) {
         if(!preloader) { callback(); return; }
         preloader.classList.remove('hidden');
@@ -59,8 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // === MOBILE BANNER ===
-    if (window.innerWidth <= 1000 && banner) banner.classList.add('active');
-    if(closeBanner) closeBanner.addEventListener('click', () => { if(banner) banner.classList.remove('active'); safePlay('snd-select'); });
+    if (window.innerWidth <= 1000 && banner) {
+        banner.classList.add('active');
+    }
+    if(closeBanner) {
+        closeBanner.addEventListener('click', () => { 
+            if(banner) banner.classList.remove('active'); 
+            safePlay('snd-select'); 
+        });
+    }
 
     // === CURSOR (Desktop Only) ===
     let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
@@ -101,10 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function activateScreen(screenId) {
         screens.forEach(s => {
             s.classList.remove('active-screen');
+            // Приховуємо інші екрани
             if (s.id !== screenId && s.id !== 'email-popup') {
                 s.style.display = 'none';
                 s.classList.add('hidden');
             }
+            // DLC Style check
             if (s.id === 'dlc-screen') s.classList.add('dlc-centered'); 
             else s.classList.remove('dlc-centered');
         });
@@ -118,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         inSubMenu = (screenId !== 'main-menu');
         
-        // Скидаємо галерею при вході: Показуємо список, ховаємо картинки
+        // Mobile Gallery Logic
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if(sidebar) sidebar.style.display = 'flex';
             if(viewport) {
@@ -131,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function goBack() {
         if(emailPopup && emailPopup.style.display === 'flex') { closeEmailPopup(); return; }
         
-        // Мобільна Галерея: Кнопка назад повертає до списку
+        // Якщо ми в галереї на мобільному і дивимось картинку
         if(window.innerWidth <= 1000 && viewport && viewport.classList.contains('active-screen')) {
              viewport.classList.remove('active-screen');
              viewport.style.display = 'none';
@@ -144,7 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         screens.forEach(s => { s.classList.remove('active-screen'); if(s.id !== 'main-menu') { s.style.display = 'none'; s.classList.add('hidden'); } });
         const menu = document.getElementById('main-menu');
-        menu.classList.remove('hidden'); menu.style.display = 'flex'; setTimeout(() => menu.classList.add('active-screen'), 10);
+        if(menu) {
+            menu.classList.remove('hidden'); 
+            menu.style.display = 'flex'; 
+            setTimeout(() => menu.classList.add('active-screen'), 10);
+        }
         
         inSubMenu = false; safePlay('snd-select');
         if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
@@ -152,11 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateVisuals(); 
     }
 
-    // === NAVIGATION CLICKS ===
+    // === CLICK HANDLERS ===
     menuBackBtns.forEach(btn => btn.addEventListener('click', () => { safePlay('snd-select'); history.back(); }));
     backHints.forEach(hint => { hint.addEventListener('click', () => { safePlay('snd-select'); goBack(); }); });
     
-    // Кнопка "BACK TO LIST" в галереї (важливо для мобілки)
     if(mobileBackBtn) {
         mobileBackBtn.addEventListener('click', () => {
             if(viewport) {
@@ -213,25 +246,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === GALLERY INTERACTION ===
     projectSlots.forEach(slot => {
+        // Click
         slot.addEventListener('click', () => {
             projectSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
             safePlay('snd-select');
             loadImages(slot.dataset.id);
             
-            // MOBILE: Перемикаємо на перегляд картинок
+            // Mobile: Switch to Viewport
             if(window.innerWidth <= 1000) {
                 if(sidebar) sidebar.style.display = 'none';
                 if(viewport) {
                     viewport.style.display = 'flex';
                     viewport.classList.add('active-screen');
-                    // Важливий хак для iOS, щоб скрол працював
-                    setTimeout(() => { viewport.style.display = 'flex'; }, 10);
                 }
                 if(vpContent) vpContent.scrollTop = 0;
             }
         });
         
+        // Hover
         slot.addEventListener('mouseenter', () => {
             if(window.innerWidth > 1000) {
                 projectSlots.forEach(s => s.classList.remove('selected'));
