@@ -159,7 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // === 6. ЛОГІКА EMAIL POPUP (FIXED) ===
     function closeEmailPopup() {
         if(emailPopup) {
-            emailPopup.style.display = 'none';
+            emailPopup.classList.remove('active-screen');
+            // Приховуємо повністю після завершення анімації CSS (0.3s)
+            clearTimeout(emailPopupTimer);
+            emailPopupTimer = setTimeout(() => { 
+                emailPopup.style.display = 'none'; 
+            }, 300);
         }
     }
 
@@ -220,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function goBack() {
         // Закриваємо попап пошти, якщо він є
-        if(emailPopup && emailPopup.style.display === 'flex') {
+        if(emailPopup && emailPopup.classList.contains('active-screen')) {
             closeEmailPopup();
             return; // Не йдемо далі, просто закриваємо попап
         }
@@ -301,6 +306,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(emailPopup) {
                         clearTimeout(emailPopupTimer);
                         emailPopup.style.display = 'flex'; // Показуємо (було display:none)
+                        // Затримка, щоб спрацювала анімація
+                        setTimeout(() => { emailPopup.classList.add('active-screen'); }, 10);
                     }
                 }
             } else if (target) {
@@ -346,10 +353,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('keydown', (e) => {
         if(e.key === 'Escape') {
-            goBack();
+            goBack(); // Універсальна функція "Назад" (закриває і попапи)
         }
         
-        if(!inSubMenu && (!emailPopup || emailPopup.style.display !== 'flex')) {
+        if(!inSubMenu && (!emailPopup || !emailPopup.classList.contains('active-screen'))) {
             if(e.key === 'ArrowUp') {
                 if(isDlcActive) { isDlcActive = false; dlcBtn.classList.remove('active-dlc'); currentMenuIndex = menuItems.length - 1; } 
                 else { currentMenuIndex = (currentMenuIndex > 0) ? currentMenuIndex - 1 : 0; }
