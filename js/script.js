@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // === 1. HISTORY API (ДЛЯ СВАЙПУ НАЗАД) ===
-    // Це єдине нововведення, яке не чіпає логіку кнопок, але дозволяє повертатись свайпом
+    // === 1. HISTORY API (Щоб працював свайп на телефоні) ===
     history.replaceState({ screen: 'main-menu', mode: 'list' }, '', '');
 
     window.addEventListener('popstate', (event) => {
@@ -22,21 +21,22 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUI(state.screen, state.mode);
     }
 
-    // Основна функція перемикання (як було раніше, просто винесена окремо)
     function updateUI(screenId, subMode) {
+        // Сховати всі екрани
         screens.forEach(s => {
             s.classList.remove('active-screen');
             if (s.id === 'dlc-screen') s.classList.add('dlc-centered'); else s.classList.remove('dlc-centered');
             if (s.id !== screenId) s.style.display = 'none';
         });
 
+        // Показати потрібний
         const target = document.getElementById(screenId);
         if(target) { 
             target.style.display = screenId === 'dlc-screen' ? 'flex' : 'flex'; 
             setTimeout(() => target.classList.add('active-screen'), 10); 
         }
 
-        // Мобільна логіка для Галереї
+        // Мобільна логіка (Галерея)
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if (subMode === 'viewport') {
                 if(sidebar) sidebar.style.display = 'none';
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Скидання стану
         inSubMenu = (screenId !== 'main-menu');
         if(!inSubMenu) {
-            // Тут звук не граємо, щоб не двоївся при натисканні "Назад"
+            // Тут звук НЕ граємо (бо це повернення назад), тільки скидаємо вибір
             if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
             projectSlots.forEach(s => s.classList.remove('selected'));
         }
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === INTERACTION (ПОВЕРНУТО СТАРУ ЛОГІКУ) ===
+    // === INTERACTION (LOGIC RESTORED TO TURN 8 VERSION) ===
 
     menuItems.forEach((item, index) => {
         item.addEventListener('mouseenter', () => {
@@ -248,22 +248,22 @@ document.addEventListener('DOMContentLoaded', () => {
             safePlay('snd-hover');
         });
         
-        // --- ОСЬ ЦЕЙ БЛОК ПОВЕРНУТО ДО "ЗАВОДСЬКИХ" НАЛАШТУВАНЬ ---
+        // Ось тут повернуто логіку 1-в-1 як було раніше
         item.addEventListener('click', () => {
             const target = item.dataset.target;
             const action = item.dataset.action;
             
-            // 1. Завжди граємо звук кліку (як було раніше)
+            // 1. Граємо звук кліку ЗАВЖДИ
             safePlay('snd-select');
-            
+
             if(action === 'email') {
-                // 2. Якщо це пошта - граємо додатковий звук і чекаємо 1000мс
+                // 2. Якщо це New Game - граємо звук гри і чекаємо
                 safePlay('snd-gamestart'); 
                 setTimeout(() => { 
                     window.location.href = "mailto:DPysartsevArt@gmail.com"; 
                 }, 1000);
             } else if (target) {
-                // 3. Інакше переходимо в меню
+                // 3. Якщо це розділ - переходимо
                 if(target === 'gallery-screen') {
                     runGalleryPreloader(() => { navigateTo(target); });
                 } else {
