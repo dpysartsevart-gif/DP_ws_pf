@@ -31,12 +31,17 @@ body {
     z-index: 1; filter: brightness(0.5); transition: transform 0.1s ease-out; 
 }
 
+/* ВИПРАВЛЕННЯ: FIXED, щоб не було білої смуги справа */
 .scanlines {
-    position: absolute; inset: 0;
+    position: fixed; /* Було absolute */
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    z-index: 2;
 }
-
 /* DUST EFFECT */
 .dust-container {
     position: absolute; inset: 0; pointer-events: none; z-index: 3; overflow: hidden;
@@ -364,67 +369,96 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
    MOBILE ADAPTATION (MAX-WIDTH: 1000px)
    ========================================= */
 @media (max-width: 1000px) {
-    .ui-layer { padding: 15px; padding-top: 20px; }
-    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
-    h1.glitch { font-size: 32px; letter-spacing: 1px; margin-bottom: 5px; }
-    .role-subtitle { font-size: 12px; margin-bottom: 10px; }
-    
-    /* HIDE DECORATIONS */
-    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .copyright-fixed { display: none !important; }
-    .coffee-hud { top: 20px; right: 20px; transform: scale(0.8); transform-origin: top right; }
-    .dlc-wrapper { bottom: auto; top: auto; position: relative !important; margin-top: 10px; width: 100%; display: flex; justify-content: center; }
+    /* 1. ФОН */
+    .bg-layer {
+        height: 100vh; height: 100dvh; position: fixed; bottom: 0; left: 0; width: 100vw;
+    }
 
-    /* MENU */
-    .menu-list { margin-top: 5px; width: 100%; padding-left: 10px; }
-    .menu-item { font-size: 24px; margin-bottom: 10px; padding: 5px 0; }
+    /* 2. МАКСИМАЛЬНЕ ЗБІЛЬШЕННЯ ІНТЕРФЕЙСУ (+30%) */
+    .ui-layer { padding: 10px; padding-top: 15px; }
+    .screen { padding: 10px; padding-top: 15px; }
     
-    /* GALLERY RESTRUCTURE */
+    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; padding-left: 5px;}
+    
+    /* Гігантський заголовок */
+    h1.glitch { font-size: 48px; letter-spacing: 1px; margin-bottom: 5px; line-height: 0.9; }
+    .role-subtitle { font-size: 16px; margin-bottom: 15px; }
+    
+    /* ХОВАЄМО ЗАЙВЕ */
+    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .copyright-fixed { display: none !important; }
+    
+    /* HUD (Батарейка) - трохи менше, щоб не заважала заголовку */
+    .coffee-hud { top: 15px; right: 15px; transform: scale(0.6); transform-origin: top right; }
+
+    /* МЕНЮ - ВЕЛИКЕ І ЗРУЧНЕ */
+    .menu-list { margin-top: 20px; width: 100%; padding-left: 5px; }
+    .menu-item { 
+        font-size: 34px; /* Збільшено з 24px */
+        margin-bottom: 15px; 
+        padding: 5px 0; 
+    } 
+    
+    /* DLC КНОПКА - ЦЕНТРУВАННЯ */
+    .dlc-wrapper { 
+        position: relative !important; 
+        bottom: auto !important; 
+        left: 0 !important; /* Фікс зміщення */
+        margin-top: 40px; /* Більший відступ від меню */
+        width: 100%; 
+        display: flex; 
+        justify-content: center;
+    }
+    .dlc-btn { 
+        font-size: 22px; /* Більший текст */
+        padding: 20px; 
+        background: rgba(0,0,0,0.6); 
+        width: 95%; /* Майже на всю ширину */
+        text-align: center; 
+        border: 1px solid #444; 
+    }
+
+    /* ГАЛЕРЕЯ */
     .gallery-layout { flex-direction: column !important; gap: 0; }
-    .gallery-sidebar { width: 100%; height: 95dvh; display: flex; }
+    .gallery-sidebar { width: 100%; height: 90dvh; display: flex; }
     .projects-scroll-area { height: 100%; padding-right: 2px; }
 
-    .gallery-viewport { display: none; width: 100%; height: 95dvh; margin-top: 0; }
+    .gallery-viewport { display: none; width: 100%; height: 90dvh; margin-top: 0; }
     .viewport-frame { height: 100%; margin-top: 0; }
     
-    /* NO SPACERS ON MOBILE */
-    .header-spacer, .back-hint { display: none; }
-    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 0; padding-left: 5px; }
-    h2 { font-size: 24px; margin-bottom: 10px; margin-top: 5px; }
+    /* ВІКНА (Shop, Options, Credits) */
+    .shop-container, .text-content, .scroll-container { 
+        width: 100%; max-width: 100%; height: 90dvh; max-height: 90dvh; 
+        padding: 20px; margin-bottom: 0; background: rgba(16, 16, 16, 0.95);
+    }
+    
+    /* ЗБІЛЬШЕНІ ЕЛЕМЕНТИ СПИСКУ */
+    .project-slot { padding: 20px 10px; margin-bottom: 10px; }
+    .slot-thumb { width: 120px; height: 70px; } /* Більші картинки */
+    .p-title { font-size: 22px; }
+    .p-desc { font-size: 14px; }
 
-    /* MOBILE BUTTONS STYLE */
+    .settings-list { width: 100%; padding-left: 0; border: none; }
+    .setting-item { font-size: 20px; padding: 15px 0; }
+
+    /* КНОПКИ НАВІГАЦІЇ */
     .mobile-nav-btn {
         display: block !important;
-        background: #111;
-        color: var(--primary-color);
-        text-align: center;
-        padding: 15px;
-        border: 1px solid var(--primary-color);
-        margin-bottom: 10px;
-        font-weight: bold;
-        text-transform: uppercase;
-        border-radius: 4px;
-        font-size: 16px;
-        pointer-events: auto;
-        width: 100%;
-    }
-
-    /* OTHER WINDOWS (MAXIMIZED) */
-    .shop-container, .text-content, .scroll-container { 
-        width: 100%; max-width: 100%; height: 95dvh; max-height: 95dvh; padding: 15px; margin-bottom: 0;
+        background: #111; color: var(--primary-color); text-align: center;
+        padding: 20px; /* Жирні кнопки */
+        border: 1px solid var(--primary-color); 
+        margin-bottom: 15px;
+        font-weight: bold; text-transform: uppercase; border-radius: 4px; 
+        font-size: 18px;
+        pointer-events: auto; width: 100%;
     }
     
-    .project-slot { padding: 15px; }
-    .slot-thumb { width: 100px; height: 60px; }
-    .p-title { font-size: 18px; }
+    /* ПРИХОВУВАННЯ */
+    .header-spacer, .back-hint { display: none; }
+    .sidebar-header-container { height: auto; margin-bottom: 15px; padding-top: 0; padding-left: 5px; }
+    h2 { font-size: 32px; margin-bottom: 15px; margin-top: 5px; }
     
-    .settings-list { width: 100%; padding-left: 0; border: none; }
-    .setting-item { font-size: 16px; padding: 10px 0; }
-    
-    .dlc-btn { width: 100%; text-align: center; background: rgba(0,0,0,0.5); border: 1px solid #444; padding: 15px; font-size: 18px; }
-    
-    /* RESTORE CURSOR */
+    #mobile-banner.active { display: flex; }
     * { cursor: auto !important; }
 }
 
-/* Hide buttons on desktop */
 .mobile-nav-btn { display: none; }
