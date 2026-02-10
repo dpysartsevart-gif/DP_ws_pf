@@ -290,3 +290,72 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .ach-text { display: flex; flex-direction: column; }
 .ach-title { color: #f7d53e; font-weight: bold; font-size: 16px; margin-bottom: 4px; }
 .ach-desc { color: #fff; font-size: 12px; font-family: 'Share Tech Mono', monospace; }
+
+/* =========================================
+   MOBILE FIXES (ADD TO END OF STYLE.CSS)
+   ========================================= */
+
+@media (max-width: 1000px) {
+
+    /* 1. Preloader Fix */
+    #gallery-preloader {
+        z-index: 999999 !important; /* Поверх усього */
+        background: #000 !important;
+    }
+
+    /* 2. Збільшення UI (Меню та кнопки) */
+    .menu-item {
+        font-size: 36px !important; /* Було 24 */
+        margin-bottom: 20px !important;
+        padding: 10px 0 !important;
+    }
+    
+    .mobile-nav-btn {
+        font-size: 20px !important;
+        padding: 20px !important;
+        margin-bottom: 20px !important;
+        background: #000 !important; /* Щоб не просвічувало */
+        z-index: 500 !important;
+    }
+
+    h2 { font-size: 32px !important; margin-bottom: 20px !important; }
+    
+    .project-slot { padding: 20px !important; }
+    .p-title { font-size: 20px !important; }
+    
+    /* 3. FIX: DLC Overlap (Виправляємо накладання кнопки) */
+    /* Змушуємо кнопку "Main Menu" бути в потоці, а не absolutely positioned */
+    #dlc-screen .mobile-nav-btn {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        margin-bottom: 20px !important;
+        order: -1; /* Ставимо на початок флекс-контейнера */
+        width: 100% !important;
+    }
+    
+    .screen.dlc-centered {
+        justify-content: flex-start !important; /* Вирівнювання зверху */
+        padding-top: 20px !important;
+        overflow-y: auto !important; /* Дозволити скрол якщо контент великий */
+    }
+
+    /* 4. FIX: Gallery Scroll (Виправляємо скрол списку проектів) */
+    .gallery-sidebar {
+        height: 100dvh !important; /* На всю висоту екрану */
+        overflow: hidden !important; /* Ховаємо скрол контейнера */
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .projects-scroll-area {
+        height: auto !important;
+        flex-grow: 1 !important; /* Займає вільне місце */
+        overflow-y: auto !important; /* Вмикаємо скрол ТІЛЬКИ тут */
+        padding-bottom: 100px !important; /* Відступ знизу для футера */
+        -webkit-overflow-scrolling: touch; /* Плавний скрол на iOS */
+    }
+    
+    /* 5. FIX: Banner z-index */
+    #mobile-banner { z-index: 9999999 !important; }
+}
