@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // === 1. HISTORY API & NAVIGATION LOGIC ===
+    // === 1. HISTORY API (ЩОБ ПРАЦЮВАВ СВАЙП НАЗАД) ===
     history.replaceState({ screen: 'main-menu', mode: 'list' }, '', '');
 
     window.addEventListener('popstate', (event) => {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => target.classList.add('active-screen'), 10); 
         }
 
-        // Логіка Галереї (Мобільна)
+        // Логіка Галереї (Мобільна: перемикання список/проект)
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if (subMode === 'viewport') {
                 if(sidebar) sidebar.style.display = 'none';
@@ -61,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const banner = document.getElementById('mobile-banner');
     const closeBanner = document.getElementById('close-banner');
     
-    // Показуємо банер тільки якщо це перший візит (можна додати localStorage, але поки просто перевірка ширини)
     if (window.innerWidth <= 1000) {
         if(banner) banner.classList.add('active');
     }
@@ -101,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let mouseX = 0, mouseY = 0;
     let circleX = 0, circleY = 0;
 
-    // Desktop Cursor
+    // Desktop Cursor (Тільки на ПК)
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
@@ -142,6 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // MOBILE ELEMENTS
     const sidebar = document.querySelector('.gallery-sidebar');
     const viewport = document.querySelector('.gallery-viewport');
+    
+    // Кнопки "Назад" (всі типи)
     const allBackBtns = document.querySelectorAll('#btn-back-to-list, .menu-back-btn, .back-hint');
 
     let currentMenuIndex = 0;
@@ -193,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
     }
 
+    // PROJECT DATA
     const projectData = {
         'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
@@ -241,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === INTERACTION ===
 
-    // 1. Menu Clicks
+    // 1. Menu Clicks (MAIN MENU)
     menuItems.forEach((item, index) => {
         item.addEventListener('mouseenter', () => {
             if(inSubMenu) return;
@@ -257,13 +259,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const action = item.dataset.action;
             safePlay('snd-select');
             
-            // --- ВИПРАВЛЕННЯ ДЛЯ NEW GAME ---
+            // --- ВИПРАВЛЕННЯ ДЛЯ NEW GAME (Без затримки) ---
             if(action === 'email') {
-                safePlay('snd-gamestart');
-                // Зменшили затримку до 300мс, щоб браузер не блокував
-                setTimeout(() => { 
-                    window.location.href = "mailto:DPysartsevArt@gmail.com"; 
-                }, 300);
+                safePlay('snd-gamestart'); // Звук грає
+                // Відкриваємо пошту миттєво, інакше браузер заблокує
+                window.location.href = "mailto:DPysartsevArt@gmail.com"; 
             } else if (target) {
                 if(target === 'gallery-screen') {
                     runGalleryPreloader(() => { navigateTo(target); });
@@ -313,11 +313,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. Back Buttons
+    // 4. Back Buttons (Використовують історію)
     allBackBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             safePlay('snd-select');
-            history.back();
+            history.back(); // Працює як свайп
         });
     });
 
