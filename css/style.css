@@ -227,12 +227,12 @@ h2 {
 
 /* ICONS */
 .wod-thumb { background-image: url('../assets/images/icons/wod_icon.jpg'); }
-.seq-thumb { background-image: url('../assets/images/icons/sequoia_icon.jpg'); }
+.seq-thumb { background-image: url('../assets/images/icons/sequoia2_icon.jpg'); }
 .mer-thumb { background-image: url('../assets/images/icons/Mermeid_icon.jpg'); } 
 .sci-thumb { background-image: url('../assets/images/icons/sf_icon.jpg'); }
-.wolv-thumb { background-image: url('../assets/images/icons/wolverine_icon.jpg'); }
+.wolv-thumb { background-image: url('../assets/images/icons/wolverine2_icon.jpg'); }
 .boy-thumb { background-image: url('../assets/images/icons/boy_icon.jpg'); } 
-.queen-thumb { background-image: url('../assets/images/icons/queen_icon.jpg'); }
+.queen-thumb { background-image: url('../assets/images/icons/queen2_icon.jpg'); }
 .hal-thumb { background-image: url('../assets/images/icons/Halloween_icon.jpg'); }
 .jinx-thumb { background-image: url('../assets/images/icons/jinxrbg_icon.jpg'); background-position: top; }
 .project-slot:hover .jinx-thumb, .project-slot.selected .jinx-thumb { background-image: url('../assets/images/icons/jinxr_icon.jpg') !important; }
