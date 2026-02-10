@@ -21,22 +21,12 @@
         </div>
     </div>
 
-    <div id="email-popup" class="popup-overlay" style="display: none;">
-        <div class="popup-content">
-            <h3>INITIALIZE CONTACT PROTOCOL?</h3>
-            <p>This action will open your default email client.</p>
-            <p class="email-address">DPysartsevArt@gmail.com</p>
-            <div class="popup-buttons">
-                <button id="btn-email-cancel" class="popup-btn cancel">CANCEL</button>
-                <button id="btn-email-confirm" class="popup-btn confirm">CONFIRM</button>
-            </div>
-        </div>
-    </div>
-
     <div id="gallery-preloader" class="hidden">
         <div class="loader-content">
             <div class="loader-text">LOADING PROJECT DATA...</div>
-            <div class="loader-bar"><div class="bar-fill"></div></div>
+            <div class="loader-bar">
+                <div class="bar-fill"></div>
+            </div>
             <div class="loader-percentage">0%</div>
         </div>
     </div>
@@ -48,7 +38,7 @@
         <div class="ach-icon" id="ach-icon">🏆</div>
         <div class="ach-text">
             <div class="ach-title">ACHIEVEMENT UNLOCKED</div>
-            <div class="ach-desc" id="ach-desc">EXPLORER</div>
+            <div class="ach-desc" id="ach-desc">EXPLORER (Viewed all projects)</div>
         </div>
     </div>
 
@@ -59,6 +49,7 @@
 
     <div class="bg-layer" id="parallax-bg"></div>
     <div class="scanlines"></div>
+    
     <div class="dust-container">
         <div class="dust-speck" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
         <div class="dust-speck" style="top: 30%; left: 80%; animation-delay: 2s;"></div>
@@ -69,14 +60,18 @@
     </div>
 
     <div class="ui-layer">
-        
+
         <div id="main-menu" class="screen active-screen">
             <div class="header">
                 <div class="header-top-row">
                     <h1 class="glitch wireframe-trigger" data-text="DMYTRO PYSARTSEV">DMYTRO PYSARTSEV</h1>
                     <div class="scene-3d-mini">
                         <div class="swarm-container">
-                            <div class="tri t1"></div><div class="tri t2"></div><div class="tri t3"></div><div class="tri t4"></div><div class="tri t5"></div>
+                            <div class="tri t1"></div>
+                            <div class="tri t2"></div>
+                            <div class="tri t3"></div>
+                            <div class="tri t4"></div>
+                            <div class="tri t5"></div>
                         </div>
                     </div>
                 </div>
@@ -97,29 +92,62 @@
         </div>
 
         <div id="gallery-screen" class="screen hidden gallery-layout">
+            
             <div class="gallery-sidebar">
                 <div class="sidebar-header-container">
                     <h2>PROJECT FILES</h2>
                 </div>
+                
                 <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
+
                 <div class="projects-scroll-area"> 
                     <div class="projects-list">
-                        <div class="project-slot" data-id="queen"><div class="slot-thumb queen-thumb"></div><div class="slot-text"><span class="p-title">THE QUEEN</span><span class="p-desc">Work in Progress / 2026</span></div></div>
-                        <div class="project-slot" data-id="jinx"><div class="slot-thumb jinx-thumb"></div><div class="slot-text"><span class="p-title">JINX (FANART)</span><span class="p-desc">Realism / 2024</span></div></div>
-                        <div class="project-slot" data-id="wod"><div class="slot-thumb wod-thumb"></div><div class="slot-text"><span class="p-title">WINGS OF DEATH</span><span class="p-desc">High Poly / 2025</span></div></div>
-                        <div class="project-slot" data-id="scifi"><div class="slot-thumb sci-thumb"></div><div class="slot-text"><span class="p-title">SCI-FI EXPLORER</span><span class="p-desc">Hand-Painted / 2025</span></div></div>
-                        <div class="project-slot" data-id="sequoia"><div class="slot-thumb seq-thumb"></div><div class="slot-text"><span class="p-title">LF SEQUOIA</span><span class="p-desc">Music Video / 2023</span></div></div>
-                        <div class="project-slot" data-id="boy"><div class="slot-thumb boy-thumb"></div><div class="slot-text"><span class="p-title">THE BOY</span><span class="p-desc">Environment / 2024</span></div></div>
-                        <div class="project-slot" data-id="mermaid"><div class="slot-thumb mer-thumb"></div><div class="slot-text"><span class="p-title">MERMAID</span><span class="p-desc">Sculpt / 2023</span></div></div>
-                        <div class="project-slot" data-id="halloween"><div class="slot-thumb hal-thumb"></div><div class="slot-text"><span class="p-title">HALLOWEEN SKETCHES</span><span class="p-desc">Series / Sketches</span></div></div>
-                        <div class="project-slot" data-id="wolverine"><div class="slot-thumb wolv-thumb"></div><div class="slot-text"><span class="p-title">WOLVERINE</span><span class="p-desc">Anatomy / 2022</span></div></div>
+                        <div class="project-slot" data-id="queen">
+                            <div class="slot-thumb queen-thumb"></div>
+                            <div class="slot-text"><span class="p-title">THE QUEEN</span><span class="p-desc">Work in Progress / 2026</span></div>
+                        </div>
+                        <div class="project-slot" data-id="jinx">
+                            <div class="slot-thumb jinx-thumb"></div>
+                            <div class="slot-text"><span class="p-title">JINX (FANART)</span><span class="p-desc">Realism / 2024</span></div>
+                        </div>
+                        <div class="project-slot" data-id="wod">
+                            <div class="slot-thumb wod-thumb"></div>
+                            <div class="slot-text"><span class="p-title">WINGS OF DEATH</span><span class="p-desc">High Poly / 2025</span></div>
+                        </div>
+                        <div class="project-slot" data-id="scifi">
+                            <div class="slot-thumb sci-thumb"></div>
+                            <div class="slot-text"><span class="p-title">SCI-FI EXPLORER</span><span class="p-desc">Hand-Painted / 2025</span></div>
+                        </div>
+                        <div class="project-slot" data-id="sequoia">
+                            <div class="slot-thumb seq-thumb"></div>
+                            <div class="slot-text"><span class="p-title">LF SEQUOIA</span><span class="p-desc">Music Video / 2023</span></div>
+                        </div>
+                        <div class="project-slot" data-id="boy">
+                            <div class="slot-thumb boy-thumb"></div>
+                            <div class="slot-text"><span class="p-title">THE BOY</span><span class="p-desc">Environment / 2024</span></div>
+                        </div>
+                        <div class="project-slot" data-id="mermaid">
+                            <div class="slot-thumb mer-thumb"></div>
+                            <div class="slot-text"><span class="p-title">MERMAID</span><span class="p-desc">Sculpt / 2023</span></div>
+                        </div>
+                        <div class="project-slot" data-id="halloween">
+                            <div class="slot-thumb hal-thumb"></div>
+                            <div class="slot-text"><span class="p-title">HALLOWEEN SKETCHES</span><span class="p-desc">Series / Sketches</span></div>
+                        </div>
+                        <div class="project-slot" data-id="wolverine">
+                            <div class="slot-thumb wolv-thumb"></div>
+                            <div class="slot-text"><span class="p-title">WOLVERINE</span><span class="p-desc">Anatomy / 2022</span></div>
+                        </div>
                     </div>
                 </div>
                 <div class="back-hint">[ESC] BACK</div>
             </div>
+
             <div class="gallery-viewport">
-                <div class="header-spacer"></div>
-                <div class="mobile-nav-btn" id="btn-back-to-list">◀ BACK TO LIST</div>
+                <div class="mobile-nav-btn" id="btn-back-to-list">
+                    ◀ BACK TO LIST
+                </div>
+
                 <div class="viewport-frame">
                     <div class="vp-header">
                         <span>:: VISUAL DATA STREAM ::</span>
@@ -136,6 +164,7 @@
         <div id="shop-screen" class="screen hidden">
             <h2>ITEM SHOP (INVENTORY)</h2>
             <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
+
             <div class="shop-container scroll-container">
                 <div class="shop-item inactive">
                     <div class="shop-icon icon-brush"></div>
@@ -159,6 +188,7 @@
         <div id="options-screen" class="screen hidden">
             <h2>SYSTEM CONFIG</h2>
             <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
+
             <div class="scroll-container">
                 <ul class="settings-list">
                     <li class="setting-category">--- CORE SYSTEMS ---</li>
@@ -167,18 +197,22 @@
                     <li class="setting-item"><span class="set-name">RETOPOLOGY</span> <span class="set-val on">CLEAN</span></li>
                     <li class="setting-item"><span class="set-name">UV MAPPING (UDIM)</span> <span class="set-val on">ENABLED</span></li>
                     <li class="setting-item"><span class="set-name">HAND-PAINT</span> <span class="set-val on">SUPPORTED</span></li>
+                    
                     <li class="setting-category">--- RENDERING ---</li>
                     <li class="setting-item"><span class="set-name">TEXTURING (PBR)</span> <span class="set-val max">HIGH RES</span></li>
                     <li class="setting-item"><span class="set-name">LIGHTING</span> <span class="set-val">CINEMATIC</span></li>
                     <li class="setting-item"><span class="set-name">UNREAL ENGINE 5</span> <span class="set-val max">INSTALLED</span></li>
                     <li class="setting-item"><span class="set-name">REALISM</span> <span class="set-val">TRUE</span></li>
+
                     <li class="setting-category">--- KNOWLEDGE BASE ---</li>
                     <li class="setting-item"><span class="set-name">HUMAN ANATOMY</span> <span class="set-val on">DEEP KNOWLEDGE</span></li>
                     <li class="setting-item"><span class="set-name">SILHOUETTE & FORM</span> <span class="set-val on">OPTIMIZED</span></li>
                     <li class="setting-item"><span class="set-name">COLOR THEORY</span> <span class="set-val on">CALIBRATED</span></li>
+
                     <li class="setting-category">--- ATTRIBUTES ---</li>
                     <li class="setting-item"><span class="set-name">CREATIVITY</span> <span class="set-val max">ULTRA</span></li>
                     <li class="setting-item"><span class="set-name">COFFEE</span> <span class="set-val max">ADDICTED</span></li>
+                    
                     <li class="setting-category">--- LANGUAGES ---</li>
                     <li class="setting-item"><span class="set-name">ENGLISH</span> <span class="set-val on">ADVANCED (C1)</span></li>
                     <li class="setting-item"><span class="set-name">FRENCH</span> <span class="set-val">INTERMEDIATE</span></li>
@@ -192,6 +226,7 @@
         <div id="credits-screen" class="screen hidden">
             <h2>CREDITS</h2>
             <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
+
             <div class="text-content scrollable">
                 <p class="role-title">DMYTRO PYSARTSEV</p>
                 <p class="role-sub">CLASS: 3D CHARACTER ARTIST | LEVEL: SENIOR</p>
@@ -203,7 +238,11 @@
                     <ul class="cv-list">
                         <li><a href="https://www.artstation.com/dpysartsev" target="_blank" class="contact-link">ARTSTATION PROFILE</a></li>
                         <li><a href="https://www.linkedin.com/in/dpysartsev/" target="_blank" class="contact-link">LINKEDIN PROFILE</a></li>
-                        <li><a href="assets/cv.pdf" target="_blank" class="contact-link">PERSONAL FILE [OPEN CV] ▼</a></li>
+                        <li>
+                            <a href="assets/cv.pdf" target="_blank" class="contact-link">
+                                PERSONAL FILE [OPEN CV] ▼
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -215,7 +254,30 @@
                         <li><strong>SWAN STUDIO:</strong> Production Lead & Design. Managed full production cycles. <span style="color:#f7d53e">(Design +50, Color Management +10)</span>.</li>
                     </ul>
                 </div>
-                
+
+                <div class="bio-section">
+                    <p class="section-header">/// ORIGIN STORY & BUFFS</p>
+                    <ul class="cv-list">
+                        <li><strong>GEODESY & CARTOGRAPHY:</strong> Master's Degree providing structural accuracy and spatial thinking. <span style="color:#f7d53e">(Technical/Engineering Bonus +10)</span>.</li>
+                        <li><strong>WOODWORKING CRAFT:</strong> Deep understanding of texture, material behavior, and physical craftsmanship. <span style="color:#f7d53e">(Tactile Bonus +10)</span>.</li>
+                    </ul>
+                </div>
+
+                <div class="bio-section">
+                    <p class="section-header">/// RESISTANCES</p>
+                    <ul class="cv-list">
+                         <li style="display: flex; justify-content: space-between; max-width: 350px;">
+                            <span>CRUNCH</span> <span style="color:#f7d53e; font-weight: bold;">IMMUNE (HIGH RES)</span>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; max-width: 350px;">
+                            <span>STRESS</span> <span style="color:#f7d53e; font-weight: bold;">FULL</span>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; max-width: 350px;">
+                            <span>LOW ENERGY</span> <span style="color:#4caf50; font-weight: bold;">NEVER</span>
+                        </li>
+                    </ul>
+                </div>
+
                 <div class="bio-section">
                     <p class="section-header">/// DEVELOPMENT TEAM</p>
                     <ul class="cv-list">
@@ -223,25 +285,40 @@
                         <li><strong>CODE SUPPORT:</strong> <span style="color:#a3cbf5;">GEMINI AI (GOOGLE)</span> (Neural Network Architecture)</li>
                     </ul>
                 </div>
-
-                <p style="margin-top: 30px; font-size: 14px; color: #666;">© 2026 DMYTRO PYSARTSEV. ALL RIGHTS RESERVED.</p>
             </div>
             <div class="back-hint">[ESC] BACK</div>
         </div>
 
         <div id="dlc-screen" class="screen hidden dlc-centered">
+            
             <div class="mobile-nav-btn menu-back-btn" style="position: absolute; top: 100px;">◀ MAIN MENU</div>
+
             <div class="coffee-hud">
-                <div class="hud-row"><span class="hud-label">CAFFEINE LEVEL</span><span class="hud-value blinking">12%</span></div>
+                <div class="hud-row">
+                    <span class="hud-label">CAFFEINE LEVEL</span>
+                    <span class="hud-value blinking">12%</span>
+                </div>
                 <div class="battery-icon">
-                    <div class="battery-body"><div class="battery-fill critical"></div><div class="battery-symbol"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A3,3 0 0,0 23,7A3,3 0 0,0 20,3M18,13A2,2 0 0,1 16,15H8A2,2 0 0,1 6,13V5H18V13Z" /></svg></div></div>
+                    <div class="battery-body">
+                        <div class="battery-fill critical"></div> 
+                        <div class="battery-symbol">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A3,3 0 0,0 23,7A3,3 0 0,0 20,3M18,13A2,2 0 0,1 16,15H8A2,2 0 0,1 6,13V5H18V13Z" />
+                            </svg>
+                        </div>
+                    </div>
                     <div class="battery-cap"></div>
                 </div>
                 <div class="hud-msg blinking">/// SYSTEM CRITICAL ///</div>
             </div>
+
             <div class="text-content centered">
                 <h3 style="color:#f7d53e; font-size: 24px; margin-bottom: 20px;">SUPPORT THE CREATOR PACK</h3>
-                <p style="font-size: 18px; line-height: 1.6;">Purchasing this DLC boosts the artist's morale, productivity, and restores faith in humanity.<br><br><span style="color: #888; font-size: 14px;">(It's not easy to survive as an artist in a world of procedural generation, but coffee helps.)</span></p>
+                <p style="font-size: 18px; line-height: 1.6;">
+                    Purchasing this DLC boosts the artist's morale, productivity, and restores faith in humanity.
+                    <br><br>
+                    <span style="color: #888; font-size: 14px;">(It's not easy to survive as an artist in a world of procedural generation, but coffee helps.)</span>
+                </p>
                 <br>
                 <a href="https://buymeacoffee.com/fr0kuc14dn" target="_blank" class="buy-btn" id="donate-btn">BUY COFFEE ($5 or more)</a>
             </div>
@@ -249,8 +326,33 @@
         </div>
 
     </div> 
+    
+    <div id="email-popup">
+        <div class="popup-content">
+            <h3 style="color:#f7d53e; font-size: 32px; margin-bottom: 20px;">NEW GAME INITIALIZATION</h3>
+            
+            <p style="font-size: 18px; line-height: 1.6; color: #fff;">
+                Are you ready to start a new project?
+            </p>
+            <br>
+            <p style="font-size: 14px; color: #888;">DESTINATION ADDRESS (COPYABLE):</p>
+            <div class="email-box">
+                DPysartsevArt@gmail.com
+            </div>
 
-    <div class="copyright-footer">
+            <div class="popup-buttons">
+                <div class="buy-btn" id="btn-email-confirm">
+                    [ ACCEPT MISSION ]
+                </div>
+                
+                <div class="buy-btn secondary" id="btn-email-cancel">
+                    [ CANCEL ]
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="copyright-fixed">
         © 2026 DMYTRO PYSARTSEV. ALL RIGHTS RESERVED.
     </div>
 
@@ -261,7 +363,9 @@
         </div>
     </div>
 
-    <div class="footer-hint"><p>[UP/DOWN] Navigate &nbsp; [ENTER] Select</p></div>
+    <div class="footer-hint">
+        <p>[UP/DOWN] Navigate &nbsp; [ENTER] Select</p>
+    </div>
 
     <script src="js/script.js"></script>
 </body>
