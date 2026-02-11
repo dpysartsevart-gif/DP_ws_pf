@@ -1,6 +1,26 @@
 /* ========================
    GLOBAL VARIABLES (THEME)
    ======================== */
+/* === PRELOADER (ЕКРАН ЗАВАНТАЖЕННЯ) === */
+#gallery-preloader {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 100000; /* Найвищий пріоритет */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: var(--primary-color);
+    font-family: 'Share Tech Mono', monospace;
+}
+.loader-content { text-align: center; width: 300px; }
+.loader-text { font-size: 18px; margin-bottom: 10px; letter-spacing: 2px; }
+.loader-bar { width: 100%; height: 4px; background: #333; position: relative; }
+.bar-fill { height: 100%; background: var(--primary-color); width: 0%; box-shadow: 0 0 10px var(--primary-color); transition: width 0.1s; }
+.loader-percentage { margin-top: 10px; font-size: 14px; color: #888; }
+.hidden { display: none !important; }
+
 :root {
     --primary-color: #f7d53e;       
     --accent-color: #a3cbf5;        
@@ -292,7 +312,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .ach-desc { color: #fff; font-size: 12px; font-family: 'Share Tech Mono', monospace; }
 
 /* =========================================
-   MOBILE FINAL FIXES v2.5 (DLC Layout & Scale)
+   MOBILE FIXES (FINAL V3)
    ========================================= */
 
 @media (max-width: 1000px) {
@@ -300,49 +320,53 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         height: 100%; margin: 0; overflow: hidden; background: #000; 
     }
     
-    /* 1. ФОН: Видимий */
+    /* 1. ФОН: Яскравий і чіткий */
     .bg-layer {
-        position: fixed !important; inset: 0 !important; width: 100% !important; height: 100% !important;
-        background-size: cover !important; background-position: center !important; z-index: 0 !important;
-        opacity: 0.8 !important; display: block !important;
+        position: fixed !important; inset: 0 !important;
+        width: 100% !important; height: 100% !important;
+        background-size: cover !important; background-position: center !important; 
+        z-index: 0 !important; opacity: 1 !important; display: block !important;
     }
 
-    /* 2. ІНТЕРФЕЙС: Прозорість 0.15 */
+    /* 2. ІНТЕРФЕЙС: Прозорий (0.15) */
     .screen {
-        position: fixed; top: 0; left: 0; width: 100% !important; height: 100% !important;
-        padding: 15px !important; padding-top: 25px !important; box-sizing: border-box;
-        background: rgba(0, 0, 0, 0.15) !important; backdrop-filter: blur(2px); 
+        position: fixed; top: 0; left: 0;
+        width: 100% !important; height: 100% !important;
+        padding: 15px !important; padding-top: 25px !important;
+        box-sizing: border-box;
+        /* ПРОЗОРІСТЬ 0.15 */
+        background: rgba(0, 0, 0, 0.15) !important; 
+        backdrop-filter: blur(2px);
         z-index: 10; display: none;
     }
     .screen.active-screen { display: flex !important; flex-direction: column; }
 
-    /* 3. DLC LAYOUT FIX (КОМПАКТНІСТЬ) */
+    /* 3. DLC FIX (Батарейка і кнопка розведені) */
     .screen.dlc-centered {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        justify-content: flex-start !important; /* Елементи йдуть зверху вниз */
-        padding-top: 40px !important;
-        gap: 10px !important; /* Відступ між елементами */
+        justify-content: flex-start !important;
+        padding-top: 10px !important;
     }
     
-    /* Кнопка "Main Menu" */
+    /* Кнопка "Main Menu" - Зверху */
     #dlc-screen .mobile-nav-btn {
         position: relative !important;
         order: 1;
         width: 100%;
-        margin-bottom: 10px !important; /* Невеликий відступ */
+        margin-bottom: 80px !important; /* ВІДСТУП ВІД КНОПКИ ДО БАТАРЕЙКИ */
         flex-shrink: 0;
-        z-index: 20;
+        z-index: 50;
     }
     
-    /* Батарейка (HUD) - ЗМЕНШЕНА */
+    /* Батарейка - По центру */
     .coffee-hud {
         position: relative !important;
         top: auto !important; right: auto !important; left: auto !important;
-        transform: scale(0.7) !important; /* ЗМЕНШИВ РОЗМІР */
+        transform: scale(1.3) !important; /* Збільшена іконка */
         order: 2;
-        margin-bottom: 10px !important; /* Мінімальний відступ */
+        margin-bottom: 40px !important;
         align-self: center !important;
         display: flex !important;
         flex-direction: column;
@@ -350,21 +374,17 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         width: auto !important; height: auto !important;
     }
 
-    /* Текст "Support Creator" - ПІДНЯТИЙ */
+    /* Текст знизу */
     .screen.dlc-centered .text-content.centered {
-        order: 3;
-        width: 100% !important;
-        flex-grow: 1; /* Займає решту місця, але не випадає */
-        max-height: calc(100% - 200px) !important; /* Обмеження висоти */
-        margin-top: 0 !important;
-        background: rgba(16,16,16,0.6) !important;
+        order: 3; width: 100% !important; flex-grow: 1; margin-top: 0 !important;
+        background: rgba(16,16,16,0.7) !important;
         border: 1px solid var(--primary-color) !important;
-        overflow-y: auto !important; /* Скрол всередині тексту, якщо треба */
     }
 
-    /* 4. ЗАГАЛЬНИЙ КОНТЕНТ */
+    /* 4. ІНШЕ */
     .shop-container, .text-content, .scroll-container {
-        width: 100% !important; max-width: none !important; height: auto !important; flex-grow: 1; 
+        width: 100% !important; max-width: none !important;
+        height: auto !important; flex-grow: 1; 
         margin: 0 !important; border: none !important; background: transparent !important;
         padding: 0 !important; padding-right: 20px !important; padding-bottom: 80px !important;
         overflow-y: auto !important;
@@ -372,11 +392,8 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     
     .setting-item { font-size: 14px !important; padding: 8px 0 !important; }
     .shop-title { font-size: 16px !important; }
-    .shop-desc { font-size: 11px !important; }
-
-    .ui-layer { padding: 0 !important; width: 100vw; height: 100dvh; display: flex; flex-direction: column; z-index: 10; }
     
-    /* Галерея */
+    .ui-layer { padding: 0 !important; width: 100vw; height: 100dvh; display: flex; flex-direction: column; z-index: 10; }
     .gallery-layout { padding: 0 !important; flex-direction: column !important; }
     .gallery-sidebar { width: 100% !important; height: 100% !important; padding: 0 !important; display: flex !important; flex-direction: column !important; }
     .projects-scroll-area { flex-grow: 1 !important; height: auto !important; overflow-y: auto !important; padding-bottom: 60px !important; padding-right: 5px !important; }
@@ -403,7 +420,4 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     }
 
     .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .back-hint, .header-spacer { display: none !important; }
-    
-    /* Preloader */
-    #gallery-preloader { z-index: 999999 !important; background: #000 !important; }
 }

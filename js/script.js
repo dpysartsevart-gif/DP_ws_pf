@@ -38,27 +38,57 @@ document.addEventListener('DOMContentLoaded', () => {
     let inSubMenu = false;
     let isDlcActive = false;
 
-    // === MOBILE BANNER INITIALIZATION ===
-    // Показуємо банер на мобільному при старті
-    if (window.innerWidth <= 1000 && banner) {
-        banner.classList.add('active');
-    }
-    if(closeBanner) {
-        closeBanner.addEventListener('click', () => { 
-            if(banner) banner.classList.remove('active'); 
-            safePlay('snd-select'); 
-        });
-    }
-
-    // === PRELOADER ТІЛЬКИ ДЛЯ ГАЛЕРЕЇ ===
-    function runGalleryPreloader(callback) {
-        if (!preloader) { callback(); return; }
+    // === SYSTEM BOOT (ЗАПУСК) ===
+    function runSystemBoot() {
+        if (!preloader) return;
         
-        // Примусово показуємо
+        // Показуємо завантажувач
         preloader.classList.remove('hidden');
         preloader.style.display = 'flex';
         preloader.style.opacity = '1';
-        preloader.style.zIndex = '999999';
+        
+        if(loaderText) loaderText.innerText = "SYSTEM BOOT SEQUENCE...";
+        
+        let loadPct = 0;
+        const interval = setInterval(() => {
+            loadPct += Math.floor(Math.random() * 10) + 5; 
+            if(loadPct > 100) loadPct = 100;
+            
+            if(barFill) barFill.style.width = `${loadPct}%`;
+            if(pctText) pctText.textContent = `${loadPct}%`;
+            
+            if(loadPct === 100) {
+                clearInterval(interval);
+                if(loaderText) loaderText.innerText = "ACCESS GRANTED";
+                
+                setTimeout(() => {
+                    preloader.style.transition = 'opacity 0.5s';
+                    preloader.style.opacity = '0';
+                    setTimeout(() => {
+                        preloader.classList.add('hidden'); // Ховаємо остаточно
+                        preloader.style.display = 'none';
+                        preloader.style.opacity = '1'; // Скидаємо для наступного разу
+                        
+                        // Банер на мобільному
+                        if (window.innerWidth <= 1000 && banner) {
+                             banner.classList.add('active');
+                        }
+                    }, 500);
+                }, 500);
+            }
+        }, 50);
+    }
+    
+    // Запускаємо!
+    runSystemBoot();
+
+    // === PRELOADER ГАЛЕРЕЇ ===
+    function runGalleryPreloader(callback) {
+        if (!preloader) { callback(); return; }
+        
+        preloader.classList.remove('hidden');
+        preloader.style.display = 'flex';
+        preloader.style.opacity = '1';
         
         if(loaderText) loaderText.innerText = "LOADING PROJECT DATA...";
         if(barFill) barFill.style.width = '0%';
@@ -81,7 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 30);
     }
 
-    // === CURSOR (Desktop Only) ===
+    // === BANNER ===
+    if(closeBanner) {
+        closeBanner.addEventListener('click', () => { 
+            if(banner) banner.classList.remove('active'); 
+            safePlay('snd-select'); 
+        });
+    }
+
+    // === CURSOR ===
     let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
@@ -110,8 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === SCREEN LOGIC ===
     function showScreen(screenId) {
-        // ЛОГІКА PRELOADER: Тільки Галерея, Тільки не з підменю, Тільки Десктоп (>1000px)
-        if(screenId === 'gallery-screen' && !inSubMenu && window.innerWidth > 1000) {
+        if(screenId === 'gallery-screen' && !inSubMenu) {
             runGalleryPreloader(() => { activateScreen(screenId); });
         } else {
             activateScreen(screenId);
@@ -138,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         inSubMenu = (screenId !== 'main-menu');
         
-        // Mobile Gallery Logic
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if(sidebar) sidebar.style.display = 'flex';
             if(viewport) {
