@@ -57,10 +57,23 @@ body {
     background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 2;
 }
 
-/* DUST EFFECT */
+/* DUST EFFECT (UPDATED) */
 .dust-container { position: absolute; inset: 0; pointer-events: none; z-index: 3; overflow: hidden; }
-.dust-speck { position: absolute; width: 2px; height: 2px; background: rgba(255, 255, 255, 0.15); border-radius: 50%; animation: dustFloat 10s infinite linear; }
-@keyframes dustFloat { 0% { transform: translateY(0) translateX(0); opacity: 0; } 100% { transform: translateY(-100px) translateX(20px); opacity: 0; } }
+.dust-speck { 
+    position: absolute; 
+    width: 3px; height: 3px; /* Трохи більші */
+    background: rgba(255, 255, 255, 0.4); /* Яскравіші */
+    border-radius: 50%; 
+    box-shadow: 0 0 3px rgba(255,255,255,0.3); /* Світіння */
+    animation: dustFloat 8s infinite linear; /* Швидше (було 10s) */
+}
+
+@keyframes dustFloat { 
+    0% { transform: translateY(0) translateX(0); opacity: 0; } 
+    20% { opacity: 0.8; } /* Швидше з'являються */
+    80% { opacity: 0.8; }
+    100% { transform: translateY(-150px) translateX(40px); opacity: 0; } /* Більший рух */
+}
 
 .ui-layer {
     position: absolute; inset: 0; padding: 60px; padding-top: 80px;
@@ -340,14 +353,14 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     }
     .screen.active-screen { display: flex !important; flex-direction: column; }
 
-    /* 3. DLC LAYOUT (НОВИЙ ПОРЯДОК) */
+   /* 3. DLC FIX (ВИПРАВЛЕНО НАКЛАДАННЯ V2) */
     .screen.dlc-centered {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        justify-content: flex-start !important; /* Починаємо зверху */
-        padding-top: 10px !important;
-        overflow-y: auto !important; /* Дозволяємо скрол, якщо екран малий */
+        justify-content: flex-start !important;
+        padding-top: 40px !important; /* Відступ від верху екрану */
+        gap: 20px !important; /* Гарантований простір між елементами */
     }
     
     /* 1. Кнопка "Main Menu" (ЗВЕРХУ) */
@@ -355,7 +368,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         position: relative !important;
         order: 1;
         width: 100%;
-        margin-bottom: 20px !important;
+        margin-bottom: 10px !important; 
         flex-shrink: 0;
         z-index: 50;
     }
@@ -364,9 +377,9 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     .screen.dlc-centered .text-content.centered {
         order: 2;
         width: 100% !important;
-        flex-grow: 0 !important; /* Не розтягувати */
+        flex-grow: 0 !important;
         margin-top: 0 !important;
-        margin-bottom: 30px !important;
+        margin-bottom: 20px !important;
         background: rgba(16,16,16,0.7) !important;
         border: 1px solid var(--primary-color) !important;
     }
@@ -375,8 +388,9 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     .coffee-hud {
         position: relative !important;
         top: auto !important; right: auto !important; left: auto !important;
-        transform: scale(0.9) !important; /* Трохи менша, акуратна */
+        transform: scale(0.9) !important;
         order: 3;
+        margin: 0 !important;
         margin-bottom: 40px !important;
         align-self: center !important;
         display: flex !important;
