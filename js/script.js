@@ -38,56 +38,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let inSubMenu = false;
     let isDlcActive = false;
 
-    // === SYSTEM BOOT (ЗАПУСК ПРИ СТАРТІ) ===
-    function runSystemBoot() {
-        if (!preloader) return;
-        
-        // ПРИМУСОВИЙ ПОКАЗ
-        // Видаляємо клас hidden і ставимо display flex вручну
-        preloader.classList.remove('hidden');
-        preloader.style.display = 'flex';
-        preloader.style.zIndex = '9999999'; // Найвищий пріоритет
-        preloader.style.opacity = '1';
-        
-        if(loaderText) loaderText.innerText = "SYSTEM BOOT SEQUENCE...";
-        
-        let loadPct = 0;
-        const interval = setInterval(() => {
-            loadPct += Math.floor(Math.random() * 5) + 3; 
-            if(loadPct > 100) loadPct = 100;
-            
-            if(barFill) barFill.style.width = `${loadPct}%`;
-            if(pctText) pctText.textContent = `${loadPct}%`;
-            
-            if(loadPct === 100) {
-                clearInterval(interval);
-                if(loaderText) loaderText.innerText = "ACCESS GRANTED";
-                
-                setTimeout(() => {
-                    preloader.style.transition = 'opacity 0.5s';
-                    preloader.style.opacity = '0'; 
-                    setTimeout(() => {
-                        preloader.classList.add('hidden');
-                        preloader.style.display = 'none';
-                        preloader.style.opacity = '1'; 
-                        
-                        // Показуємо банер ТІЛЬКИ після завантаження
-                        if (window.innerWidth <= 1000 && banner) {
-                             banner.classList.add('active');
-                        }
-                    }, 500);
-                }, 400);
-            }
-        }, 30);
+    // === MOBILE BANNER INITIALIZATION ===
+    // Показуємо банер на мобільному при старті
+    if (window.innerWidth <= 1000 && banner) {
+        banner.classList.add('active');
     }
-    
-    // Запускаємо лоадер!
-    runSystemBoot();
+    if(closeBanner) {
+        closeBanner.addEventListener('click', () => { 
+            if(banner) banner.classList.remove('active'); 
+            safePlay('snd-select'); 
+        });
+    }
 
-    // === PRELOADER ГАЛЕРЕЇ (Внутрішній) ===
+    // === PRELOADER ТІЛЬКИ ДЛЯ ГАЛЕРЕЇ ===
     function runGalleryPreloader(callback) {
         if (!preloader) { callback(); return; }
         
+        // Примусово показуємо
         preloader.classList.remove('hidden');
         preloader.style.display = 'flex';
         preloader.style.opacity = '1';
@@ -112,14 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 300);
             }
         }, 30);
-    }
-
-    // === BANNER ===
-    if(closeBanner) {
-        closeBanner.addEventListener('click', () => { 
-            if(banner) banner.classList.remove('active'); 
-            safePlay('snd-select'); 
-        });
     }
 
     // === CURSOR (Desktop Only) ===
@@ -151,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === SCREEN LOGIC ===
     function showScreen(screenId) {
-        if(screenId === 'gallery-screen' && !inSubMenu) {
+        // ЛОГІКА PRELOADER: Тільки Галерея, Тільки не з підменю, Тільки Десктоп (>1000px)
+        if(screenId === 'gallery-screen' && !inSubMenu && window.innerWidth > 1000) {
             runGalleryPreloader(() => { activateScreen(screenId); });
         } else {
             activateScreen(screenId);
@@ -178,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         inSubMenu = (screenId !== 'main-menu');
         
+        // Mobile Gallery Logic
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if(sidebar) sidebar.style.display = 'flex';
             if(viewport) {
