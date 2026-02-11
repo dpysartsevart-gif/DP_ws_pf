@@ -292,7 +292,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .ach-desc { color: #fff; font-size: 12px; font-family: 'Share Tech Mono', monospace; }
 
 /* =========================================
-   MOBILE FULLSCREEN FIXES + BACKGROUND RESTORE
+   MOBILE FULLSCREEN FIXES + VISUAL TWEAKS
    ========================================= */
 
 @media (max-width: 1000px) {
@@ -300,100 +300,85 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         height: 100%; margin: 0; overflow: hidden; background: #000; 
     }
     
-    /* 1. ВІДНОВЛЮЄМО ФОН */
+    /* 1. ФОН: Робимо його видимим */
     .bg-layer {
         position: fixed !important; 
-        top: 0 !important; left: 0 !important; 
+        inset: 0 !important;
         width: 100% !important; height: 100% !important;
         background-size: cover !important; 
         background-position: center !important; 
         z-index: 0 !important;
-        opacity: 0.6 !important; /* Трохи затемнюємо сам фон, щоб текст читався */
+        opacity: 0.5 !important; /* Яскравість фону */
         display: block !important;
     }
 
-    .ui-layer { 
-        padding: 0 !important; 
-        width: 100vw; height: 100dvh; 
-        display: flex; flex-direction: column;
-        z-index: 10; /* Інтерфейс вище фону */
-    }
-
-    /* 2. ЕКРАНИ НАПІВПРОЗОРІ (Щоб видно фон) */
+    /* 2. ІНТЕРФЕЙС: Напівпрозорий, щоб просвічував фон */
     .screen {
         position: fixed; 
         top: 0; left: 0;
         width: 100% !important; height: 100% !important;
-        padding: 20px !important; padding-top: 30px !important;
+        padding: 15px !important; padding-top: 25px !important;
         box-sizing: border-box;
-        background: rgba(0, 0, 0, 0.7) !important; /* ПРОЗОРІСТЬ 70% */
+        /* Було 0.95, ставимо 0.75 щоб бачити гори */
+        background: rgba(10, 10, 10, 0.75) !important; 
         z-index: 10;
         display: none;
     }
     .screen.active-screen { display: flex !important; flex-direction: column; }
 
-    /* Елементи інтерфейсу */
+    /* 3. КОНТЕНТ: Відступи для скролбару (FIX накладання) */
     .shop-container, .text-content, .scroll-container {
-        width: 100% !important; max-width: none !important;
-        height: auto !important; flex-grow: 1; 
-        max-height: none !important; margin: 0 !important;
+        width: 100% !important; 
+        max-width: none !important;
+        height: auto !important; 
+        flex-grow: 1; 
+        margin: 0 !important;
         border: none !important; background: transparent !important;
-        padding: 0 !important; padding-bottom: 80px !important;
+        padding: 0 !important;
+        
+        /* ВАЖЛИВО: Відступ праворуч, щоб скрол не їв букви */
+        padding-right: 20px !important; 
+        padding-bottom: 80px !important;
         overflow-y: auto !important;
     }
     
-    .screen.dlc-centered {
-        justify-content: center !important; align-items: center !important; padding: 20px !important;
+    /* Зменшуємо шрифт в налаштуваннях, як ти просив */
+    .setting-item {
+        font-size: 14px !important; /* Було 16 */
+        padding: 8px 0 !important;
     }
+    .shop-title { font-size: 16px !important; }
+    .shop-desc { font-size: 11px !important; }
+
+    /* Інші елементи (без змін логіки, тільки адаптація) */
+    .ui-layer { padding: 0 !important; width: 100vw; height: 100dvh; display: flex; flex-direction: column; z-index: 10; }
+    
+    .screen.dlc-centered { justify-content: center !important; align-items: center !important; padding: 20px !important; }
     .screen.dlc-centered .text-content {
-        flex-grow: 0 !important;
-        background: rgba(16,16,16,0.95) !important;
-        border: 2px solid var(--primary-color) !important;
-        padding: 20px !important; border-radius: 8px !important; margin-top: 20px !important;
+        flex-grow: 0 !important; background: rgba(16,16,16,0.95) !important;
+        border: 2px solid var(--primary-color) !important; padding: 20px !important;
+        border-radius: 8px !important; margin-top: 20px !important;
     }
 
+    /* Галерея */
     .gallery-layout { padding: 0 !important; flex-direction: column !important; }
-    .gallery-sidebar {
-        width: 100% !important; height: 100% !important;
-        padding: 0 !important; display: flex !important; flex-direction: column !important;
-    }
-    .projects-scroll-area {
-        flex-grow: 1 !important; height: auto !important;
-        overflow-y: auto !important; padding-bottom: 60px !important; padding-right: 0 !important;
-    }
+    .gallery-sidebar { width: 100% !important; height: 100% !important; padding: 0 !important; display: flex !important; flex-direction: column !important; }
+    .projects-scroll-area { flex-grow: 1 !important; height: auto !important; overflow-y: auto !important; padding-bottom: 60px !important; padding-right: 5px !important; }
 
-    /* ГАЛЕРЕЯ: ПЕРЕГЛЯД (Тут фон чорний, щоб не відволікати) */
     .gallery-viewport {
-        position: fixed !important; top: 0; left: 0;
-        width: 100% !important; height: 100% !important;
-        background: #000 !important; /* Чорний для картинок */
-        z-index: 5000 !important;
-        display: none; flex-direction: column; padding: 15px !important;
+        position: fixed !important; top: 0; left: 0; width: 100% !important; height: 100% !important;
+        background: #000 !important; z-index: 5000 !important; display: none; flex-direction: column; padding: 15px !important;
     }
     .gallery-viewport.active-screen { display: flex !important; }
-    .viewport-frame {
-        width: 100% !important; height: 100% !important;
-        border: none !important; background: transparent !important;
-        display: flex !important; flex-direction: column !important; margin-top: 0 !important;
-    }
-    #viewport-content {
-        flex-grow: 1 !important; overflow-y: auto !important;
-        padding-bottom: 50px !important; display: block !important;
-    }
-    .vp-content img, .vp-content video {
-        width: 100% !important; height: auto !important;
-        max-width: none !important; margin-bottom: 20px !important; display: block !important;
-    }
+    .viewport-frame { width: 100% !important; height: 100% !important; border: none !important; background: transparent !important; display: flex !important; flex-direction: column !important; margin-top: 0 !important; }
+    #viewport-content { flex-grow: 1 !important; overflow-y: auto !important; padding-bottom: 50px !important; display: block !important; }
+    .vp-content img, .vp-content video { width: 100% !important; height: auto !important; max-width: none !important; margin-bottom: 20px !important; display: block !important; }
     
-    .gallery-header-flex {
-        flex-direction: row; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px;
-    }
-    .gallery-header-flex h2 {
-        font-size: 18px !important; border: none !important; margin: 0 !important; width: auto !important;
-    }
+    .gallery-header-flex { flex-direction: row; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px; }
+    .gallery-header-flex h2 { font-size: 18px !important; border: none !important; margin: 0 !important; width: auto !important; }
 
-    .menu-item { font-size: 32px !important; padding: 15px 0 !important; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%; }
-    h2 { font-size: 28px !important; margin-bottom: 20px !important; border-bottom: 2px solid var(--primary-color) !important; }
+    .menu-item { font-size: 30px !important; padding: 12px 0 !important; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%; }
+    h2 { font-size: 26px !important; margin-bottom: 15px !important; border-bottom: 2px solid var(--primary-color) !important; }
     
     .mobile-nav-btn {
         font-size: 16px !important; padding: 15px !important; margin-bottom: 15px !important;
@@ -402,7 +387,5 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     }
 
     .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .back-hint, .header-spacer { display: none !important; }
-    
-    /* Preloader поверх усього */
     #gallery-preloader { z-index: 999999 !important; background: #000 !important; }
 }

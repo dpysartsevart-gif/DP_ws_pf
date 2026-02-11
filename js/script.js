@@ -38,19 +38,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let inSubMenu = false;
     let isDlcActive = false;
 
-    // === SYSTEM BOOT (ЗАВАНТАЖЕННЯ ПРИ СТАРТІ) ===
+    // === SYSTEM BOOT (ЗАПУСК ЕКРАНУ ЗАВАНТАЖЕННЯ) ===
     function runSystemBoot() {
         if (!preloader) return;
         
-        // Показуємо прелоадер
+        // 1. Примусово показуємо прелоадер і ставимо його поверх усього
         preloader.classList.remove('hidden');
         preloader.style.display = 'flex';
-        if(loaderText) loaderText.innerText = "SYSTEM INITIALIZATION...";
+        preloader.style.zIndex = '999999';
+        
+        // 2. Змінюємо текст на "System Boot"
+        if(loaderText) loaderText.innerText = "SYSTEM BOOT SEQUENCE...";
         
         let loadPct = 0;
-        // Швидкість завантаження (можна змінити 40 на менше число, щоб було швидше)
+        // Швидкість завантаження (зменш число 30, щоб було швидше)
         const interval = setInterval(() => {
-            loadPct += Math.floor(Math.random() * 10) + 2; 
+            loadPct += Math.floor(Math.random() * 5) + 2; 
             if(loadPct > 100) loadPct = 100;
             
             if(barFill) barFill.style.width = `${loadPct}%`;
@@ -59,27 +62,41 @@ document.addEventListener('DOMContentLoaded', () => {
             if(loadPct === 100) {
                 clearInterval(interval);
                 if(loaderText) loaderText.innerText = "ACCESS GRANTED";
+                
+                // Затримка перед зникненням
                 setTimeout(() => {
-                    preloader.style.opacity = '0'; // Плавне зникнення
+                    preloader.style.transition = 'opacity 0.5s';
+                    preloader.style.opacity = '0'; 
                     setTimeout(() => {
                         preloader.classList.add('hidden');
                         preloader.style.display = 'none';
-                        preloader.style.opacity = '1'; // Скидаємо для майбутніх запусків
+                        preloader.style.opacity = '1'; // Скидаємо для майбутніх використань
+                        
+                        // Показуємо банер на мобільному ТІЛЬКИ після завантаження
+                        if (window.innerWidth <= 1000 && banner) {
+                             banner.classList.add('active');
+                        }
                     }, 500);
-                }, 500);
+                }, 400);
             }
-        }, 40);
+        }, 30);
     }
 
-    // Запускаємо завантаження одразу
+    // ЗАПУСК!
     runSystemBoot();
 
-    // === PRELOADER ДЛЯ ГАЛЕРЕЇ ===
+
+    // === PRELOADER ДЛЯ ГАЛЕРЕЇ (Внутрішній) ===
     function runGalleryPreloader(callback) {
         if(!preloader) { callback(); return; }
+        
+        // Скидаємо стилі для повторного використання
         preloader.classList.remove('hidden');
         preloader.style.display = 'flex';
+        preloader.style.opacity = '1';
         if(loaderText) loaderText.innerText = "LOADING PROJECT DATA...";
+        if(barFill) barFill.style.width = '0%';
+        if(pctText) pctText.textContent = '0%';
         
         let loadPct = 0;
         const interval = setInterval(() => {
@@ -98,11 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 30);
     }
 
-    // === MOBILE BANNER ===
-    if (window.innerWidth <= 1000 && banner) {
-        // Показуємо банер трохи пізніше, після завантаження
-        setTimeout(() => { banner.classList.add('active'); }, 2500);
-    }
+    // === MOBILE BANNER LOGIC ===
     if(closeBanner) {
         closeBanner.addEventListener('click', () => { 
             if(banner) banner.classList.remove('active'); 
@@ -166,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         inSubMenu = (screenId !== 'main-menu');
         
-        // Mobile Gallery Logic
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if(sidebar) sidebar.style.display = 'flex';
             if(viewport) {
@@ -179,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function goBack() {
         if(emailPopup && emailPopup.style.display === 'flex') { closeEmailPopup(); return; }
         
-        // Mobile Gallery Back Logic
         if(window.innerWidth <= 1000 && viewport && viewport.classList.contains('active-screen')) {
              viewport.classList.remove('active-screen');
              viewport.style.display = 'none';
@@ -219,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === DATA ===
+    // === DATA & LOADING ===
     const projectData = {
         'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
