@@ -42,17 +42,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function runSystemBoot() {
         if (!preloader) return;
         
-        // Примусово показуємо прелоадер (скидаємо класи hidden)
-        preloader.className = ''; 
+        // ПРИМУСОВИЙ ПОКАЗ
+        // Видаляємо клас hidden і ставимо display flex вручну
+        preloader.classList.remove('hidden');
         preloader.style.display = 'flex';
-        preloader.style.zIndex = '999999';
+        preloader.style.zIndex = '9999999'; // Найвищий пріоритет
         preloader.style.opacity = '1';
         
         if(loaderText) loaderText.innerText = "SYSTEM BOOT SEQUENCE...";
         
         let loadPct = 0;
         const interval = setInterval(() => {
-            loadPct += Math.floor(Math.random() * 5) + 3; // Швидкість
+            loadPct += Math.floor(Math.random() * 5) + 3; 
             if(loadPct > 100) loadPct = 100;
             
             if(barFill) barFill.style.width = `${loadPct}%`;
@@ -68,9 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         preloader.classList.add('hidden');
                         preloader.style.display = 'none';
-                        preloader.style.opacity = '1'; // Скидаємо для майбутніх використань
+                        preloader.style.opacity = '1'; 
                         
-                        // Показуємо банер попередження на мобільному
+                        // Показуємо банер ТІЛЬКИ після завантаження
                         if (window.innerWidth <= 1000 && banner) {
                              banner.classList.add('active');
                         }
@@ -80,11 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 30);
     }
     
-    // ЗАПУСКАЄМО ЗАВАНТАЖЕННЯ ОДРАЗУ
+    // Запускаємо лоадер!
     runSystemBoot();
 
-
-    // === PRELOADER ГАЛЕРЕЇ ===
+    // === PRELOADER ГАЛЕРЕЇ (Внутрішній) ===
     function runGalleryPreloader(callback) {
         if (!preloader) { callback(); return; }
         
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 30);
     }
 
-    // === BANNER LOGIC ===
+    // === BANNER ===
     if(closeBanner) {
         closeBanner.addEventListener('click', () => { 
             if(banner) banner.classList.remove('active'); 
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === CURSOR ===
+    // === CURSOR (Desktop Only) ===
     let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === SCREEN LOGIC ===
     function showScreen(screenId) {
-        // Якщо відкриваємо галерею, запускаємо лоадер
         if(screenId === 'gallery-screen' && !inSubMenu) {
             runGalleryPreloader(() => { activateScreen(screenId); });
         } else {

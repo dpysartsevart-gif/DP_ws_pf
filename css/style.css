@@ -292,7 +292,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .ach-desc { color: #fff; font-size: 12px; font-family: 'Share Tech Mono', monospace; }
 
 /* =========================================
-   MOBILE FULLSCREEN FIXES (FINAL POLISH)
+   MOBILE FINAL FIXES (Transparency 0.15 + DLC Layout)
    ========================================= */
 
 @media (max-width: 1000px) {
@@ -300,7 +300,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         height: 100%; margin: 0; overflow: hidden; background: #000; 
     }
     
-    /* 1. ФОН: Робимо його яскравішим */
+    /* 1. ФОН: Чіткий, яскравий */
     .bg-layer {
         position: fixed !important; 
         inset: 0 !important;
@@ -308,32 +308,35 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         background-size: cover !important; 
         background-position: center !important; 
         z-index: 0 !important;
-        opacity: 0.8 !important; /* Підняв яскравість (було 0.5) */
+        opacity: 0.8 !important; 
         display: block !important;
     }
 
-    /* 2. ІНТЕРФЕЙС: Прозорий "скляний" ефект */
+    /* 2. ІНТЕРФЕЙС: Майже прозорий (0.15) */
     .screen {
         position: fixed; 
         top: 0; left: 0;
         width: 100% !important; height: 100% !important;
         padding: 15px !important; padding-top: 25px !important;
         box-sizing: border-box;
-        /* ПРОЗОРІСТЬ: Було 0.75, стало 0.35 (щоб було видно фон) */
-        background: rgba(0, 0, 0, 0.35) !important; 
-        backdrop-filter: blur(3px); /* Легке розмиття фону для читабельності */
+        
+        /* ПРОЗОРІСТЬ 0.15 - як ти просив */
+        background: rgba(0, 0, 0, 0.15) !important; 
+        
+        /* Трохи блюру, щоб текст читався на фоні гір */
+        backdrop-filter: blur(2px); 
         z-index: 10;
         display: none;
     }
     .screen.active-screen { display: flex !important; flex-direction: column; }
 
-    /* 3. DLC FIX (ВИПРАВЛЕНО НАКЛАДАННЯ) */
+    /* 3. DLC FIX (ЖОРСТКЕ РОЗДІЛЕННЯ) */
     .screen.dlc-centered {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        justify-content: flex-start !important; /* Починаємо зверху */
-        padding-top: 20px !important;
+        justify-content: flex-start !important;
+        padding-top: 60px !important; /* Відступ від верху екрану */
     }
     
     /* Кнопка "Main Menu" */
@@ -341,30 +344,34 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         position: relative !important;
         order: 1;
         width: 100%;
-        margin-bottom: 40px !important; /* Великий відступ вниз */
+        margin-bottom: 60px !important; /* ВЕЛИЧЕЗНИЙ ВІДСТУП ВНИЗ до батарейки */
         flex-shrink: 0;
+        z-index: 20; /* Щоб була точно поверх */
     }
     
     /* Батарейка (HUD) */
     .coffee-hud {
         position: relative !important;
-        top: auto !important; right: auto !important;
-        transform: scale(1) !important;
+        top: auto !important; right: auto !important; left: auto !important;
+        transform: scale(1.2) !important; /* Трохи збільшимо */
         order: 2;
-        margin-bottom: 30px !important;
+        margin-bottom: 40px !important; /* Відступ до тексту */
         align-self: center !important;
         display: flex !important;
         flex-direction: column;
         align-items: center;
+        width: auto !important;
+        height: auto !important;
     }
 
-    /* Блок з текстом "Support Creator" */
+    /* Текст "Support Creator" */
     .screen.dlc-centered .text-content.centered {
         order: 3;
         width: 100% !important;
         flex-grow: 1;
         margin-top: 0 !important;
-        background: rgba(16,16,16,0.85) !important; /* Трохи темніше під текстом */
+        background: rgba(16,16,16,0.6) !important; /* Трохи темніше під текстом для читабельності */
+        border: 1px solid var(--primary-color) !important;
     }
 
     /* 4. КОНТЕНТ */
@@ -376,7 +383,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         margin: 0 !important;
         border: none !important; background: transparent !important;
         padding: 0 !important;
-        padding-right: 20px !important; /* Щоб скрол не заважав */
+        padding-right: 20px !important;
         padding-bottom: 80px !important;
         overflow-y: auto !important;
     }
