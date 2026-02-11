@@ -70,8 +70,8 @@ body {
 
 @keyframes dustFloat { 
     0% { transform: translateY(0) translateX(0); opacity: 0; } 
-    20% { opacity: 0.4; } /* Швидше з'являються */
-    80% { opacity: 0.2; }
+    20% { opacity: 0.3; } /* Швидше з'являються */
+    80% { opacity: 0.15; }
     100% { transform: translateY(-150px) translateX(40px); opacity: 0; } /* Більший рух */
 }
 
