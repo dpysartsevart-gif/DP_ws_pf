@@ -366,16 +366,20 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         gap: 15px !important;
     }
     
-    /* 1. Кнопка "Main Menu" (ЗВЕРХУ) */
+    /* 1. Кнопка "Main Menu" (ЗВЕРХУ) - ВИПРАВЛЕНИЙ ВІДСТУП */
     #dlc-screen .mobile-nav-btn {
         position: relative !important;
         order: 1;
         width: 100%;
-        /* Прибираємо відступи, щоб вона була біля краю */
-        margin-top: 0 !important;
-        margin-bottom: 0 !important; 
+        /* Ставимо великий відступ в 50 пікселів, щоб точно відсунути текст */
+        margin-bottom: 50px !important; 
         flex-shrink: 0;
         z-index: 50;
+        display: block !important;
+    }
+    /* Додаткова гарантія: текст під кнопкою не має лізти вгору */
+    .screen.dlc-centered .text-content.centered {
+         margin-top: 0 !important;
     }
 
     /* 2. Текст "Support Creator" (ПО ЦЕНТРУ) */
