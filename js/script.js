@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const preloader = document.getElementById('gallery-preloader');
     const barFill = document.querySelector('.bar-fill');
     const pctText = document.querySelector('.loader-percentage');
-    const loaderText = document.querySelector('.loader-text'); // Текст завантаження
+    const loaderText = document.querySelector('.loader-text'); 
     
     const dot = document.querySelector('.cursor-dot');
     const circle = document.querySelector('.cursor-circle');
@@ -38,22 +38,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let inSubMenu = false;
     let isDlcActive = false;
 
-    // === SYSTEM BOOT (ЗАПУСК ЕКРАНУ ЗАВАНТАЖЕННЯ) ===
+    // === SYSTEM BOOT (ЗАПУСК ПРИ СТАРТІ) ===
     function runSystemBoot() {
         if (!preloader) return;
         
-        // 1. Примусово показуємо прелоадер і ставимо його поверх усього
-        preloader.classList.remove('hidden');
+        // Примусово показуємо прелоадер (скидаємо класи hidden)
+        preloader.className = ''; 
         preloader.style.display = 'flex';
         preloader.style.zIndex = '999999';
+        preloader.style.opacity = '1';
         
-        // 2. Змінюємо текст на "System Boot"
         if(loaderText) loaderText.innerText = "SYSTEM BOOT SEQUENCE...";
         
         let loadPct = 0;
-        // Швидкість завантаження (зменш число 30, щоб було швидше)
         const interval = setInterval(() => {
-            loadPct += Math.floor(Math.random() * 5) + 2; 
+            loadPct += Math.floor(Math.random() * 5) + 3; // Швидкість
             if(loadPct > 100) loadPct = 100;
             
             if(barFill) barFill.style.width = `${loadPct}%`;
@@ -63,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearInterval(interval);
                 if(loaderText) loaderText.innerText = "ACCESS GRANTED";
                 
-                // Затримка перед зникненням
                 setTimeout(() => {
                     preloader.style.transition = 'opacity 0.5s';
                     preloader.style.opacity = '0'; 
@@ -72,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         preloader.style.display = 'none';
                         preloader.style.opacity = '1'; // Скидаємо для майбутніх використань
                         
-                        // Показуємо банер на мобільному ТІЛЬКИ після завантаження
+                        // Показуємо банер попередження на мобільному
                         if (window.innerWidth <= 1000 && banner) {
                              banner.classList.add('active');
                         }
@@ -81,19 +79,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 30);
     }
-
-    // ЗАПУСК!
+    
+    // ЗАПУСКАЄМО ЗАВАНТАЖЕННЯ ОДРАЗУ
     runSystemBoot();
 
 
-    // === PRELOADER ДЛЯ ГАЛЕРЕЇ (Внутрішній) ===
+    // === PRELOADER ГАЛЕРЕЇ ===
     function runGalleryPreloader(callback) {
-        if(!preloader) { callback(); return; }
+        if (!preloader) { callback(); return; }
         
-        // Скидаємо стилі для повторного використання
         preloader.classList.remove('hidden');
         preloader.style.display = 'flex';
         preloader.style.opacity = '1';
+        preloader.style.zIndex = '999999';
+        
         if(loaderText) loaderText.innerText = "LOADING PROJECT DATA...";
         if(barFill) barFill.style.width = '0%';
         if(pctText) pctText.textContent = '0%';
@@ -115,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 30);
     }
 
-    // === MOBILE BANNER LOGIC ===
+    // === BANNER LOGIC ===
     if(closeBanner) {
         closeBanner.addEventListener('click', () => { 
             if(banner) banner.classList.remove('active'); 
@@ -123,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === CURSOR (Desktop Only) ===
+    // === CURSOR ===
     let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
@@ -152,6 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === SCREEN LOGIC ===
     function showScreen(screenId) {
+        // Якщо відкриваємо галерею, запускаємо лоадер
         if(screenId === 'gallery-screen' && !inSubMenu) {
             runGalleryPreloader(() => { activateScreen(screenId); });
         } else {
@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === GALLERY INTERACTION ===
+    // === INTERACTION ===
     projectSlots.forEach(slot => {
         slot.addEventListener('click', () => {
             projectSlots.forEach(s => s.classList.remove('selected'));
