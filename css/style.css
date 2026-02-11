@@ -70,8 +70,8 @@ body {
 
 @keyframes dustFloat { 
     0% { transform: translateY(0) translateX(0); opacity: 0; } 
-    20% { opacity: 0.8; } /* Швидше з'являються */
-    80% { opacity: 0.8; }
+    20% { opacity: 0.5; } /* Швидше з'являються */
+    80% { opacity: 0.3; }
     100% { transform: translateY(-150px) translateX(40px); opacity: 0; } /* Більший рух */
 }
 
@@ -353,14 +353,17 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     }
     .screen.active-screen { display: flex !important; flex-direction: column; }
 
-   /* 3. DLC FIX (ВИПРАВЛЕНО НАКЛАДАННЯ V2) */
+  /* ВСТАВИТИ ВСЕРЕДИНУ @media (max-width: 1000px) */
+
+    /* 3. DLC FIX (КНОПКА МАКСИМАЛЬНО ВГОРУ) */
     .screen.dlc-centered {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: flex-start !important;
-        padding-top: 40px !important; /* Відступ від верху екрану */
-        gap: 20px !important; /* Гарантований простір між елементами */
+        /* Мінімальний відступ зверху (було 40px) */
+        padding-top: 5px !important; 
+        gap: 15px !important;
     }
     
     /* 1. Кнопка "Main Menu" (ЗВЕРХУ) */
@@ -368,7 +371,9 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         position: relative !important;
         order: 1;
         width: 100%;
-        margin-bottom: 10px !important; 
+        /* Прибираємо відступи, щоб вона була біля краю */
+        margin-top: 0 !important;
+        margin-bottom: 0 !important; 
         flex-shrink: 0;
         z-index: 50;
     }
