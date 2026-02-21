@@ -324,6 +324,101 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .ach-title { color: #f7d53e; font-weight: bold; font-size: 16px; margin-bottom: 4px; }
 .ach-desc { color: #fff; font-size: 12px; font-family: 'Share Tech Mono', monospace; }
 
+/* === AUDIO TOGGLE === */
+#audio-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: var(--primary-color);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; /* Зменшили шрифт */
+    font-weight: bold;
+    letter-spacing: 1px;
+    z-index: 10000;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(247, 213, 62, 0.5);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 3px 6px; /* Зробили кнопку тоншою і меншою */
+    border: 1px solid var(--primary-color);
+    cursor: none;
+}
+#audio-toggle:hover {
+    background: var(--primary-color);
+    color: #000;
+    text-shadow: none;
+}
+#audio-toggle.muted {
+    color: #ff3d00;
+    border-color: #ff3d00;
+    text-shadow: 0 0 5px rgba(255, 61, 0, 0.5);
+}
+#audio-toggle.muted:hover {
+    background: #ff3d00;
+    color: #000;
+    text-shadow: none;
+}
+
+/* === HUD WIDGET === */
+#hud-widget {
+    position: fixed;
+    top: 42px; /* Підняли вище на 13 пікселів (було 55px) */
+    right: 20px;
+    left: auto;
+    bottom: auto;
+    color: var(--primary-color);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; /* Трохи менший шрифт */
+    letter-spacing: 1px;
+    z-index: 1000;
+    pointer-events: none; 
+    opacity: 0.6;
+    text-shadow: 0 0 5px rgba(247, 213, 62, 0.3);
+    text-align: right;
+}
+.hud-time { margin-bottom: 2px; }
+/* === FULLSCREEN LIGHTBOX === */
+#lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 30000; /* Вище за всі меню і попапи */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none; /* Щоб не заважав клікати, коли прозорий */
+    transition: opacity 0.3s ease;
+}
+#lightbox-overlay.active {
+    opacity: 1;
+    pointer-events: auto; /* Вмикаємо кліки, коли видимий */
+}
+#lightbox-img {
+    max-width: 95vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border: 1px solid #444;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+    cursor: none;
+}
+.lightbox-close {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    color: var(--primary-color);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: none;
+    transition: 0.2s;
+}
+.lightbox-close:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #fff;
+}
+
 /* =========================================
    MOBILE FINAL FIXES (DLC Reordered)
    ========================================= */
@@ -445,7 +540,18 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         width: 100%; background: #111; border: 1px solid var(--primary-color);
         z-index: 500; text-align: center; display: block !important;
     }
-
-    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap, .back-hint, .header-spacer { display: none !important; }
-    #gallery-preloader { z-index: 999999 !important; background: #000 !important; }
-}
+/* AUDIO & HUD WIDGET MOBILE */
+    #audio-toggle {
+        top: 15px !important;
+        right: 15px !important;
+        font-size: 9px !important;
+        padding: 2px 5px !important;
+    }
+    #hud-widget {
+        top: 35px !important; /* Чітко під зменшеною кнопкою */
+        right: 15px !important;
+        left: auto !important;
+        font-size: 8px !important; 
+        opacity: 0.5 !important;
+        text-align: right !important;
+    }

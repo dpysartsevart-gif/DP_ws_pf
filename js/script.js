@@ -12,7 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const barFill = document.querySelector('.bar-fill');
     const pctText = document.querySelector('.loader-percentage');
     const loaderText = document.querySelector('.loader-text'); 
-    
+    const audioToggle = document.getElementById('audio-toggle');
+    let isMuted = false;
+const lightbox = document.getElementById('lightbox-overlay');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxClose = document.querySelector('.lightbox-close');
     const dot = document.querySelector('.cursor-dot');
     const circle = document.querySelector('.cursor-circle');
     const banner = document.getElementById('mobile-banner');
@@ -141,7 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // === SOUNDS ===
-    function safePlay(id) {
+  function safePlay(id) {
+        if (isMuted) return; // ЯКЩО ЗВУК ВИМКНЕНО - ВИХОДИМО І НІЧОГО НЕ ГРАЄМО
         const audio = document.getElementById(id);
         if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
     }
@@ -387,10 +392,48 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; closeEmailPopup(); }, 2000);
     });
     if(btnEmailCancel) btnEmailCancel.addEventListener('click', () => { safePlay('snd-select'); closeEmailPopup(); });
+// === LIGHTBOX LOGIC ===
+    function closeLightbox() {
+        if(lightbox && lightbox.classList.contains('active')) {
+            lightbox.classList.remove('active');
+            safePlay('snd-select');
+            setTimeout(() => { lightboxImg.src = ''; }, 300); // Очищуємо після зникнення
+        }
+    }
 
+    if(lightbox) {
+        // Закриваємо по кліку куди завгодно на цьому екрані
+        lightbox.addEventListener('click', closeLightbox);
+        
+        // Додаємо ховер-ефект для курсора на закриття
+        if(lightboxClose) {
+            lightboxClose.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
+            lightboxClose.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
+        }
+    }
+
+    // Слухаємо кліки по картинках усередині галереї
+    if(vpContent) {
+        vpContent.addEventListener('click', (e) => {
+            // Перевіряємо, чи клікнули саме на картинку (IMG)
+            if(e.target.tagName === 'IMG') {
+                if (lightbox && lightboxImg) {
+                    lightboxImg.src = e.target.src; // Беремо джерело картинки
+                    lightbox.classList.add('active'); // Показуємо екран
+                    safePlay('snd-select');
+                }
+            }
+        });
+    }
     // KEYBOARD NAV
     document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape') goBack();
+        if(e.key === 'Escape') {
+            if (lightbox && lightbox.classList.contains('active')) {
+                closeLightbox(); // Якщо відкрито фото - спочатку закриваємо його
+            } else {
+                goBack(); // Інакше повертаємось в меню
+            }
+        }
         if(!inSubMenu && (!emailPopup || emailPopup.style.display !== 'flex')) {
             if(e.key === 'ArrowUp') {
                 if(isDlcActive) { isDlcActive = false; dlcBtn.classList.remove('active-dlc'); currentMenuIndex = menuItems.length - 1; } 
@@ -408,5 +451,45 @@ document.addEventListener('DOMContentLoaded', () => {
         menuItems.forEach(i => i.classList.remove('active'));
         if(dlcBtn) dlcBtn.classList.remove('active-dlc');
         if(isDlcActive) dlcBtn.classList.add('active-dlc'); else menuItems[currentMenuIndex].classList.add('active');
+    }
+// === HUD WIDGET LOGIC ===
+    const sysTimeEl = document.getElementById('sys-time');
+    const sysMemEl = document.getElementById('sys-mem');
+
+    if (sysTimeEl && sysMemEl) {
+        // Запускаємо оновлення кожну секунду (1000 мілісекунд)
+        setInterval(() => {
+            // 1. Оновлення реального часу
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const ss = String(now.getSeconds()).padStart(2, '0');
+            sysTimeEl.innerText = `${hh}:${mm}:${ss}`;
+
+            // 2. Фейкове коливання "пам'яті" (від 38% до 46%)
+            // Оновлюємо не кожну секунду, а з ймовірністю 30%, щоб виглядало природніше
+            if (Math.random() > 0.7) { 
+                const mem = Math.floor(Math.random() * 9) + 38;
+                sysMemEl.innerText = mem;
+            }
+        }, 1000);
+    }
+// === AUDIO TOGGLE LOGIC ===
+    if (audioToggle) {
+        audioToggle.addEventListener('click', () => {
+            isMuted = !isMuted; // Перемикаємо статус
+            if (isMuted) {
+                audioToggle.innerText = "[ AUDIO : OFF ]";
+                audioToggle.classList.add('muted');
+            } else {
+                audioToggle.innerText = "[ AUDIO : ON ]";
+                audioToggle.classList.remove('muted');
+                safePlay('snd-select'); // Програємо звук, щоб підтвердити увімкнення
+            }
+        });
+
+        // Додаємо курсору реакцію на наведення
+        audioToggle.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
+        audioToggle.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
     }
 });
