@@ -267,11 +267,11 @@ const lightbox = document.getElementById('lightbox-overlay');
     const projectData = {
         'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
-        'sequoia': ['youtube:gPoXD8hg3P0', 'Sequoia01.jpg', 'Sequoia02.jpg', 'Sequoia03.jpg', 'Sequoia04.jpg', 'Sequoia05.jpg'],
-        'mermaid': ['Marmeid01.jpg', 'Marmeid02.jpg'],
-        'scifi': ['sf01.jpg', 'sf02.jpg', 'sf03.jpg', 'sf04.jpg', 'sf05.jpg', 'scifi_turntable.mp4'],
-        'wolverine': ['Wolverine01.jpg', 'Wolverine02.jpg', 'Wolverine03.jpg', 'Wolverine04.jpg', 'Wolverine05.jpg', 'wolv_turntable.mp4'],
-        'boy': ['boy1.jpg', 'boy2.jpg', 'boy3.jpg', 'boy4.jpg', 'boy5.jpg', 'boy6.jpg', 'boy7.jpg', 'boy8.jpg'],
+        'sequoia': ['youtube:gPoXD8hg3P0', 'Sequoia01.jpg', 'Sequoia02|alt.jpg', 'Sequoia03|alt.jpg', 'Sequoia04.jpg', 'Sequoia05.jpg'],
+        'mermaid': ['Marmeid01.jpg', 'Marmeid02.jpg', 'Marmeid03.jpg', 'Mermaid_tt.mp4'],
+        'scifi': ['sf01|alt.jpg', 'sf02.jpg', 'sf03.jpg', 'sf04.jpg', 'sf05.jpg', 'scifi_turntable.mp4'],
+        'wolverine': ['Wolverine01.jpg', 'Wolverine02.jpg', 'Wolverine03.jpg', 'Wolverine04.jpg', 'Wolverine05.jpg', 'wolv_turntable|alt.mp4'],
+        'boy': ['boy1.jpg', 'boy2|alt.jpg', 'boy3.jpg', 'boy4.jpg', 'boy5.jpg', 'boy6.jpg', 'boy7.jpg', 'boy8.jpg'],
         'queen': ['Queen1.jpg', 'Queen2.jpg', 'Queen3.jpg', 'Queen4.jpg', 'Queen5.jpg', 'Queen6.jpg', 'Queen7.jpg', 'Queen8.jpg', 'Queen9.jpg', 'Queen10.jpg'],
         'halloween': ['Halloween1.jpg', 'Halloween2.jpg']
     };
@@ -285,7 +285,8 @@ function loadImages(id) {
         vpContent.style.scrollBehavior = '';     // Повертаємо плавність для коліщатка
         vpContent.innerHTML = '';
         if(projectData[id]) {
-            projectData[id].forEach(item => {
+projectData[id].forEach(item => {
+                // 1. Ютуб залишаємо як є
                 if (item.startsWith('youtube:')) {
                     const videoId = item.split(':')[1];
                     const iframe = document.createElement('iframe');
@@ -293,56 +294,70 @@ function loadImages(id) {
                     iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
                     iframe.allowFullscreen = true;
                     vpContent.appendChild(iframe);
-                } else if (item.endsWith('.mp4')) {
-                    const v = document.createElement('video');
-                    v.src = `assets/images/${item}`;
-                    v.controls = true; v.loop = true; v.muted = true; 
-                    vpContent.appendChild(v);
                 } else {
-                   // === ЛОГІКА ДЛЯ АЛЬТЕРНАТИВНИХ КАРТИНОК + SKELETON ===
+                    // 2. УНІВЕРСАЛЬНА ЛОГІКА ДЛЯ КАРТИНОК ТА ВІДЕО З |alt
                     let fileName = item;
                     let hasAlt = false;
 
+                    // Розпізнаємо |alt де б він не стояв
                     if (item.includes('|alt')) {
-                        fileName = item.split('|')[0];
                         hasAlt = true;
+                        fileName = item.replace('|alt', ''); 
                     }
 
                     const wrapper = document.createElement('div');
-                    wrapper.className = 'img-wrapper skeleton-loader'; // 1. Вішаємо клас кібер-заглушки
+                    wrapper.className = 'img-wrapper'; 
 
-                    const img = document.createElement('img');
-                    img.src = `assets/images/${fileName}`;
-                    img.style.opacity = '0'; // 2. Робимо фото прозорим поки вантажиться
-                    img.style.transition = 'opacity 0.4s ease'; // 3. Плавна поява
-                    
-                    img.onload = function() {
-                        wrapper.classList.remove('skeleton-loader'); // 4. Знімаємо заглушку
-                        this.style.opacity = '1'; // 5. Показуємо готове фото
-                    };
-                    img.onerror = function() { this.style.display = 'none'; wrapper.style.display = 'none'; };
-                    wrapper.appendChild(img);
+                    let mediaEl;
 
+                    // Якщо це відео
+                    if (fileName.endsWith('.mp4')) {
+                        mediaEl = document.createElement('video');
+                        mediaEl.src = `assets/images/${fileName}`;
+                        mediaEl.controls = true; mediaEl.loop = true; mediaEl.muted = true;
+                        wrapper.appendChild(mediaEl);
+                    } 
+                    // Якщо це картинка (додаємо Skeleton)
+                    else {
+                        wrapper.classList.add('skeleton-loader'); 
+                        mediaEl = document.createElement('img');
+                        mediaEl.src = `assets/images/${fileName}`;
+                        mediaEl.style.opacity = '0'; 
+                        mediaEl.style.transition = 'opacity 0.4s ease'; 
+                        
+                        mediaEl.onload = function() {
+                            wrapper.classList.remove('skeleton-loader'); 
+                            this.style.opacity = '1'; 
+                        };
+                        mediaEl.onerror = function() { this.style.display = 'none'; wrapper.style.display = 'none'; };
+                        wrapper.appendChild(mediaEl);
+                    }
+
+                    // 3. ДОДАЄМО КНОПКУ, ЯКЩО Є |alt
                     if (hasAlt) {
                         const altBtn = document.createElement('div');
                         altBtn.className = 'alt-toggle-btn';
-                        altBtn.innerText = '[ VIEW MESH ]';
+                        altBtn.innerText = '[ VIEW EXTRA ]';
                         let showingAlt = false;
 
-                        // Створюємо ім'я файлу з _alt (наприклад, file_alt.jpg)
                         const extIdx = fileName.lastIndexOf('.');
                         const altSrc = `assets/images/` + fileName.substring(0, extIdx) + '_alt' + fileName.substring(extIdx);
-                        const baseSrc = img.src;
+                        const baseSrc = mediaEl.src;
 
                         altBtn.addEventListener('click', (e) => {
-                            e.stopPropagation(); // Щоб не відкривався Fullscreen по кліку на кнопку
+                            e.stopPropagation(); 
                             showingAlt = !showingAlt;
-                            img.src = showingAlt ? altSrc : baseSrc;
-                            altBtn.innerText = showingAlt ? '[ VIEW RENDER ]' : '[ VIEW MESH ]';
+                            mediaEl.src = showingAlt ? altSrc : baseSrc;
+                            
+                            // Якщо це відео - примусово запускаємо його після перемикання
+                            if (fileName.endsWith('.mp4')) {
+                                mediaEl.play().catch(()=>{}); 
+                            }
+                            
+                            altBtn.innerText = showingAlt ? '[ VIEW RENDER ]' : '[ VIEW EXTRA ]';
                             safePlay('snd-hover');
                         });
                         
-                        // Додаємо ховер для курсора
                         altBtn.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
                         altBtn.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
 

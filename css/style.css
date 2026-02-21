@@ -182,31 +182,39 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .vp-content video, 
 .vp-content iframe {
     flex: 0 0 auto !important; 
-    scroll-snap-align: center !important; /* Магніт до центру екрану */
+    scroll-snap-align: center !important; 
     margin: 0 !important;
-    
-    height: 65vh !important; /* Фіксуємо великий розмір */
+    height: 65vh !important; 
     max-height: 800px !important;
-    width: auto !important;
-    max-width: 100% !important;
     position: relative !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
 }
 
+/* 1. РОБИМО ОБГОРТКУ НА ВСЮ ШИРИНУ VIEWPORT */
 .vp-content .img-wrapper {
-    display: inline-block !important; /* Щоб кнопка View Mesh не з'їжджала */
+    display: flex !important; 
+    justify-content: center !important; /* Картинка завжди по центру */
+    align-items: center !important;
+    width: 100% !important; /* Займає всю ширину вікна */
+    box-shadow: none !important; /* Тінь на обгортці не потрібна */
+    background: transparent !important;
 }
 
+/* 2. НАЛАШТУВАННЯ САМОЇ КАРТИНКИ */
 .vp-content .img-wrapper img { 
     height: 100% !important; 
     width: auto !important; 
     max-width: 100% !important;
     object-fit: contain !important;
     display: block !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important; /* Тінь тільки під картинкою */
 }
 
+/* 3. НАЛАШТУВАННЯ ВІДЕО ТА YOUTUBE */
 .vp-content iframe, .vp-content video {
+    width: auto !important;
+    max-width: 100% !important;
     aspect-ratio: 16/9 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
 }
 .vp-placeholder { margin-top: 250px; color: #444; animation: blink 2s infinite; font-size: 18px;}
 
@@ -534,14 +542,14 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 
 .alt-toggle-btn {
     position: absolute; 
-    top: 15px; 
-    left: 15px;
+    top: 8px;  /* Було 15px */
+    left: 8px; /* Було 15px */
     background: rgba(16, 16, 16, 0.85); 
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
-    padding: 6px 12px; 
+    padding: 3px 6px; /* Було 6px 12px */
     font-family: 'Share Tech Mono', monospace; 
-    font-size: 12px;
+    font-size: 8px; /* Було 12px */
     font-weight: bold;
     letter-spacing: 1px;
     cursor: none; 
