@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const loaderText = document.querySelector('.loader-text'); 
     const audioToggle = document.getElementById('audio-toggle');
     let isMuted = false;
+const terminal = document.getElementById('dev-terminal');
+    const termInput = document.getElementById('term-input');
+    const termOutput = document.getElementById('term-output');
 const lightbox = document.getElementById('lightbox-overlay');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxClose = document.querySelector('.lightbox-close');
@@ -300,11 +303,12 @@ const lightbox = document.getElementById('lightbox-overlay');
         });
     });
 
-    // === ACHIEVEMENTS ===
+  // === ACHIEVEMENTS ===
     let viewedProjects = new Set();
     let explorerUnlocked = false;
     let munchkinUnlocked = false;
     let supporterUnlocked = false;
+    let cheaterUnlocked = false; 
 
     function showAchievement(title, desc, icon) {
         if(achievementPopup) {
@@ -473,6 +477,105 @@ const lightbox = document.getElementById('lightbox-overlay');
                 sysMemEl.innerText = mem;
             }
         }, 1000);
+    }
+// === TERMINAL EASTER EGG LOGIC ===
+    // Відкриття/Закриття по кнопці Тильда (~) / Бектік (`)
+    document.addEventListener('keydown', (e) => {
+        // e.code === 'Backquote' працює навіть якщо розкладка клавіатури UA/RU (клавіша 'Ё')
+        if (e.code === 'Backquote') {
+            e.preventDefault(); // Забороняємо друкувати сам символ '`' в інпут
+            if (terminal) {
+                terminal.classList.toggle('active');
+                if (terminal.classList.contains('active')) {
+                    termInput.focus();
+                    safePlay('snd-select');
+                } else {
+                    termInput.blur();
+                    safePlay('snd-hover');
+                }
+            }
+        }
+    });
+
+    if (termInput) {
+        termInput.addEventListener('keydown', (e) => {
+            // Запобігаємо тому, щоб стрілки вгору/вниз в терміналі перемикали головне меню
+            if(terminal.classList.contains('active')) {
+                e.stopPropagation(); 
+            }
+
+            if (e.key === 'Enter') {
+                const cmd = termInput.value.trim().toLowerCase();
+                termInput.value = ''; // Очищаємо рядок вводу
+
+                if (cmd !== '') {
+                    printToTerminal(`user@sys:~$ ${cmd}`, 'term-prompt');
+                    processCommand(cmd);
+                }
+            }
+        });
+    }
+
+    function printToTerminal(text, className = '') {
+        const div = document.createElement('div');
+        div.className = `term-msg ${className}`;
+        div.textContent = text;
+        termOutput.appendChild(div);
+        termOutput.scrollTop = termOutput.scrollHeight; // Автоматично скролимо вниз
+    }
+
+   function processCommand(cmd) {
+        // База класичних чіт-кодів
+        const cheatCodes = [
+            'god', 'godmode', 'noclip', // Універсальні (Source / Quake)
+            'iddqd', 'idkfa', 'idspispopd', 'lumberjack',         // 
+            'hesoyam', 'baguvix', 'aezakmi', 'panzer', 'leavemealone', // GTA (SA / VC)
+            'motherlode', 'greedisgood', 'showmethemoney' // The Sims, Warcraft, Starcraft
+        ];
+
+        // Перевіряємо, чи введений текст є чіт-кодом
+        if (cheatCodes.includes(cmd)) {
+            printToTerminal('>>> ILLEGAL CHEAT CODE DETECTED...', 'term-err');
+            printToTerminal('God mode activated. (Just kidding, this is a portfolio).', 'term-sys');
+            
+            if (!cheaterUnlocked) {
+                cheaterUnlocked = true;
+                showAchievement("ACHIEVEMENT UNLOCKED", "CHEATER (Used a classic cheat code)", "👾");
+                safePlay('snd-gamestart'); // Звук як при початку гри
+            }
+            return; // Зупиняємо функцію, щоб не спрацював default
+        }
+
+        // Звичайні команди
+        switch(cmd) {
+            case 'help':
+                printToTerminal('AVAILABLE COMMANDS:', 'term-sys');
+                printToTerminal('- help   : Display this message');
+                printToTerminal('- hire   : Initialize recruitment protocol');
+                printToTerminal('- coffee : Dispense emergency caffeine');
+                printToTerminal('- clear  : Wipe terminal output');
+                break;
+            case 'hire':
+                printToTerminal('>>> EXECUTING RECRUITMENT PROTOCOL...', 'term-sys');
+                printToTerminal('Opening secure communication channels...');
+                setTimeout(() => {
+                    terminal.classList.remove('active');
+                    if(emailPopup) emailPopup.style.display = 'flex';
+                }, 1500);
+                break;
+            case 'coffee':
+                printToTerminal('WARNING: CAFFEINE OVERLOAD DETECTED.', 'term-err');
+                printToTerminal('System performance +50%. Applying Buff...');
+                showAchievement("ACHIEVEMENT UNLOCKED", "HACKER MAN (Found the Terminal)", "💻");
+                safePlay('snd-gamestart');
+                break;
+            case 'clear':
+                termOutput.innerHTML = '<div>Type \'help\' for available commands.</div>';
+                break;
+            default:
+                printToTerminal(`Command not found: ${cmd}`, 'term-err');
+                break;
+        }
     }
 // === AUDIO TOGGLE LOGIC ===
     if (audioToggle) {

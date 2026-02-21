@@ -204,7 +204,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .back-hint { margin-top: 20px; margin-bottom: 50px; color: #666; font-size: 14px; cursor: pointer; pointer-events: auto;}
 .back-hint:hover { color: #fff; }
 
-.dlc-wrapper { position: fixed; bottom: 50px; left: 60px; z-index: 101; pointer-events: auto;}
+.dlc-wrapper { position: fixed; bottom: 38px; left: 60px; z-index: 101; pointer-events: auto;}
 .dlc-btn { font-size: 16px; color: #666; cursor: pointer; transition: 0.3s; padding: 8px; font-weight: bold; letter-spacing: 1px; }
 .dlc-btn.active-dlc, .dlc-btn:hover { color: var(--primary-color); text-shadow: 0 0 5px var(--primary-color); }
 .buy-btn { display: inline-block; background: var(--primary-color); color: #000; padding: 15px 30px; text-decoration: none; font-weight: bold; margin-top: 20px; border: 2px solid var(--primary-color); transition: 0.2s; pointer-events: auto;}
@@ -418,6 +418,29 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     color: #fff;
     text-shadow: 0 0 10px #fff;
 }
+/* === TERMINAL EASTER EGG === */
+#dev-terminal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 45vh;
+    background: rgba(10, 15, 10, 0.95); /* Темно-зеленуватий відтінок */
+    border-bottom: 2px solid #4caf50;
+    z-index: 40000; font-family: 'Share Tech Mono', monospace; color: #4caf50;
+    padding: 20px; display: flex; flex-direction: column;
+    transform: translateY(-100%); transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9); pointer-events: none;
+}
+#dev-terminal.active { transform: translateY(0); pointer-events: auto; }
+.term-header { font-size: 14px; margin-bottom: 15px; border-bottom: 1px dashed #4caf50; padding-bottom: 5px; opacity: 0.7; }
+#term-output { flex-grow: 1; overflow-y: auto; margin-bottom: 10px; font-size: 14px; line-height: 1.5; display: flex; flex-direction: column; }
+.term-input-line { display: flex; align-items: center; font-size: 16px; }
+.term-prompt { margin-right: 10px; color: #fff; }
+#term-input { background: transparent; border: none; color: var(--primary-color); font-family: 'Share Tech Mono', monospace; font-size: 16px; flex-grow: 1; outline: none; }
+.term-msg { margin-bottom: 5px; }
+.term-err { color: #ff3d00; }
+.term-sys { color: #a3cbf5; }
+
+/* Стиль скролу для терміналу */
+#term-output::-webkit-scrollbar { width: 4px; }
+#term-output::-webkit-scrollbar-thumb { background: #4caf50; }
 
 /* =========================================
    MOBILE FINAL FIXES (DLC Reordered)
