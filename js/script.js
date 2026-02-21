@@ -431,11 +431,16 @@ const lightbox = document.getElementById('lightbox-overlay');
     }
     // KEYBOARD NAV
     document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape') {
+       if(e.key === 'Escape') {
             if (lightbox && lightbox.classList.contains('active')) {
-                closeLightbox(); // Якщо відкрито фото - спочатку закриваємо його
+                closeLightbox(); // 1. Закриваємо фото на весь екран
+            } else if (terminal && terminal.classList.contains('active')) {
+                // 2. Закриваємо термінал, якщо він відкритий
+                terminal.classList.remove('active');
+                if(termInput) termInput.blur();
+                safePlay('snd-hover');
             } else {
-                goBack(); // Інакше повертаємось в меню
+                goBack(); // 3. Інакше повертаємось в попереднє меню
             }
         }
         if(!inSubMenu && (!emailPopup || emailPopup.style.display !== 'flex')) {
@@ -478,36 +483,53 @@ const lightbox = document.getElementById('lightbox-overlay');
             }
         }, 1000);
     }
+
 // === TERMINAL EASTER EGG LOGIC ===
-    // Відкриття/Закриття по кнопці Тильда (~) / Бектік (`)
+  // === TERMINAL EASTER EGG LOGIC ===
+    
+    // 1. Глобальне Відкриття/Закриття по клавіші ~ (Тільда)
     document.addEventListener('keydown', (e) => {
-        // e.code === 'Backquote' працює навіть якщо розкладка клавіатури UA/RU (клавіша 'Ё')
         if (e.code === 'Backquote') {
-            e.preventDefault(); // Забороняємо друкувати сам символ '`' в інпут
+            e.preventDefault(); 
             if (terminal) {
-                terminal.classList.toggle('active');
                 if (terminal.classList.contains('active')) {
-                    termInput.focus();
-                    safePlay('snd-select');
-                } else {
-                    termInput.blur();
+                    terminal.classList.remove('active');
+                    if (termInput) termInput.blur();
                     safePlay('snd-hover');
+                } else {
+                    terminal.classList.add('active');
+                    if (termInput) {
+                        termInput.value = '';
+                        termInput.focus();
+                    }
+                    safePlay('snd-select');
                 }
             }
         }
     });
 
+    // 2. Логіка всередині поля вводу
     if (termInput) {
         termInput.addEventListener('keydown', (e) => {
-            // Запобігаємо тому, щоб стрілки вгору/вниз в терміналі перемикали головне меню
-            if(terminal.classList.contains('active')) {
-                e.stopPropagation(); 
+            // Зупиняємо "спливання" подій, щоб натискання клавіш не перемикали головне меню на фоні
+            if (terminal.classList.contains('active')) {
+                e.stopPropagation();
             }
 
-            if (e.key === 'Enter') {
-                const cmd = termInput.value.trim().toLowerCase();
-                termInput.value = ''; // Очищаємо рядок вводу
+            // Закриваємо термінал, якщо натиснуто Тільду або ESC прямо під час друку команди
+            if (e.code === 'Backquote' || e.code === 'Escape') {
+                e.preventDefault();
+                terminal.classList.remove('active');
+                termInput.blur();
+                termInput.value = '';
+                safePlay('snd-hover');
+                return;
+            }
 
+            // Обробка команди при натисканні Enter
+            if (e.key === 'Enter' || e.code === 'NumpadEnter') {
+                const cmd = termInput.value.trim().toLowerCase();
+                termInput.value = ''; 
                 if (cmd !== '') {
                     printToTerminal(`user@sys:~$ ${cmd}`, 'term-prompt');
                     processCommand(cmd);
@@ -515,6 +537,18 @@ const lightbox = document.getElementById('lightbox-overlay');
             }
         });
     }
+
+    // 3. Закриття по кліку мишкою в порожнє місце (поза терміналом)
+    document.addEventListener('click', (e) => {
+        if (terminal && terminal.classList.contains('active')) {
+            // Перевіряємо, чи клік був НЕ по вікну терміналу
+            if (!terminal.contains(e.target)) {
+                terminal.classList.remove('active');
+                if (termInput) termInput.blur();
+                safePlay('snd-hover');
+            }
+        }
+    });
 
     function printToTerminal(text, className = '') {
         const div = document.createElement('div');
