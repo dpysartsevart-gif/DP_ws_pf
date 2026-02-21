@@ -250,6 +250,10 @@ const lightbox = document.getElementById('lightbox-overlay');
 function loadImages(id) {
         checkExplorer(id);
         if(!vpContent) return;
+// === ПРИМУСОВЕ СКИДАННЯ СКРОЛУ ===
+        vpContent.style.scrollBehavior = 'auto'; // Тимчасово вимикаємо плавність
+        vpContent.scrollTop = 0;                 // Миттєво кидаємо на самий верх
+        vpContent.style.scrollBehavior = '';     // Повертаємо плавність для коліщатка
         vpContent.innerHTML = '';
         if(projectData[id]) {
             projectData[id].forEach(item => {
@@ -670,5 +674,63 @@ function loadImages(id) {
         // Додаємо курсору реакцію на наведення
         audioToggle.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
         audioToggle.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
+    }
+// === VERTICAL SMART SNAP SCROLL LOGIC ===
+    if (vpContent) {
+        let isScrolling = false; 
+        
+        vpContent.addEventListener('wheel', (e) => {
+            if (Math.abs(e.deltaY) > 0) {
+                e.preventDefault(); // Забороняємо стандартний хаотичний скрол
+                
+                if (isScrolling) return; // Чекаємо, поки закінчиться попередня анімація
+                isScrolling = true;
+
+                // 1. Беремо тільки реальні зображення/відео
+                const items = Array.from(vpContent.children).filter(child => 
+                    child.classList.contains('img-wrapper') || 
+                    child.tagName === 'VIDEO' || 
+                    child.tagName === 'IFRAME' ||
+                    child.classList.contains('vp-placeholder')
+                );
+
+                if (items.length === 0) {
+                    isScrolling = false;
+                    return;
+                }
+
+                // 2. Визначаємо точний центр вікна по вертикалі
+                const containerRect = vpContent.getBoundingClientRect();
+                const containerCenter = containerRect.top + (containerRect.height / 2);
+
+                // 3. Знаходимо кадр, який зараз перед очима
+                let closestItem = items[0];
+                let minDistance = Infinity;
+
+                items.forEach(item => {
+                    const rect = item.getBoundingClientRect();
+                    const itemCenter = rect.top + (rect.height / 2);
+                    const distance = Math.abs(itemCenter - containerCenter);
+                    
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestItem = item;
+                    }
+                });
+
+                // 4. Вираховуємо наступний кадр (вгору або вниз)
+                const currentIndex = items.indexOf(closestItem);
+                let nextIndex = currentIndex + (e.deltaY > 0 ? 1 : -1);
+                
+                if (nextIndex < 0) nextIndex = 0;
+                if (nextIndex >= items.length) nextIndex = items.length - 1;
+
+                // 5. Робимо плавний ривок рівно до центру наступного кадру
+                items[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+
+                // Знімаємо блок через 400мс
+                setTimeout(() => { isScrolling = false; }, 400); 
+            }
+        }, { passive: false });
     }
 });
