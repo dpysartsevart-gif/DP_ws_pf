@@ -201,11 +201,28 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .set-val { color: #ccc; } .set-val.on { color: #4caf50; font-weight: bold; } .set-val.max { color: #ff3d00; font-weight: bold; } .set-val.disabled { color: #444; text-decoration: line-through; font-size: 14px;}
 
 .footer-hint { position: fixed; bottom: 45px; left: 0; width: 100%; text-align: center; color: #666; font-size: 14px; letter-spacing: 2px; z-index: 200; pointer-events: none; }
-.back-hint { margin-top: 20px; margin-bottom: 50px; color: #666; font-size: 14px; cursor: pointer; pointer-events: auto;}
-.back-hint:hover { color: #fff; }
+/* === FIXED BACK BUTTON (DESKTOP) === */
+.back-hint { 
+    position: fixed; 
+    bottom: 45px; /* Ідеально на одній лінії з копірайтом та текстом навігації */
+    left: 60px;   /* На одній вертикалі з лівим краєм меню і кнопкою DLC */
+    margin: 0; 
+    color: #666; 
+    font-size: 14px; 
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: none; /* Щоб діяв кастомний курсор */
+    pointer-events: auto;
+    z-index: 200;
+    transition: all 0.2s ease;
+}
+.back-hint:hover { 
+    color: #fff; 
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6); 
+}
 
 .dlc-wrapper { position: fixed; bottom: 38px; left: 60px; z-index: 101; pointer-events: auto;}
-.dlc-btn { font-size: 16px; color: #666; cursor: pointer; transition: 0.3s; padding: 8px; font-weight: bold; letter-spacing: 1px; }
+.dlc-btn { font-size: 16px; color: #ACB7C2; cursor: pointer; transition: 0.3s; padding: 8px; font-weight: bold; letter-spacing: 1px; }
 .dlc-btn.active-dlc, .dlc-btn:hover { color: var(--primary-color); text-shadow: 0 0 5px var(--primary-color); }
 .buy-btn { display: inline-block; background: var(--primary-color); color: #000; padding: 15px 30px; text-decoration: none; font-weight: bold; margin-top: 20px; border: 2px solid var(--primary-color); transition: 0.2s; pointer-events: auto;}
 .buy-btn.secondary { background: transparent; color: #888; border-color: #444; }
@@ -362,13 +379,13 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 /* === HUD WIDGET === */
 #hud-widget {
     position: fixed;
-    top: 42px; /* Підняли вище на 13 пікселів (було 55px) */
-    right: 20px;
+    bottom: 65px; /* Одразу над копірайтом (який на 45px) */
+    right: 20px;  /* Притискаємо до правого краю */
+    top: auto;    /* Скидаємо позицію зверху */
     left: auto;
-    bottom: auto;
     color: var(--primary-color);
     font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; /* Трохи менший шрифт */
+    font-size: 10px;
     letter-spacing: 1px;
     z-index: 1000;
     pointer-events: none; 
@@ -571,10 +588,5 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
         padding: 2px 5px !important;
     }
     #hud-widget {
-        top: 35px !important; /* Чітко під зменшеною кнопкою */
-        right: 15px !important;
-        left: auto !important;
-        font-size: 8px !important; 
-        opacity: 0.5 !important;
-        text-align: right !important;
+        display: none !important; /* Повністю приховуємо годинник на телефонах */
     }
