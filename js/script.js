@@ -247,7 +247,7 @@ const lightbox = document.getElementById('lightbox-overlay');
         'halloween': ['Halloween1.jpg', 'Halloween2.jpg']
     };
 
-    function loadImages(id) {
+function loadImages(id) {
         checkExplorer(id);
         if(!vpContent) return;
         vpContent.innerHTML = '';
@@ -266,10 +266,50 @@ const lightbox = document.getElementById('lightbox-overlay');
                     v.controls = true; v.loop = true; v.muted = true; 
                     vpContent.appendChild(v);
                 } else {
+                    // === ЛОГІКА ДЛЯ АЛЬТЕРНАТИВНИХ КАРТИНОК ===
+                    let fileName = item;
+                    let hasAlt = false;
+
+                    // Якщо в масиві є позначка |alt
+                    if (item.includes('|alt')) {
+                        fileName = item.split('|')[0];
+                        hasAlt = true;
+                    }
+
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'img-wrapper';
+
                     const img = document.createElement('img');
-                    img.src = `assets/images/${item}`;
-                    img.onerror = function() { this.style.display = 'none'; };
-                    vpContent.appendChild(img);
+                    img.src = `assets/images/${fileName}`;
+                    img.onerror = function() { this.style.display = 'none'; wrapper.style.display = 'none'; };
+                    wrapper.appendChild(img);
+
+                    if (hasAlt) {
+                        const altBtn = document.createElement('div');
+                        altBtn.className = 'alt-toggle-btn';
+                        altBtn.innerText = '[ VIEW MESH ]';
+                        let showingAlt = false;
+
+                        // Створюємо ім'я файлу з _alt (наприклад, file_alt.jpg)
+                        const extIdx = fileName.lastIndexOf('.');
+                        const altSrc = `assets/images/` + fileName.substring(0, extIdx) + '_alt' + fileName.substring(extIdx);
+                        const baseSrc = img.src;
+
+                        altBtn.addEventListener('click', (e) => {
+                            e.stopPropagation(); // Щоб не відкривався Fullscreen по кліку на кнопку
+                            showingAlt = !showingAlt;
+                            img.src = showingAlt ? altSrc : baseSrc;
+                            altBtn.innerText = showingAlt ? '[ VIEW RENDER ]' : '[ VIEW MESH ]';
+                            safePlay('snd-hover');
+                        });
+                        
+                        // Додаємо ховер для курсора
+                        altBtn.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
+                        altBtn.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
+
+                        wrapper.appendChild(altBtn);
+                    }
+                    vpContent.appendChild(wrapper);
                 }
             });
         } else {
@@ -588,7 +628,9 @@ const lightbox = document.getElementById('lightbox-overlay');
                 printToTerminal('- hire   : Initialize recruitment protocol');
                 printToTerminal('- coffee : Dispense emergency caffeine');
                 printToTerminal('- clear  : Wipe terminal output');
+                printToTerminal('- *** : Do you remember any c*****? ;) ');
                 break;
+
             case 'hire':
                 printToTerminal('>>> EXECUTING RECRUITMENT PROTOCOL...', 'term-sys');
                 printToTerminal('Opening secure communication channels...');
