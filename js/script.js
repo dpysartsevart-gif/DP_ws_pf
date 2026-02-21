@@ -45,6 +45,21 @@ const lightbox = document.getElementById('lightbox-overlay');
     let inSubMenu = false;
     let isDlcActive = false;
 
+// === DYNAMIC FAVICON LOGIC ===
+    const faviconDefault = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f7d53e" rx="20"/><text y="70" x="15" fill="black" font-family="monospace" font-size="60" font-weight="bold">DP</text></svg>';
+    const faviconTerminal = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23ff3d00" rx="20"/><text y="65" x="15" fill="white" font-family="monospace" font-size="55">>_</text></svg>';
+
+    function setFavicon(url) {
+        let link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+        }
+        link.href = url;
+    }
+    setFavicon(faviconDefault); // Встановлюємо базову іконку
+
     // === SYSTEM BOOT (ЗАПУСК) ===
     function runSystemBoot() {
         if (!preloader) return;
@@ -126,12 +141,22 @@ const lightbox = document.getElementById('lightbox-overlay');
         });
     }
 
-    // === CURSOR ===
+// === CURSOR (HOVER UPGRADE) ===
     let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
+
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX; mouseY = e.clientY;
             if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
+
+            // Перевіряємо, чи ми над інтерактивним елементом (ТІЛЬКИ ВІЗУАЛ)
+            const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close');
+            if (target) {
+                if(circle) circle.classList.add('magnetic');
+            } else {
+                if(circle) circle.classList.remove('magnetic');
+            }
+
             const bg = document.getElementById('parallax-bg');
             if(bg) {
                 const moveX = (window.innerWidth / 2 - mouseX) * 0.02; 
@@ -139,8 +164,12 @@ const lightbox = document.getElementById('lightbox-overlay');
                 bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             }
         });
+
         function animateCursor() {
-            circleX += (mouseX - circleX) * 0.15; circleY += (mouseY - circleY) * 0.15;
+            // Завжди плавно йдемо за мишкою, БЕЗ примагнічування до кнопок
+            circleX += (mouseX - circleX) * 0.15; 
+            circleY += (mouseY - circleY) * 0.15;
+            
             if(circle) { circle.style.left = `${circleX}px`; circle.style.top = `${circleY}px`; }
             requestAnimationFrame(animateCursor);
         }
@@ -270,21 +299,27 @@ function loadImages(id) {
                     v.controls = true; v.loop = true; v.muted = true; 
                     vpContent.appendChild(v);
                 } else {
-                    // === ЛОГІКА ДЛЯ АЛЬТЕРНАТИВНИХ КАРТИНОК ===
+                   // === ЛОГІКА ДЛЯ АЛЬТЕРНАТИВНИХ КАРТИНОК + SKELETON ===
                     let fileName = item;
                     let hasAlt = false;
 
-                    // Якщо в масиві є позначка |alt
                     if (item.includes('|alt')) {
                         fileName = item.split('|')[0];
                         hasAlt = true;
                     }
 
                     const wrapper = document.createElement('div');
-                    wrapper.className = 'img-wrapper';
+                    wrapper.className = 'img-wrapper skeleton-loader'; // 1. Вішаємо клас кібер-заглушки
 
                     const img = document.createElement('img');
                     img.src = `assets/images/${fileName}`;
+                    img.style.opacity = '0'; // 2. Робимо фото прозорим поки вантажиться
+                    img.style.transition = 'opacity 0.4s ease'; // 3. Плавна поява
+                    
+                    img.onload = function() {
+                        wrapper.classList.remove('skeleton-loader'); // 4. Знімаємо заглушку
+                        this.style.opacity = '1'; // 5. Показуємо готове фото
+                    };
                     img.onerror = function() { this.style.display = 'none'; wrapper.style.display = 'none'; };
                     wrapper.appendChild(img);
 
@@ -529,7 +564,6 @@ function loadImages(id) {
     }
 
 // === TERMINAL EASTER EGG LOGIC ===
-  // === TERMINAL EASTER EGG LOGIC ===
     
     // 1. Глобальне Відкриття/Закриття по клавіші ~ (Тільда)
     document.addEventListener('keydown', (e) => {
@@ -538,10 +572,12 @@ function loadImages(id) {
             if (terminal) {
                 if (terminal.classList.contains('active')) {
                     terminal.classList.remove('active');
+                    setFavicon(faviconDefault); // ПОВЕРТАЄМО FAVICON
                     if (termInput) termInput.blur();
                     safePlay('snd-hover');
                 } else {
                     terminal.classList.add('active');
+                    setFavicon(faviconTerminal); // ЧЕРВОНИЙ FAVICON!
                     if (termInput) {
                         termInput.value = '';
                         termInput.focus();
