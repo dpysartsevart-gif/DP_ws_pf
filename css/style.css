@@ -789,5 +789,6 @@ body::after {
         padding: 2px 5px !important;
     }
     #hud-widget {
-        display: none !important; /* Повністю приховуємо годинник на телефонах */
+        display: none !important; 
     }
+} /* <--- ОСЬ ЦЯ ДУЖКА КРИТИЧНО ВАЖЛИВА! Вона закриває блок @media */
