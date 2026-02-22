@@ -574,9 +574,9 @@ body::after {
     pointer-events: none; 
     z-index: 9000; 
     /* Зменшили непрозорість чорного з 0.5 до 0.15 (стало набагато світліше) */
-    background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.15) 150%);
+    background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.1) 150%);
     /* Тінь по краях екрану теж зробили легшою (з 0.5 до 0.25) */
-    box-shadow: inset 0 0 80px rgba(0,0,0,0.25);
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.15);
 }
 
 /* 2. SKELETON LOADING (Для галереї) */
