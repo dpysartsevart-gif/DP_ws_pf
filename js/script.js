@@ -13,7 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const pctText = document.querySelector('.loader-percentage');
     const loaderText = document.querySelector('.loader-text'); 
     const audioToggle = document.getElementById('audio-toggle');
-    let isMuted = false;
+    // Читаємо пам'ять браузера: якщо там записано 'true', звук буде вимкнено
+    let isMuted = localStorage.getItem('dp_audio_muted') === 'true';
+
+    // Одразу застосовуємо візуальний стан кнопки при завантаженні
+    if (audioToggle) {
+        if (isMuted) {
+            audioToggle.innerText = "[ AUDIO : OFF ]";
+            audioToggle.classList.add('muted');
+        }
+    }
 const terminal = document.getElementById('dev-terminal');
     const termInput = document.getElementById('term-input');
     const termOutput = document.getElementById('term-output');
@@ -181,7 +190,7 @@ const lightbox = document.getElementById('lightbox-overlay');
         if (isMuted) return; // ЯКЩО ЗВУК ВИМКНЕНО - ВИХОДИМО І НІЧОГО НЕ ГРАЄМО
         const audio = document.getElementById(id);
         if(audio) { 
-            audio.volume = 0.5; // МАГІЯ ТУТ: 0.5 = 50% гучності (можеш змінити на 0.3 для 30% тощо)
+            audio.volume = 0.3; // МАГІЯ ТУТ: 0.5 = 50% гучності (можеш змінити на 0.3 для 30% тощо)
             audio.currentTime = 0; 
             audio.play().catch(() => {}); 
         }
@@ -380,13 +389,19 @@ function loadImages(id) {
 
         if(projectData[id]) {
             projectData[id].forEach(item => {
-                if (item.startsWith('youtube:')) {
+if (item.startsWith('youtube:')) {
                     const videoId = item.split(':')[1];
                     const iframe = document.createElement('iframe');
-                    iframe.src = `https://www.youtube.com/embed/${videoId}`;
-                    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-                    iframe.allowFullscreen = true;
+                    iframe.setAttribute('loading', 'lazy'); // ДОДАНО: Ліниве завантаження для YouTube
+                    // Додали параметри fs=1 та playsinline=1 для мобілок
+                    iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0&fs=1&playsinline=1`;
+                    // Жорстко прописуємо дозволи на повний екран для всіх видів браузерів
+                    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen');
+                    iframe.setAttribute('allowfullscreen', 'true');
+                    iframe.setAttribute('webkitallowfullscreen', 'true');
+                    iframe.setAttribute('mozallowfullscreen', 'true');
                     vpContent.appendChild(iframe);
+     
                 } else {
                     // === УНІВЕРСАЛЬНА ЛОГІКА ДЛЯ КАРТИНОК ТА ВІДЕО ===
                     let fileName = item;
@@ -414,6 +429,7 @@ function loadImages(id) {
                     else {
                         wrapper.classList.add('skeleton-loader'); 
                         mediaEl = document.createElement('img');
+                        mediaEl.setAttribute('loading', 'lazy'); // ДОДАНО: Ліниве завантаження для картинок
                         mediaEl.src = `assets/images/${fileName}`;
                         mediaEl.style.opacity = '0'; 
                         mediaEl.style.transition = 'opacity 0.4s ease'; 
@@ -811,6 +827,10 @@ function loadImages(id) {
     if (audioToggle) {
         audioToggle.addEventListener('click', () => {
             isMuted = !isMuted; // Перемикаємо статус
+            
+            // МАГІЯ: Зберігаємо вибір користувача в пам'ять браузера
+            localStorage.setItem('dp_audio_muted', isMuted);
+            
             if (isMuted) {
                 audioToggle.innerText = "[ AUDIO : OFF ]";
                 audioToggle.classList.add('muted');
