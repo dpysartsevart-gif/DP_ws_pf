@@ -176,11 +176,15 @@ const lightbox = document.getElementById('lightbox-overlay');
         animateCursor();
     }
 
-    // === SOUNDS ===
-  function safePlay(id) {
+// === SOUNDS ===
+    function safePlay(id) {
         if (isMuted) return; // ЯКЩО ЗВУК ВИМКНЕНО - ВИХОДИМО І НІЧОГО НЕ ГРАЄМО
         const audio = document.getElementById(id);
-        if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+        if(audio) { 
+            audio.volume = 0.5; // МАГІЯ ТУТ: 0.5 = 50% гучності (можеш змінити на 0.3 для 30% тощо)
+            audio.currentTime = 0; 
+            audio.play().catch(() => {}); 
+        }
     }
 
     // === SCREEN LOGIC ===
@@ -234,6 +238,10 @@ const lightbox = document.getElementById('lightbox-overlay');
     }
 
     // === ОНОВЛЕНА ФУНКЦІЯ ПЕРЕМИКАННЯ ЕКРАНІВ ===
+// Додаємо змінну для зберігання таймера
+    let queenScrambleInterval = null;
+
+    // === ОНОВЛЕНА ФУНКЦІЯ ПЕРЕМИКАННЯ ЕКРАНІВ ===
     function activateScreen(screenId) {
         screens.forEach(s => {
             s.classList.remove('active-screen');
@@ -252,19 +260,34 @@ const lightbox = document.getElementById('lightbox-overlay');
             setTimeout(() => {
                 target.classList.add('active-screen');
                 
-                // --- ЗАПУСКАЄМО ЕФЕКТ ТІЛЬКИ ДЛЯ DIGITAL QUEEN ПРИ ВХОДІ В ГАЛЕРЕЮ ---
+                // --- ЛОГІКА ДЕКОДУВАННЯ ДЛЯ DIGITAL QUEEN ---
                 if (screenId === 'gallery-screen') {
-                    // Шукаємо заголовок (p-title) тільки всередині проекту queen
                     const queenTitle = document.querySelector('.project-slot[data-id="queen"] .p-title');
                     if (queenTitle) {
-                        scrambleText(queenTitle, 1500); // 1500мс = 1.5 секунди хаосу перед появою
+                        // 1. Запускаємо ефект одразу при вході в галерею
+                        scrambleText(queenTitle, 1500); 
+                        
+                        // 2. Зупиняємо старий таймер (запобіжник від багів)
+                        if (queenScrambleInterval) clearInterval(queenScrambleInterval);
+                        
+                        // 3. Запускаємо новий цикл кожні 20 секунд (20000 мілісекунд)
+                        queenScrambleInterval = setInterval(() => {
+                            scrambleText(queenTitle, 1500);
+                        }, 20000);
+                    }
+                } else {
+                    // Якщо ми вийшли з галереї - повністю вимикаємо таймер
+                    if (queenScrambleInterval) {
+                        clearInterval(queenScrambleInterval);
+                        queenScrambleInterval = null;
                     }
                 }
+                // --------------------------------------------
                 
             }, 10); 
         }
         
-inSubMenu = (screenId !== 'main-menu');
+        inSubMenu = (screenId !== 'main-menu');
         
         // --- ФІКС ЗВУКУ (ГЛОБАЛЬНИЙ): Якщо вийшли з галереї, вбиваємо відео ---
         if (screenId !== 'gallery-screen') {

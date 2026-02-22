@@ -293,7 +293,16 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .buy-btn:hover { background: transparent; color: var(--primary-color); }
 .centered { text-align: center; }
 
-.coffee-hud { position: absolute; top: 40px; right: 60px; display: flex; flex-direction: column; align-items: flex-end; font-family: 'Oxanium', monospace; z-index: 10; }
+.coffee-hud { 
+    position: absolute; 
+    top: 55px; /* Спустили трохи нижче, щоб не прилипало до AUDIO (було 40px) */
+    right: 20px; /* МАГІЯ ТУТ: тепер відступ такий самий, як у кнопки AUDIO (було 60px) */
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-end; /* Весь вміст батареї вирівнюється по правому краю */
+    font-family: 'Oxanium', monospace; 
+    z-index: 10; 
+}
 .hud-row { display: flex; gap: 10px; align-items: center; margin-bottom: 5px; }
 .hud-label { font-size: 12px; color: #888; letter-spacing: 2px; }
 .hud-value { font-size: 16px; font-weight: bold; color: #ff3d00; text-shadow: 0 0 10px rgba(255, 61, 0, 0.5); }
