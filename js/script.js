@@ -275,7 +275,7 @@ const lightbox = document.getElementById('lightbox-overlay');
         }
     }
 
-    function goBack() {
+function goBack() {
         if(emailPopup && emailPopup.style.display === 'flex') { closeEmailPopup(); return; }
         
         if(window.innerWidth <= 1000 && viewport && viewport.classList.contains('active-screen')) {
@@ -283,6 +283,11 @@ const lightbox = document.getElementById('lightbox-overlay');
              viewport.style.display = 'none';
              sidebar.style.display = 'flex';
              safePlay('snd-select');
+             
+             // --- ФІКС ЗВУКУ: Очищаємо вікно, щоб зупинити відео ---
+             if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
+             projectSlots.forEach(s => s.classList.remove('selected'));
+             
              return;
         }
 
