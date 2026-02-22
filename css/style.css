@@ -540,27 +540,47 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 }
 
 
+/* === КНОПКА-ТРИКУТНИК (VIEW MESH / RENDER) === */
 .alt-toggle-btn {
     position: absolute; 
-    top: 8px;  /* Було 15px */
-    left: 8px; /* Було 15px */
-    background: rgba(16, 16, 16, 0.85); 
-    color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-    padding: 3px 6px; /* Було 6px 12px */
-    font-family: 'Share Tech Mono', monospace; 
-    font-size: 8px; /* Було 12px */
-    font-weight: bold;
-    letter-spacing: 1px;
+    top: 20px; /* Трохи відступили від самого краю, щоб дихало */
+    left: 20px;
+    z-index: 50;
     cursor: none; 
-    z-index: 10; 
-    transition: all 0.2s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+
+    /* Жорстко фіксуємо розмір саме для іконки */
+    width: 30px !important;
+    height: 30px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    /* Примусово вбиваємо рамки та фони від старої текстової кнопки */
+    background: transparent !important; 
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+
+    color: var(--primary-color);
+    transition: transform 0.2s ease;
 }
-.alt-toggle-btn:hover { 
-    background: var(--primary-color); 
-    color: #000; 
-    box-shadow: 0 0 10px rgba(247, 213, 62, 0.5);
+
+/* Стиль самої SVG іконки */
+.alt-toggle-btn svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none; /* МАГІЯ: Тепер мишка ігнорує лінії SVG і бачить тільки саму кнопку */
+    filter: drop-shadow(0 0 4px var(--primary-color));
+    transition: all 0.2s ease;
+}
+
+/* Ефект при наведенні (Пульсація) */
+.alt-toggle-btn:hover {
+    transform: scale(1.15); 
+}
+.alt-toggle-btn:hover svg {
+    filter: drop-shadow(0 0 12px var(--primary-color)); /* Яскравий неон */
 }
 /* =========================================
    V2.8 POLISH UPDATE (PREMIUM DETAILS)

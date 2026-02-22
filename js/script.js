@@ -279,14 +279,15 @@ const lightbox = document.getElementById('lightbox-overlay');
 function loadImages(id) {
         checkExplorer(id);
         if(!vpContent) return;
-// === ПРИМУСОВЕ СКИДАННЯ СКРОЛУ ===
-        vpContent.style.scrollBehavior = 'auto'; // Тимчасово вимикаємо плавність
-        vpContent.scrollTop = 0;                 // Миттєво кидаємо на самий верх
-        vpContent.style.scrollBehavior = '';     // Повертаємо плавність для коліщатка
+
+        // === ПРИМУСОВЕ СКИДАННЯ СКРОЛУ ===
+        vpContent.style.scrollBehavior = 'auto'; 
+        vpContent.scrollTop = 0;                 
+        vpContent.style.scrollBehavior = '';     
         vpContent.innerHTML = '';
+
         if(projectData[id]) {
-projectData[id].forEach(item => {
-                // 1. Ютуб залишаємо як є
+            projectData[id].forEach(item => {
                 if (item.startsWith('youtube:')) {
                     const videoId = item.split(':')[1];
                     const iframe = document.createElement('iframe');
@@ -295,7 +296,7 @@ projectData[id].forEach(item => {
                     iframe.allowFullscreen = true;
                     vpContent.appendChild(iframe);
                 } else {
-                    // 2. УНІВЕРСАЛЬНА ЛОГІКА ДЛЯ КАРТИНОК ТА ВІДЕО З |alt
+                    // === УНІВЕРСАЛЬНА ЛОГІКА ДЛЯ КАРТИНОК ТА ВІДЕО ===
                     let fileName = item;
                     let hasAlt = false;
 
@@ -333,11 +334,16 @@ projectData[id].forEach(item => {
                         wrapper.appendChild(mediaEl);
                     }
 
-                    // 3. ДОДАЄМО КНОПКУ, ЯКЩО Є |alt
+                    // === ДОДАЄМО КНОПКУ-ТРИКУТНИК, ЯКЩО Є |alt ===
                     if (hasAlt) {
                         const altBtn = document.createElement('div');
-                        altBtn.className = 'alt-toggle-btn';
-                        altBtn.innerText = '[ VIEW EXTRA ]';
+                        altBtn.className = 'alt-toggle-btn'; 
+
+                        // --- SVG ІКОНКИ ---
+                        const iconMesh = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 20 2 20"></polygon><line x1="12" y1="2" x2="12" y2="20"></line><line x1="22" y1="20" x2="12" y2="12"></line><line x1="2" y1="20" x2="12" y2="12"></line></svg>`;
+                        const iconRender = `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 20 2 20"></polygon></svg>`;
+                        
+                        altBtn.innerHTML = iconMesh; 
                         let showingAlt = false;
 
                         const extIdx = fileName.lastIndexOf('.');
@@ -349,12 +355,11 @@ projectData[id].forEach(item => {
                             showingAlt = !showingAlt;
                             mediaEl.src = showingAlt ? altSrc : baseSrc;
                             
-                            // Якщо це відео - примусово запускаємо його після перемикання
                             if (fileName.endsWith('.mp4')) {
                                 mediaEl.play().catch(()=>{}); 
                             }
                             
-                            altBtn.innerText = showingAlt ? '[ VIEW RENDER ]' : '[ VIEW EXTRA ]';
+                            altBtn.innerHTML = showingAlt ? iconRender : iconMesh;
                             safePlay('snd-hover');
                         });
                         
@@ -363,6 +368,8 @@ projectData[id].forEach(item => {
 
                         wrapper.appendChild(altBtn);
                     }
+                    
+                    // Додаємо повністю зібраний блок у галерею
                     vpContent.appendChild(wrapper);
                 }
             });
