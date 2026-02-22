@@ -791,4 +791,4 @@ body::after {
    #hud-widget {
         display: none !important; 
     }
-} /* <--- ОСЬ ЦЯ ДУЖКА КРИТИЧНО ВАЖЛИВА! Вона закриває блок @media */
+}
