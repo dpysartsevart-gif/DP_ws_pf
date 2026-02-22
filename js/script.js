@@ -306,7 +306,7 @@ const lightbox = document.getElementById('lightbox-overlay');
     menuBackBtns.forEach(btn => btn.addEventListener('click', () => { safePlay('snd-select'); history.back(); }));
     backHints.forEach(hint => { hint.addEventListener('click', () => { safePlay('snd-select'); goBack(); }); });
     
-    if(mobileBackBtn) {
+if(mobileBackBtn) {
         mobileBackBtn.addEventListener('click', () => {
             if(viewport) {
                 viewport.classList.remove('active-screen');
@@ -314,6 +314,10 @@ const lightbox = document.getElementById('lightbox-overlay');
             }
             if(sidebar) sidebar.style.display = 'flex';
             safePlay('snd-select');
+            
+            // --- ФІКС ЗВУКУ: Очищаємо вікно, щоб зупинити відео ---
+            if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
+            projectSlots.forEach(s => s.classList.remove('selected'));
         });
     }
 
