@@ -192,6 +192,48 @@ const lightbox = document.getElementById('lightbox-overlay');
         }
     }
 
+// === SCRAMBLE TEXT LOGIC (ЕФЕКТ ДЕКОДУВАННЯ) ===
+    const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*<>[]';
+    
+    function scrambleText(element, duration = 1500) {
+        // ВИПРАВЛЕНО: Використовуємо textContent, він бачить текст навіть коли екран прихований
+        const originalText = element.getAttribute('data-original') || element.textContent.trim();
+        
+        // Запобіжник: якщо текст раптом все одно порожній, не ламаємо його
+        if (!originalText) return;
+
+        if (!element.getAttribute('data-original')) {
+            element.setAttribute('data-original', originalText);
+        }
+        
+        let startTime = null;
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1); 
+
+            let scrambled = '';
+            for (let i = 0; i < originalText.length; i++) {
+                if (originalText[i] === ' ') {
+                    scrambled += ' '; 
+                } else if (i < originalText.length * progress) {
+                    scrambled += originalText[i]; 
+                } else {
+                    scrambled += scrambleChars[Math.floor(Math.random() * scrambleChars.length)]; 
+                }
+            }
+            element.textContent = scrambled; // Змінено на textContent
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                element.textContent = originalText; // Гарантовано повертаємо чистий текст
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    // === ОНОВЛЕНА ФУНКЦІЯ ПЕРЕМИКАННЯ ЕКРАНІВ ===
     function activateScreen(screenId) {
         screens.forEach(s => {
             s.classList.remove('active-screen');
@@ -207,7 +249,19 @@ const lightbox = document.getElementById('lightbox-overlay');
         if(target) { 
             target.classList.remove('hidden'); 
             target.style.display = 'flex'; 
-            setTimeout(() => target.classList.add('active-screen'), 10); 
+            setTimeout(() => {
+                target.classList.add('active-screen');
+                
+                // --- ЗАПУСКАЄМО ЕФЕКТ ТІЛЬКИ ДЛЯ DIGITAL QUEEN ПРИ ВХОДІ В ГАЛЕРЕЮ ---
+                if (screenId === 'gallery-screen') {
+                    // Шукаємо заголовок (p-title) тільки всередині проекту queen
+                    const queenTitle = document.querySelector('.project-slot[data-id="queen"] .p-title');
+                    if (queenTitle) {
+                        scrambleText(queenTitle, 1500); // 1500мс = 1.5 секунди хаосу перед появою
+                    }
+                }
+                
+            }, 10); 
         }
         
         inSubMenu = (screenId !== 'main-menu');
@@ -265,7 +319,7 @@ const lightbox = document.getElementById('lightbox-overlay');
 
     // === DATA & LOADING ===
     const projectData = {
-        'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod_demo.mp4'],
+        'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05|alt.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod09.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
         'sequoia': ['youtube:gPoXD8hg3P0', 'Sequoia01.jpg', 'Sequoia02|alt.jpg', 'Sequoia03|alt.jpg', 'Sequoia04.jpg', 'Sequoia05.jpg'],
         'mermaid': ['Marmeid01.jpg', 'Marmeid02.jpg', 'Marmeid03.jpg', 'Mermaid_tt.mp4'],

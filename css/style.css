@@ -50,7 +50,7 @@ body {
     background-image: url('../assets/bg.jpg'); background-size: cover; background-position: center;
     z-index: 1; 
     /* Додали drop-shadow кольорів, щоб при русі фону він злегка розшаровувався */
-    filter: brightness(0.5) drop-shadow(4px 0px 0px rgba(255,0,0,0.3)) drop-shadow(-4px 0px 0px rgba(0,255,255,0.3)); 
+    filter: brightness(0.6) drop-shadow(4px 0px 0px rgba(255,0,0,0.3)) drop-shadow(-4px 0px 0px rgba(0,255,255,0.3)); 
     transition: transform 0.1s ease-out; 
 }
 
