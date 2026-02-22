@@ -317,37 +317,21 @@ const lightbox = document.getElementById('lightbox-overlay');
         
         inSubMenu = (screenId !== 'main-menu');
         
-        // --- ФІКС ЗВУКУ (ГЛОБАЛЬНИЙ): Якщо вийшли з галереї, вбиваємо відео ---
+// --- ФІКС ЗВУКУ (ГЛОБАЛЬНИЙ): Якщо вийшли з галереї, вбиваємо відео ---
         if (screenId !== 'gallery-screen') {
             if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
-         // === INTERACTION ===
-    projectSlots.forEach(slot => {
-        slot.addEventListener('click', () => {
             projectSlots.forEach(s => s.classList.remove('selected'));
-            slot.classList.add('selected');
-            safePlay('snd-select');
-            loadImages(slot.dataset.id);
-            if(window.innerWidth <= 1000) {
-                // ДОДАНО: Створюємо фейкову "сторінку" в історії браузера для свайпу
-                history.pushState({ screen: 'mobile-project-view' }, '', '');
-                
-                if(sidebar) sidebar.style.display = 'none';
-                if(viewport) {
-                    viewport.style.display = 'flex';
-                    viewport.classList.add('active-screen');
-                }
-                if(vpContent) vpContent.scrollTop = 0;
-            }
-        });
+        }
         
-        if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
-            if(sidebar) sidebar.style.display = 'flex';
-            if(viewport) {
+        // --- ФІКС ДЛЯ МОБІЛКИ ПРИ ВХОДІ В ГАЛЕРЕЮ ---
+        if (screenId === 'gallery-screen' && window.innerWidth <= 1000) {
+            if (sidebar) sidebar.style.display = 'flex';
+            if (viewport) {
                 viewport.style.display = 'none';
                 viewport.classList.remove('active-screen');
             }
         }
-    }
+    } // <--- ОСЬ ЦЯ ДУЖКА РЯТУЄ СВІТ (Закриває функцію activateScreen)
 
 function goBack() {
         if(emailPopup && emailPopup.style.display === 'flex') { closeEmailPopup(); return; }
@@ -530,7 +514,7 @@ function loadImages(id) {
         }
     }
 
-    // === INTERACTION ===
+// === INTERACTION ===
     projectSlots.forEach(slot => {
         slot.addEventListener('click', () => {
             projectSlots.forEach(s => s.classList.remove('selected'));
@@ -538,6 +522,9 @@ function loadImages(id) {
             safePlay('snd-select');
             loadImages(slot.dataset.id);
             if(window.innerWidth <= 1000) {
+                // ДОДАНО: Створюємо сторінку в історії для свайпу
+                history.pushState({ screen: 'mobile-project-view' }, '', '');
+                
                 if(sidebar) sidebar.style.display = 'none';
                 if(viewport) {
                     viewport.style.display = 'flex';
