@@ -755,8 +755,23 @@ body::after {
     #viewport-content { flex-grow: 1 !important; overflow-y: auto !important; padding-bottom: 50px !important; display: block !important; }
 .vp-content img, .vp-content video, .vp-content iframe { width: 100% !important; height: auto !important; max-width: none !important; margin-bottom: 20px !important; display: block !important; aspect-ratio: 16/9 !important; }
     
-    .gallery-header-flex { flex-direction: row; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px; }
-    .gallery-header-flex h2 { font-size: 18px !important; border: none !important; margin: 0 !important; width: auto !important; }
+    .gallery-header-flex { 
+        flex-direction: column !important; /* Вибудовуємо елементи один під одним */
+        justify-content: flex-start !important; 
+        align-items: flex-start !important; /* Притискаємо до лівого краю */
+        width: 100%; 
+        margin-bottom: 15px; 
+        gap: 8px !important; /* Акуратна відстань між текстом і кнопкою */
+    }
+    .gallery-header-flex h2 { font-size: 18px !important; border: none !important; margin: 0 !important; width: auto !important; line-height: 1.1 !important; }
+    
+    /* Додаємо точковий стиль для самої кнопки на мобільному */
+    .vp-link {
+        font-size: 11px !important; /* Робимо шрифт акуратнішим */
+        padding: 5px 10px !important; /* Зменшуємо "рамку" */
+        margin-bottom: 0 !important;
+        letter-spacing: 1px;
+    }
 
     .menu-item { font-size: 30px !important; padding: 12px 0 !important; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%; }
     h2 { font-size: 26px !important; margin-bottom: 15px !important; border-bottom: 2px solid var(--primary-color) !important; }
