@@ -1,10 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // === HISTORY API ===
+
+   // === HISTORY API ===
     history.replaceState({ screen: 'main-menu' }, '', '');
     window.addEventListener('popstate', (event) => {
-        if (event.state) showScreen(event.state.screen); 
-        else showScreen('main-menu');
+        // ДОДАНО: Перехоплюємо свайп назад на мобілці, щоб не викидало з галереї
+        if (window.innerWidth <= 1000 && document.querySelector('.gallery-viewport').classList.contains('active-screen')) {
+            const viewport = document.querySelector('.gallery-viewport');
+            const sidebar = document.querySelector('.gallery-sidebar');
+            const vpContent = document.getElementById('viewport-content');
+            
+            viewport.classList.remove('active-screen');
+            viewport.style.display = 'none';
+            sidebar.style.display = 'flex';
+            
+            if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
+            document.querySelectorAll('.project-slot').forEach(s => s.classList.remove('selected'));
+            return; // Зупиняємо функцію, щоб залишитись у списку галереї
+        }
+
+        if (event.state && event.state.screen && event.state.screen !== 'mobile-project-view') {
+            showScreen(event.state.screen); 
+        } else {
+            showScreen('main-menu');
+        }
     });
 
     // === ЗМІННІ ===
@@ -190,7 +209,7 @@ const lightbox = document.getElementById('lightbox-overlay');
         if (isMuted) return; // ЯКЩО ЗВУК ВИМКНЕНО - ВИХОДИМО І НІЧОГО НЕ ГРАЄМО
         const audio = document.getElementById(id);
         if(audio) { 
-            audio.volume = 0.3; // МАГІЯ ТУТ: 0.5 = 50% гучності (можеш змінити на 0.3 для 30% тощо)
+            audio.volume = 0.15; // МАГІЯ ТУТ: 0.5 = 50% гучності (можеш змінити на 0.3 для 30% тощо)
             audio.currentTime = 0; 
             audio.play().catch(() => {}); 
         }
@@ -301,8 +320,25 @@ const lightbox = document.getElementById('lightbox-overlay');
         // --- ФІКС ЗВУКУ (ГЛОБАЛЬНИЙ): Якщо вийшли з галереї, вбиваємо відео ---
         if (screenId !== 'gallery-screen') {
             if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
+         // === INTERACTION ===
+    projectSlots.forEach(slot => {
+        slot.addEventListener('click', () => {
             projectSlots.forEach(s => s.classList.remove('selected'));
-        }
+            slot.classList.add('selected');
+            safePlay('snd-select');
+            loadImages(slot.dataset.id);
+            if(window.innerWidth <= 1000) {
+                // ДОДАНО: Створюємо фейкову "сторінку" в історії браузера для свайпу
+                history.pushState({ screen: 'mobile-project-view' }, '', '');
+                
+                if(sidebar) sidebar.style.display = 'none';
+                if(viewport) {
+                    viewport.style.display = 'flex';
+                    viewport.classList.add('active-screen');
+                }
+                if(vpContent) vpContent.scrollTop = 0;
+            }
+        });
         
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if(sidebar) sidebar.style.display = 'flex';
@@ -388,11 +424,16 @@ function loadImages(id) {
         vpContent.innerHTML = '';
 
         if(projectData[id]) {
-            projectData[id].forEach(item => {
-if (item.startsWith('youtube:')) {
+            if(projectData[id]) {
+            // ДОДАЛИ index у дужки
+            projectData[id].forEach((item, index) => {
+                // ... логіка YouTube відео ...
+                if (item.startsWith('youtube:')) {
                     const videoId = item.split(':')[1];
                     const iframe = document.createElement('iframe');
-                    iframe.setAttribute('loading', 'lazy'); // ДОДАНО: Ліниве завантаження для YouTube
+                    
+                    // ДОДАНО: Тільки якщо це 3-тє відео або далі, вмикаємо ліниве завантаження
+                    if (index >= 3) iframe.setAttribute('loading', 'lazy');
                     // Додали параметри fs=1 та playsinline=1 для мобілок
                     iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0&fs=1&playsinline=1`;
                     // Жорстко прописуємо дозволи на повний екран для всіх видів браузерів
@@ -425,11 +466,14 @@ if (item.startsWith('youtube:')) {
                         mediaEl.controls = true; mediaEl.loop = true; mediaEl.muted = true;
                         wrapper.appendChild(mediaEl);
                     } 
-                    // Якщо це картинка (додаємо Skeleton)
+// Якщо це картинка (додаємо Skeleton)
                     else {
                         wrapper.classList.add('skeleton-loader'); 
                         mediaEl = document.createElement('img');
-                        mediaEl.setAttribute('loading', 'lazy'); // ДОДАНО: Ліниве завантаження для картинок
+                        
+                        // ДОДАНО: Перші 2 картинки вантажимо одразу, решту — ліниво
+                        if (index >= 2) mediaEl.setAttribute('loading', 'lazy'); 
+                        
                         mediaEl.src = `assets/images/${fileName}`;
                         mediaEl.style.opacity = '0'; 
                         mediaEl.style.transition = 'opacity 0.4s ease'; 
