@@ -264,7 +264,13 @@ const lightbox = document.getElementById('lightbox-overlay');
             }, 10); 
         }
         
-        inSubMenu = (screenId !== 'main-menu');
+inSubMenu = (screenId !== 'main-menu');
+        
+        // --- ФІКС ЗВУКУ (ГЛОБАЛЬНИЙ): Якщо вийшли з галереї, вбиваємо відео ---
+        if (screenId !== 'gallery-screen') {
+            if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
+            projectSlots.forEach(s => s.classList.remove('selected'));
+        }
         
         if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
             if(sidebar) sidebar.style.display = 'flex';
