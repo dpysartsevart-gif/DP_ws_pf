@@ -631,18 +631,29 @@ body::after {
 }
 
 /* === OPTIONS LAYOUT & ACHIEVEMENTS PANEL === */
-.options-layout { display: flex; gap: 40px; align-items: flex-start; width: 100%; max-width: 1100px; pointer-events: auto; }
+/* Збільшили max-width і додали justify-content: space-between, щоб рознести блоки по краях */
+.options-layout { display: flex; gap: 40px; align-items: flex-start; width: 100%; max-width: 1200px; pointer-events: auto; justify-content: space-between; }
+
+/* Основний список залишається зліва */
 .settings-container { flex-grow: 1; max-width: 700px; margin-bottom: 0; }
 
+/* Панель ачівок: тепер ВУЗЬКА (110px) і ВЕРТИКАЛЬНА */
 .achievements-panel { 
-    width: 280px; background: rgba(0,0,0,0.6); border: 1px solid #333; 
-    padding: 20px; border-radius: 6px; flex-shrink: 0; 
+    width: 110px; background: rgba(0,0,0,0.6); border: 1px solid #333; 
+    padding: 15px; border-radius: 6px; flex-shrink: 0; text-align: center;
+    margin-top: 20px; /* Трохи опустили вниз для естетики */
 }
 .ach-panel-title { 
-    font-size: 14px; color: var(--primary-color); letter-spacing: 2px; 
+    font-size: 12px; color: var(--primary-color); letter-spacing: 1px; 
     margin-bottom: 20px; border-bottom: 1px dashed #444; padding-bottom: 10px; 
+    writing-mode: vertical-rl; /* Фішка: вертикальний текст заголовка! */
+    text-orientation: mixed;
+    transform: rotate(180deg); /* Розвертаємо, щоб читалось знизу вгору */
+    margin-left: auto; margin-right: auto;
 }
-.ach-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+
+/* Головна зміна: ОДНА колонка замість трьох */
+.ach-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
 
 .ach-slot { 
     width: 100%; aspect-ratio: 1/1; background: #111; border: 1px solid #333; 
@@ -651,23 +662,24 @@ body::after {
     cursor: default;
 }
 
-/* Силует (Заблоковано) - Чорна тінь без кольору */
+/* Силует (Заблоковано) */
 .ach-slot.locked { filter: grayscale(100%) contrast(0%) brightness(20%); opacity: 0.5; }
 
-/* Відкрито (Колір, неон та рамка) */
+/* Відкрито */
 .ach-slot:not(.locked) { 
     border-color: var(--primary-color); background: rgba(247, 213, 62, 0.1); 
     filter: none; opacity: 1; box-shadow: 0 0 15px rgba(247, 213, 62, 0.2); 
 }
 
-/* Tooltip (Назва ачівки) */
+/* Tooltip (тепер з'являється зліва від іконки, бо панель справа) */
 .ach-slot::after {
-    content: attr(data-tooltip); position: absolute; bottom: -10px; left: 50%; 
-    transform: translateX(-50%); background: #000; color: #fff; font-size: 10px; 
+    content: attr(data-tooltip); position: absolute; 
+    top: 50%; right: 120%; /* Змінили позицію наліво */
+    transform: translateY(-50%); background: #000; color: #fff; font-size: 10px; 
     padding: 4px 8px; border: 1px solid var(--primary-color); white-space: nowrap; 
     opacity: 0; pointer-events: none; transition: 0.2s; font-family: 'Share Tech Mono', monospace; z-index: 10;
 }
-.ach-slot:hover::after { opacity: 1; bottom: -25px; }
+.ach-slot:hover::after { opacity: 1; right: 140%; /* Від'їжджає вліво при наведенні */ }
 
 
 /* === RANDOM CRT GLITCH TRANSITION === */
@@ -823,11 +835,11 @@ body.glitch-transition {
         z-index: 500; text-align: center; display: block !important;
     }
 /* Mobile Options & Achievements */
-    .options-layout { flex-direction: column !important; gap: 20px !important; }
-    .settings-container { height: 50vh !important; max-height: 50vh !important; }
-    .achievements-panel { width: 100% !important; margin-bottom: 50px !important; }
-    .ach-slot { font-size: 40px !important; }
-
+    .options-layout { flex-direction: column !important; gap: 20px !important; display: block !important; }
+    .settings-container { height: 65vh !important; max-height: 65vh !important; width: 100% !important; }
+    
+    /* ПОВНІСТЮ ХОВАЄМО АЧІВКИ НА МОБІЛЬНОМУ */
+    .achievements-panel { display: none !important; }
 /* AUDIO & HUD WIDGET MOBILE */
     #audio-toggle {
         top: 15px !important;
