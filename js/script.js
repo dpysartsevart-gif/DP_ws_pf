@@ -180,29 +180,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             }
 
-// === РОЗУМНИЙ ПИЛ (М'ЯКИЙ РОЗЛІТ) ===
+            // === РОЗУМНИЙ ПИЛ (М'ЯКИЙ РОЗЛІТ) ===
             document.querySelectorAll('.dust-speck').forEach(speck => {
                 const rect = speck.getBoundingClientRect();
                 const speckX = rect.left + rect.width / 2;
                 const speckY = rect.top + rect.height / 2;
                 const dist = Math.hypot(mouseX - speckX, mouseY - speckY);
                 
-                // Зменшили радіус реакції з 120 до 90
                 if (dist < 90) {
                     const angle = Math.atan2(speckY - mouseY, speckX - mouseX);
-                    const force = (90 - dist) * 0.25; // Сила зменшена вдвічі
+                    const force = (90 - dist) * 0.25;
                     speck.style.marginLeft = `${Math.cos(angle) * force}px`;
                     speck.style.marginTop = `${Math.sin(angle) * force}px`;
-                    // Зробили відштовхування плавнішим
                     speck.style.transition = 'margin 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
                 } else {
                     speck.style.marginLeft = '0px';
                     speck.style.marginTop = '0px';
-                    // Пил повертається на місце дуже повільно і природньо (1.5 сек)
                     speck.style.transition = 'margin 1.5s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
                 }
             });
-  });
+        });
 
         function animateCursor() {
             circleX += (mouseX - circleX) * 0.15; 
@@ -284,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (Math.random() < 0.33) {
                         document.body.classList.add('glitch-transition');
                         safePlay('snd-gamestart'); 
-                        setTimeout(() => document.body.classList.remove('glitch-transition'), 400);
+                        setTimeout(() => document.body.classList.remove('glitch-transition'), 300);
                     }
 
                     const queenTitle = document.querySelector('.project-slot[data-id="queen"] .p-title');
@@ -465,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-// === INTERACTION (HOVER INTENT / DEBOUNCE 3D) ===
+    // === INTERACTION (HOVER INTENT / DEBOUNCE 3D) ===
     projectSlots.forEach(slot => {
         let hoverTimer = null; // Індивідуальний таймер для кожної картки
 
@@ -491,7 +488,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.innerWidth <= 1000) return; 
             
             // Скидаємо таймер при кожному русі мишки.
-            // Трансформація запуститься ТІЛЬКИ якщо мишка повністю завмерла.
             if (hoverTimer) clearTimeout(hoverTimer);
 
             hoverTimer = setTimeout(() => {
@@ -510,12 +506,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 slot.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
                 slot.style.transform = `perspective(1000px) rotateX(0deg) rotateY(${rotateY}deg)`;
-            }, 300); // 300мс зупинки курсора (можеш змінити на 500, якщо хочеш довше)
+            }, 300); // 300мс зупинки курсора
         });
 
         slot.addEventListener('mouseleave', () => {
             if (window.innerWidth <= 1000) return;
-            if (hoverTimer) clearTimeout(hoverTimer); // Вбиваємо таймер, якщо курсор пішов з картки
+            if (hoverTimer) clearTimeout(hoverTimer); // Вбиваємо таймер
             slot.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
             slot.style.transform = ''; 
         });
