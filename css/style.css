@@ -1035,4 +1035,34 @@ body::before {
 .menu-item, .dlc-btn, .buy-btn { 
     transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s, text-shadow 0.3s !important; 
 }
+/* === PROJECT CARDS GLOW SWEEP (Блік при наведенні) === */
+.project-slot {
+    position: relative;
+    overflow: hidden; /* Щоб блік не вилазив за краї картки */
+}
+
+/* Створюємо сам блік (світлу лінію під кутом) */
+.project-slot::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 60%;
+    height: 100%;
+    /* Напівпрозорий жовто-білий градієнт */
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(247, 213, 62, 0.15) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    z-index: 10;
+    pointer-events: none; /* Щоб не блокував кліки */
+}
+
+/* Запускаємо анімацію пробігу при наведенні */
+.project-slot:hover::before {
+    animation: shineSweep 0.6s ease-out forwards;
+}
+
+@keyframes shineSweep {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
 }

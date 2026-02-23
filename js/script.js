@@ -158,11 +158,11 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
                     const centerX = rect.left + rect.width / 2;
                     const centerY = rect.top + rect.height / 2;
                     
-                    // Сила тяжіння (Збільшено до 0.15 для відчутності)
-                    const pullX = (mouseX - centerX) * 0.15; 
-                    const pullY = (mouseY - centerY) * 0.15; 
+                    // Сила тяжіння (Збільшено до 0.10 для відчутності)
+                    const pullX = (mouseX - centerX) * 0.10; 
+                    const pullY = (mouseY - centerY) * 0.10; 
                     
-                    const baseTranslate = target.classList.contains('menu-item') ? 'translateX(10px)' : '';
+                    const baseTranslate = target.classList.contains('menu-item') ? 'translateX(7px)' : '';
                     target.style.transform = `${baseTranslate} translate(${pullX}px, ${pullY}px)`;
                 }
             } else {
@@ -593,8 +593,8 @@ item.addEventListener('mouseenter', () => {
             currentMenuIndex = index;
             safePlay('snd-hover');
             
-            // === РАНДОМНИЙ CIPHER ТІЛЬКИ ДЛЯ GALLERY (50% шанс) ===
-            if (item.id === 'btn-gallery' && Math.random() > 0.5) {
+            // === РАНДОМНИЙ CIPHER ТІЛЬКИ ДЛЯ GALLERY (30% шанс) ===
+            if (item.id === 'btn-gallery' && Math.random() > 0.3) {
                 scrambleText(item, 400); 
             }
         });
