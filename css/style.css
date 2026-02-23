@@ -133,7 +133,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 /* --- GALLERY --- */
 .gallery-layout { display: flex !important; flex-direction: row !important; height: 100%; gap: 60px; align-items: flex-start; } 
 .gallery-sidebar { width: 500px; display: flex; flex-direction: column; pointer-events: auto; flex-shrink: 0; }
-.projects-scroll-area { flex-grow: 0; height: 70vh; overflow-y: auto; padding-right: 25px; padding-top: 5px; padding-bottom: 5px; }
+.projects-scroll-area { flex-grow: 0; height: 70vh; overflow-y: auto; padding-right: 25px; padding-top: 5px; padding-bottom: 5px; margin-top: -5px; }
 .project-slot { padding: 10px; border: 1px solid #333; background: rgba(0,0,0,0.5); margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 15px; pointer-events: auto; border-radius: 0px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
 .project-slot:hover, .project-slot.selected { border-color: var(--primary-color); background: rgba(247, 213, 62, 0.1); border-radius: 6px; transform: translateX(10px); }
 .slot-thumb { width: 80px; height: 50px; background-color: #222; background-size: cover; background-position: center; border: 1px solid #444; transition: 0.2s; border-radius: 2px;}
