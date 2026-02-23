@@ -188,29 +188,37 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     position: relative !important;
 }
 
-/* 1. ОБГОРТКА ВПРИТУЛ ДО КАРТИНКИ (Щоб трикутник не з'їжджав) */
+/* 1. ОБГОРТКА НА ВСЮ ШИРИНУ (Щоб трикутник стояв на місці) */
 .vp-content .img-wrapper {
-    display: block !important; 
-    width: fit-content !important; 
-    max-width: 100% !important;
-    margin: 0 auto !important; /* Центруємо саму картинку */
+    display: flex !important; 
+    justify-content: center !important; /* Центруємо картинку всередині */
+    align-items: center !important;
+    width: 100% !important; /* Завжди 100% ширини вікна */
+    position: relative !important;
     box-shadow: none !important; 
     background: transparent !important;
+}
+
+/* Картинка зберігає свої пропорції */
+.vp-content .img-wrapper img,
+.vp-content .img-wrapper video {
+    max-width: 100%;
+    max-height: 65vh;
+    width: auto;
+    display: block;
 }
 
 /* === УНІВЕРСАЛЬНИЙ СТИЛЬ ДЛЯ ВІЗУАЛЬНОГО КОНТЕНТУ === */
 .img-wrapper img,
 .img-wrapper video,
 #viewport-content iframe {
-    width: 100%;
-    display: block;
     border-radius: 8px !important; 
     border: none !important;
     outline: none;
     background-color: #000; 
 
-    /* МАГІЯ ТІНІ: Тільки зліва (-15px) і знизу (15px), легка та м'яка */
-    box-shadow: -15px 15px 25px rgba(0, 0, 0, 0.4) !important;
+    /* ЮВЕЛІРНА ТІНЬ: Зміщена на 4px вліво і 5px вниз. Точно не обріжеться! */
+    box-shadow: -4px 5px 8px rgba(0, 0, 0, 0.6) !important;
         
     transition: all 0.3s ease; 
 }
