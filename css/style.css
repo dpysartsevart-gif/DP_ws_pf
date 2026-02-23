@@ -282,29 +282,7 @@ transform: translateZ(0); /* Вмикаємо 3D-прискорення GPU */
 .cv-list strong { color: #fff; font-weight: bold; }
 .contact-link { color: #89b4fa; text-decoration: none; font-weight: bold; letter-spacing: 1px; border-bottom: 1px dashed #89b4fa; transition: 0.2s; }
 .contact-link:hover { color: #b4befe; border-bottom: 1px solid #b4befe; text-shadow: 0 0 8px rgba(137, 180, 250, 0.6); }
-/* === HR MAGNET: ПУЛЬСУЮЧЕ CV === */
-a[href="assets/cv.pdf"] {
-    color: var(--primary-color) !important;
-    border: 1px solid var(--primary-color) !important;
-    padding: 6px 15px;
-    border-radius: 4px;
-    display: inline-block;
-    animation: pulseCV 2s infinite;
-    text-shadow: 0 0 8px rgba(247, 213, 62, 0.5);
-    background: rgba(247, 213, 62, 0.1);
-    margin-top: 5px;
-    text-decoration: none;
-}
-a[href="assets/cv.pdf"]:hover {
-    background: var(--primary-color) !important;
-    color: #000 !important;
-    animation: none;
-}
-@keyframes pulseCV {
-    0% { box-shadow: 0 0 0 0 rgba(247, 213, 62, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(247, 213, 62, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(247, 213, 62, 0); }
-}
+
 
 .shop-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 15px; margin-bottom: 15px; border-radius: 8px; transition: 0.2s; }
 .shop-item.inactive { opacity: 0.6; filter: grayscale(0.8); }
