@@ -461,8 +461,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-// === INTERACTION (ULTIMATE STABLE 3D - CENTER X) ===
+// === INTERACTION (HOVER INTENT / DEBOUNCE 3D) ===
     projectSlots.forEach(slot => {
+        let hoverTimer = null; // Індивідуальний таймер для кожної картки
+
         slot.addEventListener('click', () => {
             if(window.innerWidth > 1000 && slot.classList.contains('selected')) return; 
             projectSlots.forEach(s => s.classList.remove('selected'));
@@ -480,62 +482,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Ініціалізуємо "пам'ять" зони
-        slot.dataset.tiltZone = 'center-50';
-
+        // === 3D ЗАТРИМКА (DEBOUNCE) ===
         slot.addEventListener('mousemove', (e) => {
             if (window.innerWidth <= 1000) return; 
             
-            // СЕКРЕТ СТАБІЛЬНОСТІ: Рахуємо від ЦЕНТРУ, який не рухається при rotateY!
-            const rect = slot.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            
-            // Відстань від центру: від -1.0 (лівий край) до 1.0 (правий край)
-            const pctFromCenter = (e.clientX - centerX) / (rect.width / 2); 
-            
-            let rotateY = 0;
-            let currentZone = 'center-50';
-            
-            // 1. Ліва зона 10% (від лівого краю до -0.8)
-            if (pctFromCenter < -0.8) {
-                rotateY = -3;
-                currentZone = 'left-10';
-            }
-            // 2. Ліва зона 15% (від -0.8 до -0.5)
-            else if (pctFromCenter >= -0.8 && pctFromCenter < -0.5) {
-                rotateY = -1;
-                currentZone = 'left-15';
-            }
-            // 3. Зона Центр 50% (від -0.5 до 0.5)
-            else if (pctFromCenter >= -0.5 && pctFromCenter <= 0.5) {
-                rotateY = 0;
-                currentZone = 'center-50';
-            }
-            // 4. Права зона 15% (від 0.5 до 0.8)
-            else if (pctFromCenter > 0.5 && pctFromCenter <= 0.8) {
-                rotateY = 1;
-                currentZone = 'right-15';
-            }
-            // 5. Права зона 10% (від 0.8 до правого краю)
-            else if (pctFromCenter > 0.8) {
-                rotateY = 3;
-                currentZone = 'right-10';
-            }
+            // Скидаємо таймер при кожному русі мишки.
+            // Трансформація запуститься ТІЛЬКИ якщо мишка повністю завмерла.
+            if (hoverTimer) clearTimeout(hoverTimer);
 
-            // Застосовуємо нахил ЛИШЕ якщо курсор перейшов у нову зону
-            // Це повністю вбиває баг з нескінченною вібрацією
-            if (slot.dataset.tiltZone !== currentZone) {
-                slot.dataset.tiltZone = currentZone;
-                // Максимально плавний інтерактивний перехід (cubic-bezier як в Apple UI)
-                slot.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
+            hoverTimer = setTimeout(() => {
+                const rect = slot.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const pctFromCenter = (e.clientX - centerX) / (rect.width / 2); 
+                
+                let rotateY = 0;
+                
+                // Твої ідеальні зони: 10% (2°) / 15% (1°) / 50% (0) / 15% (1°) / 10% (2°)
+                if (pctFromCenter < -0.8) rotateY = -2;
+                else if (pctFromCenter >= -0.8 && pctFromCenter < -0.5) rotateY = -1;
+                else if (pctFromCenter >= -0.5 && pctFromCenter <= 0.5) rotateY = 0;
+                else if (pctFromCenter > 0.5 && pctFromCenter <= 0.8) rotateY = 1;
+                else if (pctFromCenter > 0.8) rotateY = 2;
+
+                slot.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
                 slot.style.transform = `perspective(1000px) rotateX(0deg) rotateY(${rotateY}deg)`;
-            }
+            }, 300); // 300мс зупинки курсора (можеш змінити на 500, якщо хочеш довше)
         });
 
         slot.addEventListener('mouseleave', () => {
             if (window.innerWidth <= 1000) return;
-            slot.dataset.tiltZone = 'center-50'; 
-            slot.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
+            if (hoverTimer) clearTimeout(hoverTimer); // Вбиваємо таймер, якщо курсор пішов з картки
+            slot.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
             slot.style.transform = ''; 
         });
 
