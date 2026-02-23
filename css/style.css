@@ -208,16 +208,40 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important; /* Тінь тільки під картинкою */
 }
 
-/* === VIEWPORT IMAGES & VIDEO === */
-.img-wrapper img,
-.img-wrapper video {
-    width: 100%;
-    height: auto;
-    display: block;
-    /* ДОДАНО: Благородне закруглення, як у YouTube-відео */
-    border-radius: 8px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3); /* Легка тінь для об'єму */
+/* === ФІКС ОБРІЗАННЯ ТІНІ ВНИЗУ === */
+/* Додаємо значний відступ під ОСТАННІМ елементом у списку перегляду.
+   Це дає місце для м'якого затухання градієнта тіні, щоб вона не впиралася в дно скролу. */
+#viewport-content > :last-child {
+    margin-bottom: 50px !important; 
 }
+
+/* === УНІВЕРСАЛЬНИЙ СТИЛЬ ДЛЯ ВІЗУАЛЬНОГО КОНТЕНТУ === */
+/* Застосовуємо до картинок, відео та YouTube iframe */
+.img-wrapper img,
+.img-wrapper video,
+#viewport-content iframe {
+    width: 100%;
+    display: block;
+    border-radius: 8px; /* Благородне закруглення */
+    border: none !important;
+    outline: none;
+    background-color: #000; /* Фікс від білих спалахів */
+
+    /* НОВА ПРЕМІАЛЬНА ТІНЬ (БАГАТОШАРОВА) */
+    /* Створює глибокий, м'який градієнт під елементом */
+    box-shadow: 
+        0 20px 40px -10px rgba(0, 0, 0, 0.7), /* Глибока, розмита тінь внизу */
+        0 5px 15px -5px rgba(0,0,0,0.4);      /* Ближча тінь для чіткості */
+        
+    transition: all 0.3s ease; /* Плавність для майбутніх ефектів */
+}
+
+/* Специфічний фікс пропорцій ТІЛЬКИ для YouTube */
+#viewport-content iframe {
+     aspect-ratio: 16 / 9;
+     height: auto;
+}
+
 
 /* 3. НАЛАШТУВАННЯ ВІДЕО ТА YOUTUBE */
 /* === YOUTUBE IFRAME FIX === */
