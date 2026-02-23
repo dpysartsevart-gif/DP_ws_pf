@@ -352,7 +352,7 @@ a, button, .menu-item, .project-slot, .back-hint, .shop-btn { cursor: none; }
 body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 203, 245, 0.1); border-color: var(--accent-color); }
 
 /* POPUP */
-.popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 20000; display: flex; align-items: center; justify-content: center; }
+.popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 20000; display: flex; align-items: center; justify-content: center; }
 .popup-content { background: #111; border: 2px solid var(--primary-color); padding: 40px; text-align: center; max-width: 500px; box-shadow: 0 0 30px rgba(247,213,62,0.2); }
 .email-box { background: #222; padding: 15px; margin: 20px 0; border: 1px dashed #555; color: #a3cbf5; font-size: 20px; user-select: text; cursor: text; }
 .popup-buttons { display: flex; gap: 20px; justify-content: center; }
@@ -391,7 +391,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     .gallery-viewport { display: none; width: 100%; height: 100%; margin-top: 0; }
     .viewport-frame { height: 100%; margin-top: 0; }
     .header-spacer, .back-hint { display: none; }
-    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 0; padding-left: 5px; }
+.sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 25px; padding-left: 5px; }
     h2 { font-size: 24px; margin-bottom: 10px; margin-top: 5px; }
     .mobile-nav-btn { display: block !important; background: #111; color: var(--primary-color); text-align: center; padding: 15px; border: 1px solid var(--primary-color); margin-bottom: 10px; font-weight: bold; text-transform: uppercase; border-radius: 4px; font-size: 16px; pointer-events: auto; width: 100%; z-index: 100; }
     .shop-container, .text-content, .scroll-container { width: 100%; max-width: 100%; height: 95dvh; max-height: 95dvh; padding: 15px; margin-bottom: 0; }
