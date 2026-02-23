@@ -646,7 +646,19 @@ body::after {
     margin-bottom: 0; 
     height: 70vh; 
 }
+/* РОЗТЯГУЄМО СПИСОК ОПЦІЙ НА ВСЮ ШИРИНУ */
+.settings-list { 
+    width: 100% !important; 
+    max-width: 100% !important; /* Вбиваємо старе обмеження */
+    padding-right: 20px; /* Безпечний відступ від скролбару, щоб текст на нього не наліз */
+}
 
+/* ГАРАНТУЄМО, ЩО ПАРАМЕТРИ РОЗЛІТАЮТЬСЯ ПО КРАЯХ */
+.setting-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Розштовхує ліву і праву колонки максимально в сторони */
+}
 /* ВУЗЬКА ПАНЕЛЬ ДЛЯ 1 КОЛОНКИ */
 .achievements-panel { 
     width: 90px; /* Звузили панель, щоб виглядала як витончений HUD */
