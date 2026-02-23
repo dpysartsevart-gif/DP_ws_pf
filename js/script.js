@@ -180,25 +180,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             }
 
+// === РОЗУМНИЙ ПИЛ (М'ЯКИЙ РОЗЛІТ) ===
             document.querySelectorAll('.dust-speck').forEach(speck => {
                 const rect = speck.getBoundingClientRect();
                 const speckX = rect.left + rect.width / 2;
                 const speckY = rect.top + rect.height / 2;
                 const dist = Math.hypot(mouseX - speckX, mouseY - speckY);
                 
-                if (dist < 120) {
+                // Зменшили радіус реакції з 120 до 90
+                if (dist < 90) {
                     const angle = Math.atan2(speckY - mouseY, speckX - mouseX);
-                    const force = (120 - dist) * 0.5;
+                    const force = (90 - dist) * 0.25; // Сила зменшена вдвічі
                     speck.style.marginLeft = `${Math.cos(angle) * force}px`;
                     speck.style.marginTop = `${Math.sin(angle) * force}px`;
-                    speck.style.transition = 'margin 0.1s ease-out';
+                    // Зробили відштовхування плавнішим
+                    speck.style.transition = 'margin 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
                 } else {
                     speck.style.marginLeft = '0px';
                     speck.style.marginTop = '0px';
-                    speck.style.transition = 'margin 0.5s ease-in-out';
+                    // Пил повертається на місце дуже повільно і природньо (1.5 сек)
+                    speck.style.transition = 'margin 1.5s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
                 }
             });
-        });
+
 
         function animateCursor() {
             circleX += (mouseX - circleX) * 0.15; 

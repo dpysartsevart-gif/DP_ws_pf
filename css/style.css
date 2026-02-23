@@ -630,31 +630,18 @@ body::after {
     transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, border-radius 0.2s;
 }
 
-/* 4. ACTIVE PROJECT SCANNER (Легкий скан-лайн на активному проекті) */
-.project-slot { position: relative; overflow: hidden; } /* Додаємо для обмеження лінії */
-.project-slot.selected::before {
-    content: ''; 
-    position: absolute; 
-    left: 0; 
-    top: -50%; 
-    width: 3px; 
-    height: 50%;
-    background: var(--primary-color); 
-    box-shadow: 0 0 10px var(--primary-color);
-    animation: slotScan 2s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate;
-}
-@keyframes slotScan { 0% { top: -20%; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { top: 70%; opacity: 0; } }
+
 
 /* === RANDOM CRT GLITCH TRANSITION === */
 body.glitch-transition {
-    animation: crtGlitch 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    animation: crtGlitch 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
 @keyframes crtGlitch {
-    0% { filter: hue-rotate(0deg); transform: skewX(0deg) scale(1); }
-    20% { filter: drop-shadow(6px 0px 0px rgba(255,0,0,0.8)) drop-shadow(-6px 0px 0px rgba(0,255,255,0.8)); transform: skewX(-2deg) scale(1.01); }
-    40% { filter: drop-shadow(-6px 0px 0px rgba(255,0,0,0.8)) drop-shadow(6px 0px 0px rgba(0,255,255,0.8)); transform: skewX(2deg); }
-    60% { filter: drop-shadow(2px 0px 0px rgba(255,0,0,0.5)); transform: skewX(0deg); }
-    100% { filter: none; transform: scale(1); }
+    0% { transform: translateX(0); filter: none; }
+    20% { transform: translateX(-2px); filter: drop-shadow(2px 0 0 rgba(255,0,0,0.8)) drop-shadow(-2px 0 0 rgba(0,255,255,0.8)); }
+    40% { transform: translateX(2px); filter: drop-shadow(-2px 0 0 rgba(255,0,0,0.8)) drop-shadow(2px 0 0 rgba(0,255,255,0.8)); }
+    60% { transform: translateX(-1px); filter: drop-shadow(1px 0 0 rgba(255,0,0,0.5)); }
+    100% { transform: translateX(0); filter: none; }
 }
 
 /* Оновлення карток галереї для 3D (Додаємо перспективу батькам) */
