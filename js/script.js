@@ -461,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === INTERACTION (HOVER LOOP FIX) ===
+   // === INTERACTION (STABLE ZONED 3D) ===
     projectSlots.forEach(slot => {
         slot.addEventListener('click', () => {
             if(window.innerWidth > 1000 && slot.classList.contains('selected')) return; 
@@ -480,34 +480,43 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 3D Нахил
+        // === СПРОЩЕНИЙ ЗОНОВАНИЙ 3D НАХИЛ (Ідея Арт-директора) ===
         slot.addEventListener('mousemove', (e) => {
-            if (window.innerWidth <= 1000) return;
+            if (window.innerWidth <= 1000) return; 
             
             const rect = slot.getBoundingClientRect();
             const x = e.clientX - rect.left; 
-            const y = e.clientY - rect.top;  
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+            const width = rect.width;
             
-            // Зменшили кут нахилу, щоб мишка не злітала з картки
-            const rotateX = ((y - centerY) / centerY) * -5; 
-            const rotateY = ((x - centerX) / centerX) * 5;
+            let rotateY = 0;
             
-            slot.style.transition = 'transform 0.1s linear';
-            // Не збільшуємо картку через JS (scale3d прибрано), щоб вона не "втікала" від курсора
-            slot.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            // Зона 1: Ліві 25% картки
+            if (x < width * 0.25) {
+                rotateY = -6; 
+            } 
+            // Зона 2: Праві 25% картки
+            else if (x > width * 0.75) {
+                rotateY = 6;  
+            } 
+            // Зона 3: Центр (50% простору)
+            else {
+                rotateY = 0;  
+            }
+
+            // Робимо перехід між зонами супер-плавним (0.3s)
+            slot.style.transition = 'transform 0.3s ease-out'; 
+            // Тільки Y-нахил! Ніякого X, щоб картка не стрибала по висоті
+            slot.style.transform = `perspective(1000px) rotateX(0deg) rotateY(${rotateY}deg)`;
         });
 
         slot.addEventListener('mouseleave', () => {
             if (window.innerWidth <= 1000) return;
-            slot.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
+            slot.style.transition = 'transform 0.4s ease-out'; 
             slot.style.transform = ''; 
         });
 
         slot.addEventListener('mouseenter', () => {
             if(window.innerWidth > 1000) {
-                // ГОЛОВНИЙ ЗАХИСТ ВІД ПЕТЛІ: Якщо картка вже обрана - ігноруємо
                 if(slot.classList.contains('selected')) return; 
                 
                 projectSlots.forEach(s => s.classList.remove('selected'));
