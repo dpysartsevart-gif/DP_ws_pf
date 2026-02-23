@@ -388,12 +388,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         wrapper.classList.add('skeleton-loader'); 
 mediaEl = document.createElement('img');
-                        // ПРО РІВЕНЬ: Перші 5 картинки вантажаться миттєво, інші - економлять трафік
-                        if (index >= 5) mediaEl.setAttribute('loading', 'lazy'); 
-                        mediaEl.decoding = "async";
+                        /* ПОВНІСТЮ ВИМИКАЄМО LAZY LOADING: всі картинки вантажаться одразу */
+                        mediaEl.decoding = "async"; /* Залишаємо асинхронність, щоб не вішати інтерфейс */
                         
                         mediaEl.style.opacity = '0'; 
                         mediaEl.style.transition = 'opacity 0.3s ease';
+                        
                         
                         mediaEl.onload = function() {
                             wrapper.classList.remove('skeleton-loader'); 
