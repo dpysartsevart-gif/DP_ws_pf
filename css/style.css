@@ -230,7 +230,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     top: 0px !important; 
     /* МАГІЯ ТУТ: від'ємний відступ вліво компенсує padding контейнера */
     /* Трикутник вилізе за межі обгортки і стане ближче до рамки Viewport */
-    left: -20px !important; 
+    left: -35px !important; 
     z-index: 50 !important;
     cursor: none; 
     width: 24px !important;
