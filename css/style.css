@@ -133,8 +133,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 /* --- GALLERY --- */
 .gallery-layout { display: flex !important; flex-direction: row !important; height: 100%; gap: 60px; align-items: flex-start; } 
 .gallery-sidebar { width: 500px; display: flex; flex-direction: column; pointer-events: auto; flex-shrink: 0; }
-.projects-scroll-area { flex-grow: 0; height: 70vh; overflow-y: auto; padding-right: 25px; }
-
+.projects-scroll-area { flex-grow: 0; height: 70vh; overflow-y: auto; padding-right: 25px; padding-top: 5px; padding-bottom: 5px; }
 .project-slot { padding: 10px; border: 1px solid #333; background: rgba(0,0,0,0.5); margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 15px; pointer-events: auto; border-radius: 0px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
 .project-slot:hover, .project-slot.selected { border-color: var(--primary-color); background: rgba(247, 213, 62, 0.1); border-radius: 6px; transform: translateX(10px); }
 .slot-thumb { width: 80px; height: 50px; background-color: #222; background-size: cover; background-position: center; border: 1px solid #444; transition: 0.2s; border-radius: 2px;}
@@ -421,7 +420,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     right: 20px;
     color: var(--primary-color);
     font-family: 'Share Tech Mono', monospace;
-    font-size: 10px; /* Зменшили шрифт */
+    font-size: 10px; 
     font-weight: bold;
     letter-spacing: 1px;
     z-index: 10000;
@@ -429,8 +428,9 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     transition: all 0.3s ease;
     text-shadow: 0 0 5px rgba(247, 213, 62, 0.5);
     background: rgba(0, 0, 0, 0.1);
-    padding: 3px 6px; /* Зробили кнопку тоншою і меншою */
+    padding: 3px 6px; 
     border: 1px solid var(--primary-color);
+    border-radius: 4px; /* ДОДАНО: Акуратне скруглення в стилі всього UI */
     cursor: none;
 }
 #audio-toggle:hover {
@@ -552,7 +552,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 /* === КНОПКА-ТРИКУТНИК (VIEW MESH / RENDER) === */
 .alt-toggle-btn {
     position: absolute; 
-    top: 5px; /* Трохи відступили від самого краю, щоб дихало */
+    top: 4px; /* Трохи відступили від самого краю, щоб дихало */
     left: 10px;
     z-index: 50;
     cursor: none; 
