@@ -694,11 +694,11 @@ body::after {
 .ach-grid { 
     display: flex; 
     flex-direction: column; 
-    justify-content: space-between; /* Магія: рівномірно розкидає 7 іконок по вертикалі */
+    justify-content: space-between; 
     align-items: center;
     flex-grow: 1; 
-    overflow: hidden; /* Вбиваємо скролбар назавжди */
-    gap: 5px; /* Мінімальний відступ-запобіжник */
+    overflow: visible; /* МАГІЯ ТУТ: Повертаємо видимість тултіпам! (було hidden) */
+    gap: 5px; 
 }
 
 /* ІДІАЛЬНО КВАДРАТНІ СЛОТИ */
