@@ -243,16 +243,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 }
 
 
-/* 3. НАЛАШТУВАННЯ ВІДЕО ТА YOUTUBE */
-/* === YOUTUBE IFRAME FIX === */
-#viewport-content iframe {
-    border: none !important;       /* Безжалісно вбиваємо білу рамку */
-    outline: none;
-    border-radius: 8px;            /* Додаємо благородне закруглення кутів */
-    background-color: #000;        /* Щоб не було білого спалаху при загрузці */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Стильна кібер-тінь */
-    overflow: hidden;
-}
+
 .vp-placeholder { margin-top: 250px; color: #444; animation: blink 2s infinite; font-size: 18px;}
 
 /* ICONS (З цифрою 2) */
