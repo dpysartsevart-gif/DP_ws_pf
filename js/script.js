@@ -421,10 +421,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         wrapper.classList.add('skeleton-loader'); 
 mediaEl = document.createElement('img');
-                        // ПРО РІВЕНЬ: Перша картинка одразу, інші - при скролі.
-                        if (index > 0) mediaEl.setAttribute('loading', 'lazy'); 
-                        // АСИНХРОННИЙ ДЕКОДИНГ: Не блокує інтерфейс під час розпаковки jpeg
-                        mediaEl.decoding = "async"; 
+                        // ПРО РІВЕНЬ: Перші 5 картинки вантажаться миттєво, інші - економлять трафік
+                        if (index >= 5) mediaEl.setAttribute('loading', 'lazy'); 
+                        mediaEl.decoding = "async";
                         
                         mediaEl.style.opacity = '0'; 
                         mediaEl.style.transition = 'opacity 0.3s ease';
