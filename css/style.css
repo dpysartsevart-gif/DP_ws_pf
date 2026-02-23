@@ -631,35 +631,62 @@ body::after {
 }
 
 /* === OPTIONS LAYOUT & ACHIEVEMENTS PANEL === */
-/* Збільшили max-width і додали justify-content: space-between, щоб рознести блоки по краях */
-.options-layout { display: flex; gap: 40px; align-items: flex-start; width: 100%; max-width: 1200px; pointer-events: auto; justify-content: space-between; }
+.options-layout { 
+    display: flex; 
+    gap: 40px; 
+    align-items: stretch; /* Вирівнюємо обидві колонки по висоті */
+    width: 100%; 
+    max-width: 100%; /* Зняли обмеження, щоб панель притиснулася до правого краю */
+    pointer-events: auto; 
+    justify-content: space-between; 
+}
+.settings-container { 
+    flex-grow: 1; 
+    max-width: 800px; /* Дали трохи більше місця для тексту налаштувань */
+    margin-bottom: 0; 
+    height: 70vh; /* Жорстка висота, ідентична до вікна Галереї */
+}
 
-/* Основний список залишається зліва */
-.settings-container { flex-grow: 1; max-width: 700px; margin-bottom: 0; }
-
-/* Панель ачівок: тепер ВУЗЬКА (110px) і ВЕРТИКАЛЬНА */
 .achievements-panel { 
-    width: 110px; background: rgba(0,0,0,0.6); border: 1px solid #333; 
-    padding: 15px; border-radius: 6px; flex-shrink: 0; text-align: center;
-    margin-top: 20px; /* Трохи опустили вниз для естетики */
+    width: 110px; 
+    background: rgba(0,0,0,0.6); 
+    border: 1px solid #333; 
+    padding: 15px; 
+    border-radius: 6px; 
+    flex-shrink: 0; 
+    text-align: center;
+    margin-top: 0; /* Прибрали відступ! Тепер вона починається чітко на одному рівні з опціями */
+    height: 70vh; /* Висота 1-в-1 як у списка налаштувань */
+    display: flex;
+    flex-direction: column;
 }
 .ach-panel-title { 
     font-size: 12px; color: var(--primary-color); letter-spacing: 1px; 
     margin-bottom: 20px; border-bottom: 1px dashed #444; padding-bottom: 10px; 
-    writing-mode: vertical-rl; /* Фішка: вертикальний текст заголовка! */
+    writing-mode: vertical-rl; 
     text-orientation: mixed;
-    transform: rotate(180deg); /* Розвертаємо, щоб читалось знизу вгору */
+    transform: rotate(180deg); 
     margin-left: auto; margin-right: auto;
+    flex-shrink: 0; /* Забороняємо заголовку сплющуватися */
 }
 
-/* Головна зміна: ОДНА колонка замість трьох */
-.ach-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+/* === МАГІЯ РОЗПОДІЛУ ІКОНОК === */
+.ach-grid { 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; /* Рівномірно розкидає ачівки по всій доступній висоті */
+    flex-grow: 1; /* Змушує сітку зайняти весь залишок висоти під заголовком */
+}
 
 .ach-slot { 
-    width: 100%; aspect-ratio: 1/1; background: #111; border: 1px solid #333; 
+    width: 100%; 
+    aspect-ratio: 1/1; /* Завжди ідеальний квадрат */
+    max-height: 75px; /* Захист, щоб на 4K моніторах іконки не стали гігантськими */
+    background: #111; border: 1px solid #333; 
     border-radius: 4px; display: flex; align-items: center; justify-content: center; 
     font-size: 32px; position: relative; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
     cursor: default;
+    margin: 0 auto;
 }
 
 /* Силует (Заблоковано) */
@@ -671,15 +698,15 @@ body::after {
     filter: none; opacity: 1; box-shadow: 0 0 15px rgba(247, 213, 62, 0.2); 
 }
 
-/* Tooltip (тепер з'являється зліва від іконки, бо панель справа) */
+/* Tooltip (Спливаюча підказка зліва) */
 .ach-slot::after {
     content: attr(data-tooltip); position: absolute; 
-    top: 50%; right: 120%; /* Змінили позицію наліво */
+    top: 50%; right: 120%; 
     transform: translateY(-50%); background: #000; color: #fff; font-size: 10px; 
     padding: 4px 8px; border: 1px solid var(--primary-color); white-space: nowrap; 
     opacity: 0; pointer-events: none; transition: 0.2s; font-family: 'Share Tech Mono', monospace; z-index: 10;
 }
-.ach-slot:hover::after { opacity: 1; right: 140%; /* Від'їжджає вліво при наведенні */ }
+.ach-slot:hover::after { opacity: 1; right: 140%; }
 
 
 /* === RANDOM CRT GLITCH TRANSITION === */
