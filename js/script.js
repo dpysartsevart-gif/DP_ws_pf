@@ -142,26 +142,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close');
             
-            // 1. Скидаємо магнітний ефект для ВСІХ кнопок, з яких пішов курсор
+            // 1. Очищаємо ефект ТІЛЬКИ з тих кнопок, на яких немає курсору
             document.querySelectorAll('.menu-item, .dlc-btn, .buy-btn').forEach(btn => {
-                btn.style.transform = '';
+                if (btn !== target) {
+                    btn.style.transform = ''; 
+                }
             });
 
             if (target) {
                 if(circle) circle.classList.add('magnetic');
                 
-                // 2. MAGNETIC PHYSICAL HOVER (Тягнемо кнопку за курсором)
+                // 2. MAGNETIC PHYSICAL HOVER (Справжня фізика)
                 if (target.classList.contains('menu-item') || target.classList.contains('dlc-btn') || target.classList.contains('buy-btn')) {
                     const rect = target.getBoundingClientRect();
                     const centerX = rect.left + rect.width / 2;
                     const centerY = rect.top + rect.height / 2;
                     
-                    // Сила тяжіння (чим ближче курсор до краю, тим сильніше тягне)
+                    // Сила тяжіння (Збільшено до 0.15 для відчутності)
                     const pullX = (mouseX - centerX) * 0.15; 
-                    const pullY = (mouseY - centerY) * 0.25; 
+                    const pullY = (mouseY - centerY) * 0.15; 
                     
-                    // Зберігаємо базовий CSS-зсув для меню, щоб воно не зламалося
-                    const baseTranslate = target.classList.contains('menu-item') ? 'translateX(20px)' : '';
+                    const baseTranslate = target.classList.contains('menu-item') ? 'translateX(10px)' : '';
                     target.style.transform = `${baseTranslate} translate(${pullX}px, ${pullY}px)`;
                 }
             } else {
@@ -592,8 +593,10 @@ item.addEventListener('mouseenter', () => {
             currentMenuIndex = index;
             safePlay('snd-hover');
             
-            // === CIPHER HOVER: Декодування тексту при наведенні ===
-            scrambleText(item, 400); 
+            // === РАНДОМНИЙ CIPHER ТІЛЬКИ ДЛЯ GALLERY (50% шанс) ===
+            if (item.id === 'btn-gallery' && Math.random() > 0.5) {
+                scrambleText(item, 400); 
+            }
         });
         item.addEventListener('click', () => {
             const target = item.dataset.target;
