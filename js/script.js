@@ -421,10 +421,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         wrapper.classList.add('skeleton-loader'); 
                         mediaEl = document.createElement('img');
-                        if (index >= 4) mediaEl.setAttribute('loading', 'lazy'); 
+                        /* Прибрали loading="lazy" для максимальної швидкості */
                         
                         mediaEl.style.opacity = '0'; 
-                        mediaEl.style.transition = 'opacity 0.4s ease'; 
+                        mediaEl.style.transition = 'opacity 0.2s ease'; /* Пришвидшили плавне з'явлення */
                         
                         mediaEl.onload = function() {
                             wrapper.classList.remove('skeleton-loader'); 
