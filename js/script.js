@@ -765,8 +765,22 @@ document.addEventListener('DOMContentLoaded', () => {
         termOutput.scrollTop = termOutput.scrollHeight; 
     }
 
-   function processCommand(cmd) {
-        const cheatCodes = ['god', 'godmode', 'noclip', 'iddqd', 'idkfa', 'idspispopd', 'lumberjack', 'hesoyam', 'baguvix', 'aezakmi', 'panzer', 'leavemealone', 'motherlode', 'greedisgood', 'showmethemoney'];
+function processCommand(cmd) {
+        // УЛЬТИМАТИВНА БАЗА ЧІТ-КОДІВ (Без пробілів для терміналу)
+        const cheatCodes = [
+            // Classic FPS (Doom, Quake, Half-Life)
+            'god', 'godmode', 'noclip', 'iddqd', 'idkfa', 'idspispopd',
+            // GTA Series (SA, VC, V)
+            'hesoyam', 'baguvix', 'aezakmi', 'panzer', 'leavemealone', 'turtle', 'painkiller', 'catchme',
+            // Strategies (Warcraft, Starcraft, Age of Empires)
+            'greedisgood', 'showmethemoney', 'whosyourdaddy', 'thereisnospoon', 'poweroverwhelming', 'blacksheepwall', 'howdoyouturnthison', 'aegis',
+            // Heroes of Might and Magic III
+            'nwcwc', 'nwconlyamodel', 'nwcneo', 'nwczion', 'nwctrojanrabbit',
+            // RPGs (Skyrim, Fallout)
+            'tgm', 'tcl', 'psb',
+            // The Sims & Culture
+            'motherlode', 'rosebud', 'lumberjack', 'konami', 'konamicode'
+        ];
 
         if (cheatCodes.includes(cmd)) {
             printToTerminal('>>> ILLEGAL CHEAT CODE DETECTED...', 'term-err');
@@ -786,6 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 printToTerminal('- hire   : Initialize recruitment protocol');
                 printToTerminal('- coffee : Dispense emergency caffeine');
                 printToTerminal('- clear  : Wipe terminal output');
+                printToTerminal('- *** : Do you remember any classic cheats? ;)');
                 break;
             case 'hire':
                 printToTerminal('>>> EXECUTING RECRUITMENT PROTOCOL...', 'term-sys');
