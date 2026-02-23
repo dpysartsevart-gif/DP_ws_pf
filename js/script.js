@@ -461,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-// === INTERACTION (PREMIUM STABLE ZONED 3D) ===
+// === INTERACTION (ULTIMATE STABLE 3D - CENTER X) ===
     projectSlots.forEach(slot => {
         slot.addEventListener('click', () => {
             if(window.innerWidth > 1000 && slot.classList.contains('selected')) return; 
@@ -480,43 +480,62 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Ініціалізуємо "пам'ять" для зони, щоб уникнути стрибків
-        slot.dataset.tiltState = 'center';
+        // Ініціалізуємо "пам'ять" зони
+        slot.dataset.tiltZone = 'center-50';
 
         slot.addEventListener('mousemove', (e) => {
             if (window.innerWidth <= 1000) return; 
             
+            // СЕКРЕТ СТАБІЛЬНОСТІ: Рахуємо від ЦЕНТРУ, який не рухається при rotateY!
             const rect = slot.getBoundingClientRect();
-            const x = e.clientX - rect.left; 
-            const width = rect.width;
+            const centerX = rect.left + rect.width / 2;
             
-            let newState = 'center';
+            // Відстань від центру: від -1.0 (лівий край) до 1.0 (правий край)
+            const pctFromCenter = (e.clientX - centerX) / (rect.width / 2); 
+            
             let rotateY = 0;
+            let currentZone = 'center-50';
             
-            // Зона 1: Ліві 25%
-            if (x < width * 0.25) {
-                newState = 'left';
-                rotateY = -2; // Кут значно зменшено для солідності (було 6)
-            } 
-            // Зона 2: Праві 25%
-            else if (x > width * 0.75) {
-                newState = 'right';
-                rotateY = 2;  // Кут значно зменшено для солідності (було 6)
-            } 
-            
-            // МАГІЯ: Застосовуємо нахил ТІЛЬКИ якщо курсор перейшов у НОВУ зону.
-            // Це повністю блокує вібрацію та перевантаження браузера.
-            if (slot.dataset.tiltState !== newState) {
-                slot.dataset.tiltState = newState;
-                slot.style.transition = 'transform 0.4s ease-out'; 
+            // 1. Ліва зона 10% (від лівого краю до -0.8)
+            if (pctFromCenter < -0.8) {
+                rotateY = -3;
+                currentZone = 'left-10';
+            }
+            // 2. Ліва зона 15% (від -0.8 до -0.5)
+            else if (pctFromCenter >= -0.8 && pctFromCenter < -0.5) {
+                rotateY = -1;
+                currentZone = 'left-15';
+            }
+            // 3. Зона Центр 50% (від -0.5 до 0.5)
+            else if (pctFromCenter >= -0.5 && pctFromCenter <= 0.5) {
+                rotateY = 0;
+                currentZone = 'center-50';
+            }
+            // 4. Права зона 15% (від 0.5 до 0.8)
+            else if (pctFromCenter > 0.5 && pctFromCenter <= 0.8) {
+                rotateY = 1;
+                currentZone = 'right-15';
+            }
+            // 5. Права зона 10% (від 0.8 до правого краю)
+            else if (pctFromCenter > 0.8) {
+                rotateY = 3;
+                currentZone = 'right-10';
+            }
+
+            // Застосовуємо нахил ЛИШЕ якщо курсор перейшов у нову зону
+            // Це повністю вбиває баг з нескінченною вібрацією
+            if (slot.dataset.tiltZone !== currentZone) {
+                slot.dataset.tiltZone = currentZone;
+                // Максимально плавний інтерактивний перехід (cubic-bezier як в Apple UI)
+                slot.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
                 slot.style.transform = `perspective(1000px) rotateX(0deg) rotateY(${rotateY}deg)`;
             }
         });
 
         slot.addEventListener('mouseleave', () => {
             if (window.innerWidth <= 1000) return;
-            slot.dataset.tiltState = 'center'; // Скидаємо пам'ять при виході
-            slot.style.transition = 'transform 0.4s ease-out'; 
+            slot.dataset.tiltZone = 'center-50'; 
+            slot.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
             slot.style.transform = ''; 
         });
 
