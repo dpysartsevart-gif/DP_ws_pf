@@ -662,18 +662,16 @@ body::after {
 
 /* ЗМЕНШЕНИЙ ЗАГОЛОВОК */
 .ach-panel-title { 
-    font-size: 10px; /* Зробили значно меншим */
+    font-size: 9px; /* Зменшили ще на 1px, щоб слово не билося об краї панелі */
     color: var(--primary-color); 
     letter-spacing: 1px; 
-    margin-bottom: 15px; 
+    margin-bottom: 12px; 
     border-bottom: 1px dashed #444; 
     padding-bottom: 8px; 
     text-align: center; 
     flex-shrink: 0; 
-    writing-mode: horizontal-tb; 
-    transform: none; 
+    line-height: 1.6; /* ДОДАНО: Ідеальна відстань між /// та словом ACHIEVEMENTS */
 }
-
 /* СІТКА ІНВЕНТАРЮ: 1 КОЛОНКА, ЩО ЗАЙМАЄ ВСЮ ВИСОТУ */
 .ach-grid { 
     display: flex; 
