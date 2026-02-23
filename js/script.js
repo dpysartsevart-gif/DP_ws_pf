@@ -528,12 +528,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // === ACHIEVEMENTS ===
+// === ACHIEVEMENTS ===
     let viewedProjects = new Set();
     let explorerUnlocked = false;
     let munchkinUnlocked = false;
     let supporterUnlocked = false;
     let cheaterUnlocked = false; 
+    let talentUnlocked = false; // НОВА ЗМІННА
+
+    // Відслідковуємо кліки по всіх посиланнях у розділі Credits (CV, ArtStation, LinkedIn)
+    const creditLinks = document.querySelectorAll('#credits-screen a');
+    creditLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (!talentUnlocked) {
+                talentUnlocked = true;
+                // Невелика затримка, щоб юзер встиг побачити ачівку перед переходом на іншу вкладку
+                setTimeout(() => {
+                    showAchievement("ACHIEVEMENT UNLOCKED", "FOUND A TALENT (Checked the artist's links)", "🤝");
+                }, 500);
+            }
+        });
+    });
 
 function showAchievement(title, desc, icon) {
         if(achievementPopup) {
@@ -546,13 +561,15 @@ function showAchievement(title, desc, icon) {
             setTimeout(() => { achievementPopup.classList.remove('show'); }, 5000);
         }
         
-        // === РОЗБЛОКУВАННЯ СИЛУЕТУ В ПАНЕЛІ ===
+// === РОЗБЛОКУВАННЯ СИЛУЕТУ В ПАНЕЛІ ===
         if (desc.includes("EXPLORER")) document.getElementById('ach-explorer')?.classList.remove('locked');
         if (desc.includes("NEW JOURNEY")) document.getElementById('ach-journey')?.classList.remove('locked');
         if (desc.includes("SUPPORTER")) document.getElementById('ach-supporter')?.classList.remove('locked');
         if (desc.includes("MUNCHKIN")) document.getElementById('ach-munchkin')?.classList.remove('locked');
         if (desc.includes("CHEATER")) document.getElementById('ach-cheater')?.classList.remove('locked');
-        if (desc.includes("HACKER MAN")) document.getElementById('ach-hacker')?.classList.remove('locked');  
+        if (desc.includes("HACKER MAN")) document.getElementById('ach-hacker')?.classList.remove('locked');
+        // ДОДАНО:
+        if (desc.includes("FOUND A TALENT")) document.getElementById('ach-talent')?.classList.remove('locked');
     }
     
     function checkExplorer(id) {
