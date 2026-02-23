@@ -420,11 +420,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         wrapper.appendChild(mediaEl);
                     } else {
                         wrapper.classList.add('skeleton-loader'); 
-                        mediaEl = document.createElement('img');
-                        /* Прибрали loading="lazy" для максимальної швидкості */
+mediaEl = document.createElement('img');
+                        // ПРО РІВЕНЬ: Перша картинка одразу, інші - при скролі.
+                        if (index > 0) mediaEl.setAttribute('loading', 'lazy'); 
+                        // АСИНХРОННИЙ ДЕКОДИНГ: Не блокує інтерфейс під час розпаковки jpeg
+                        mediaEl.decoding = "async"; 
                         
                         mediaEl.style.opacity = '0'; 
-                        mediaEl.style.transition = 'opacity 0.2s ease'; /* Пришвидшили плавне з'явлення */
+                        mediaEl.style.transition = 'opacity 0.3s ease';
                         
                         mediaEl.onload = function() {
                             wrapper.classList.remove('skeleton-loader'); 

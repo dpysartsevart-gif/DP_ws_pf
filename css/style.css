@@ -210,6 +210,9 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     border-radius: 8px !important; 
     box-shadow: none !important; /* Тінь повністю вимкнено */
     border: none !important;
+transform: translateZ(0); /* Вмикаємо 3D-прискорення GPU */
+    backface-visibility: hidden;
+    will-change: opacity; /* Попереджаємо браузер, що буде анімація */
 }
 
 /* === 3. YOUTUBE ВІДЕО (Без тіней) === */
@@ -908,9 +911,10 @@ body.glitch-transition {
     .gallery-sidebar { width: 100% !important; height: 100% !important; padding: 0 !important; display: flex !important; flex-direction: column !important; }
     .projects-scroll-area { flex-grow: 1 !important; height: auto !important; overflow-y: auto !important; padding-bottom: 60px !important; padding-right: 5px !important; }
 
-    .gallery-viewport {
+.gallery-viewport {
         position: fixed !important; top: 0; left: 0; width: 100% !important; height: 100% !important;
         background: #000 !important; z-index: 5000 !important; display: none; flex-direction: column; padding: 15px !important;
+        backdrop-filter: none !important; /* ВИМИКАЄМО БЛЮР ДЛЯ ШВИДКОДІЇ */
     }
     .gallery-viewport.active-screen { display: flex !important; }
     .viewport-frame { width: 100% !important; height: 100% !important; border: none !important; background: transparent !important; display: flex !important; flex-direction: column !important; margin-top: 0 !important; }
