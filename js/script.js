@@ -465,9 +465,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === INTERACTION ===
+// === INTERACTION ===
     projectSlots.forEach(slot => {
         slot.addEventListener('click', () => {
+            // На десктопі не перезавантажуємо проект, якщо він вже відкритий
+            if(window.innerWidth > 1000 && slot.classList.contains('selected')) return; 
+            
             projectSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
             safePlay('snd-select');
@@ -486,7 +489,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // === 3D ХОЛОГРАФІЧНИЙ НАХИЛ КАРТОК ===
         slot.addEventListener('mousemove', (e) => {
             if (window.innerWidth <= 1000) return; 
-            slot.style.transition = 'none'; 
+            // ФІКС 1: Замість різкого 'none' робимо мікро-плавність тільки для 3D
+            slot.style.transition = 'transform 0.05s linear'; 
             
             const rect = slot.getBoundingClientRect();
             const x = e.clientX - rect.left; 
@@ -494,20 +498,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             
-            const rotateX = ((y - centerY) / centerY) * -10; 
-            const rotateY = ((x - centerX) / centerX) * 10;
+            // Трохи зменшив кут (з 10 до 8), щоб рух був більш "преміальним" і стабільним
+            const rotateX = ((y - centerY) / centerY) * -8; 
+            const rotateY = ((x - centerX) / centerX) * 8;
             
-            slot.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            // Додано perspective безпосередньо в transform для кращої стабілізації
+            slot.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         });
 
         slot.addEventListener('mouseleave', () => {
             if (window.innerWidth <= 1000) return;
+            // Повертаємо базову плавність CSS
             slot.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
             slot.style.transform = ''; 
         });
 
         slot.addEventListener('mouseenter', () => {
             if(window.innerWidth > 1000) {
+                // ФІКС 2 (КРИТИЧНИЙ): Якщо картка вже вибрана — ігноруємо наведення!
+                // Це повністю зупинить спам перезавантажень галереї.
+                if(slot.classList.contains('selected')) return; 
+                
                 projectSlots.forEach(s => s.classList.remove('selected'));
                 slot.classList.add('selected');
                 safePlay('snd-hover');
