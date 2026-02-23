@@ -168,9 +168,9 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     flex-direction: column !important;
     align-items: center !important;
     
-    /* Відстань між кадрами по вертикалі (щоб сусідні не лізли в кадр) */
     gap: 30vh !important; 
-    padding: 10vh 0 15vh 0 !important; 
+    /* ДОДАНО: 40px відступів по боках, щоб тіні більше не вдарялися об стіни екрану */
+    padding: 10vh 40px 15vh 40px !important; 
     
     scroll-snap-type: y mandatory !important;
     scroll-behavior: smooth !important;
@@ -209,10 +209,10 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     outline: none;
     background-color: #000; 
 
-    /* БАГАТОШАРОВА ТІНЬ (З !important, щоб ніщо її не перебило) */
+    /* ФІКС: Більш густа і широка тінь з плюсовим розширенням */
     box-shadow: 
-        0 25px 50px -12px rgba(0, 0, 0, 1), 
-        0 10px 20px -5px rgba(0, 0, 0, 0.6) !important;
+        0 20px 40px 5px rgba(0, 0, 0, 0.8), 
+        0 5px 15px rgba(0, 0, 0, 0.9) !important;
         
     transition: all 0.3s ease; 
 }
