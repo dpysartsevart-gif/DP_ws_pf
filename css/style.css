@@ -398,20 +398,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .cursor-dot, .cursor-circle {
     z-index: 100000 !important;
 }
-/* === YOUTUBE IFRAME FIX === */
-#viewport-content iframe {
-    border: none !important;       
-    outline: none;
-    border-radius: 8px;            
-    background-color: #000;        
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
-    overflow: hidden;
-    
-    /* === ФІКС ПРОПОРЦІЙ (ШИРОКИЙ ФОРМАТ) === */
-    width: 100% !important;        /* Розтягуємо на всю ширину контейнера */
-    aspect-ratio: 16 / 9;          /* Жорстко фіксуємо кіношний формат */
-    height: auto;                  /* Висота підлаштується автоматично */
-}
+
 /* 2. Стилі для Ачівки (їх не було в оригіналі) */
 #achievement-popup {
     position: fixed;
