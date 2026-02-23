@@ -535,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let supporterUnlocked = false;
     let cheaterUnlocked = false; 
 
-    function showAchievement(title, desc, icon) {
+function showAchievement(title, desc, icon) {
         if(achievementPopup) {
             const t = achievementPopup.querySelector('.ach-title');
             const d = achievementPopup.querySelector('.ach-desc');
@@ -545,6 +545,15 @@ document.addEventListener('DOMContentLoaded', () => {
             safePlay('snd-achievement');
             setTimeout(() => { achievementPopup.classList.remove('show'); }, 5000);
         }
+        
+        // === РОЗБЛОКУВАННЯ СИЛУЕТУ В ПАНЕЛІ ===
+        if (desc.includes("EXPLORER")) document.getElementById('ach-explorer')?.classList.remove('locked');
+        if (desc.includes("NEW JOURNEY")) document.getElementById('ach-journey')?.classList.remove('locked');
+        if (desc.includes("SUPPORTER")) document.getElementById('ach-supporter')?.classList.remove('locked');
+        if (desc.includes("MUNCHKIN")) document.getElementById('ach-munchkin')?.classList.remove('locked');
+        if (desc.includes("CHEATER")) document.getElementById('ach-cheater')?.classList.remove('locked');
+        if (desc.includes("HACKER MAN")) document.getElementById('ach-hacker')?.classList.remove('locked');
+    }
     }
     
     function checkExplorer(id) {
