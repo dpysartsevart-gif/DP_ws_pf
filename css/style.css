@@ -552,14 +552,14 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 /* === КНОПКА-ТРИКУТНИК (VIEW MESH / RENDER) === */
 .alt-toggle-btn {
     position: absolute; 
-    top: 20px; /* Трохи відступили від самого краю, щоб дихало */
-    left: 20px;
+    top: 10px; /* Трохи відступили від самого краю, щоб дихало */
+    left: 10px;
     z-index: 50;
     cursor: none; 
 
     /* Жорстко фіксуємо розмір саме для іконки */
-    width: 30px !important;
-    height: 30px !important;
+    width: 20px !important;
+    height: 20px !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;

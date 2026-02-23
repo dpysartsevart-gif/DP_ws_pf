@@ -505,7 +505,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if (pctFromCenter > 0.8) rotateY = 2;
 
                 slot.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
-                slot.style.transform = `perspective(1000px) rotateX(0deg) rotateY(${rotateY}deg)`;
+// ДОДАНО: Зберігаємо зсув вправо (translateX 10px), щоб картка не обрізалась ліворуч
+                slot.style.transform = `perspective(1000px) translateX(10px) rotateX(0deg) rotateY(${rotateY}deg)`;
             }, 300); // 300мс зупинки курсора
         });
 
