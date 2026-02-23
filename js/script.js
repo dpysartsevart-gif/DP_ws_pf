@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     speck.style.transition = 'margin 1.5s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
                 }
             });
-
+  });
 
         function animateCursor() {
             circleX += (mouseX - circleX) * 0.15; 
