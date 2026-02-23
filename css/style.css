@@ -198,31 +198,33 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     background: transparent !important;
 }
 
-/* =========================================
- 2.  ФІНАЛЬНИЙ ПРЕМІАЛЬНИЙ СТИЛЬ ДЛЯ ВСІХ МЕДІА
-   ========================================= */
-.vp-content .img-wrapper img,
-.vp-content .img-wrapper video,
+/* === УНІВЕРСАЛЬНИЙ СТИЛЬ ДЛЯ ВІЗУАЛЬНОГО КОНТЕНТУ === */
+.img-wrapper img,
+.img-wrapper video,
 #viewport-content iframe {
-    border-radius: 8px !important;
+    width: 100%;
+    display: block;
+    border-radius: 8px !important; 
     border: none !important;
-    background-color: #000 !important;
-    
-    /* Глибока багатошарова тінь з !important, щоб її більше ніхто не перебив */
+    outline: none;
+    background-color: #000; 
+
+    /* БАГАТОШАРОВА ТІНЬ (З !important, щоб ніщо її не перебило) */
     box-shadow: 
-        0 25px 50px -12px rgba(0, 0, 0, 1),   /* М'який градієнт, що розчиняється внизу */
-        0 10px 20px -5px rgba(0, 0, 0, 0.6) !important; /* Контурна тінь для об'єму */
+        0 25px 50px -12px rgba(0, 0, 0, 1), 
+        0 10px 20px -5px rgba(0, 0, 0, 0.6) !important;
+        
+    transition: all 0.3s ease; 
 }
 
 /* Специфічний фікс пропорцій ТІЛЬКИ для YouTube */
 #viewport-content iframe {
-    width: 100% !important;        
-    aspect-ratio: 16 / 9 !important;          
-    height: auto !important;                  
-    outline: none;
+     width: 100% !important;
+     aspect-ratio: 16 / 9 !important;
+     height: auto !important;
 }
 
-/* Даємо величезний відступ внизу, щоб тінь останнього елемента не обрізалася скролом */
+/* ФІКС ОБРІЗАННЯ ТІНІ ВНИЗУ */
 #viewport-content > :last-child {
     margin-bottom: 80px !important; 
 }
@@ -875,8 +877,26 @@ body.glitch-transition {
     .gallery-viewport.active-screen { display: flex !important; }
     .viewport-frame { width: 100% !important; height: 100% !important; border: none !important; background: transparent !important; display: flex !important; flex-direction: column !important; margin-top: 0 !important; }
     #viewport-content { flex-grow: 1 !important; overflow-y: auto !important; padding-bottom: 50px !important; display: block !important; }
-.vp-content img, .vp-content video, .vp-content iframe { width: 100% !important; height: auto !important; max-width: none !important; margin-bottom: 20px !important; display: block !important; aspect-ratio: 16/9 !important; }
-    
+
+/* МОБІЛЬНИЙ ФІКС: Зображення на всю ширину, YouTube залишається 16:9 */
+    .vp-content .img-wrapper { 
+        height: auto !important; 
+        max-height: none !important; 
+        margin-bottom: 40px !important; 
+    }
+    .vp-content img, .vp-content video { 
+        width: 100% !important; 
+        height: auto !important; 
+        max-width: 100% !important; 
+        display: block !important; 
+        aspect-ratio: auto !important; /* ЖОДНИХ 16/9 ДЛЯ КАРТИНОК! */
+    }
+    .vp-content iframe { 
+        width: 100% !important; 
+        height: auto !important; 
+        aspect-ratio: 16/9 !important; 
+        margin-bottom: 40px !important;
+    }
     .gallery-header-flex { 
         flex-direction: column !important; /* Вибудовуємо елементи один під одним */
         justify-content: flex-start !important; 
