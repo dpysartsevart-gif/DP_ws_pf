@@ -140,9 +140,30 @@ document.addEventListener('DOMContentLoaded', () => {
             mouseX = e.clientX; mouseY = e.clientY;
             if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
 
-            const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close');
+const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close');
+            
+            // 1. Скидаємо магнітний ефект для ВСІХ кнопок, з яких пішов курсор
+            document.querySelectorAll('.menu-item, .dlc-btn, .buy-btn').forEach(btn => {
+                btn.style.transform = '';
+            });
+
             if (target) {
                 if(circle) circle.classList.add('magnetic');
+                
+                // 2. MAGNETIC PHYSICAL HOVER (Тягнемо кнопку за курсором)
+                if (target.classList.contains('menu-item') || target.classList.contains('dlc-btn') || target.classList.contains('buy-btn')) {
+                    const rect = target.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    
+                    // Сила тяжіння (чим ближче курсор до краю, тим сильніше тягне)
+                    const pullX = (mouseX - centerX) * 0.15; 
+                    const pullY = (mouseY - centerY) * 0.25; 
+                    
+                    // Зберігаємо базовий CSS-зсув для меню, щоб воно не зламалося
+                    const baseTranslate = target.classList.contains('menu-item') ? 'translateX(20px)' : '';
+                    target.style.transform = `${baseTranslate} translate(${pullX}px, ${pullY}px)`;
+                }
             } else {
                 if(circle) circle.classList.remove('magnetic');
             }
@@ -562,7 +583,7 @@ function showAchievement(title, desc, icon) {
 
     // === MENU ===
     menuItems.forEach((item, index) => {
-        item.addEventListener('mouseenter', () => {
+item.addEventListener('mouseenter', () => {
             if(inSubMenu) return;
             if(dlcBtn) dlcBtn.classList.remove('active-dlc');
             isDlcActive = false;
@@ -570,6 +591,9 @@ function showAchievement(title, desc, icon) {
             item.classList.add('active');
             currentMenuIndex = index;
             safePlay('snd-hover');
+            
+            // === CIPHER HOVER: Декодування тексту при наведенні ===
+            scrambleText(item, 400); 
         });
         item.addEventListener('click', () => {
             const target = item.dataset.target;
