@@ -461,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-   // === INTERACTION (STABLE ZONED 3D) ===
+// === INTERACTION (PREMIUM STABLE ZONED 3D) ===
     projectSlots.forEach(slot => {
         slot.addEventListener('click', () => {
             if(window.innerWidth > 1000 && slot.classList.contains('selected')) return; 
@@ -480,7 +480,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // === СПРОЩЕНИЙ ЗОНОВАНИЙ 3D НАХИЛ (Ідея Арт-директора) ===
+        // Ініціалізуємо "пам'ять" для зони, щоб уникнути стрибків
+        slot.dataset.tiltState = 'center';
+
         slot.addEventListener('mousemove', (e) => {
             if (window.innerWidth <= 1000) return; 
             
@@ -488,29 +490,32 @@ document.addEventListener('DOMContentLoaded', () => {
             const x = e.clientX - rect.left; 
             const width = rect.width;
             
+            let newState = 'center';
             let rotateY = 0;
             
-            // Зона 1: Ліві 25% картки
+            // Зона 1: Ліві 25%
             if (x < width * 0.25) {
-                rotateY = -6; 
+                newState = 'left';
+                rotateY = -2; // Кут значно зменшено для солідності (було 6)
             } 
-            // Зона 2: Праві 25% картки
+            // Зона 2: Праві 25%
             else if (x > width * 0.75) {
-                rotateY = 6;  
+                newState = 'right';
+                rotateY = 2;  // Кут значно зменшено для солідності (було 6)
             } 
-            // Зона 3: Центр (50% простору)
-            else {
-                rotateY = 0;  
+            
+            // МАГІЯ: Застосовуємо нахил ТІЛЬКИ якщо курсор перейшов у НОВУ зону.
+            // Це повністю блокує вібрацію та перевантаження браузера.
+            if (slot.dataset.tiltState !== newState) {
+                slot.dataset.tiltState = newState;
+                slot.style.transition = 'transform 0.4s ease-out'; 
+                slot.style.transform = `perspective(1000px) rotateX(0deg) rotateY(${rotateY}deg)`;
             }
-
-            // Робимо перехід між зонами супер-плавним (0.3s)
-            slot.style.transition = 'transform 0.3s ease-out'; 
-            // Тільки Y-нахил! Ніякого X, щоб картка не стрибала по висоті
-            slot.style.transform = `perspective(1000px) rotateX(0deg) rotateY(${rotateY}deg)`;
         });
 
         slot.addEventListener('mouseleave', () => {
             if (window.innerWidth <= 1000) return;
+            slot.dataset.tiltState = 'center'; // Скидаємо пам'ять при виході
             slot.style.transition = 'transform 0.4s ease-out'; 
             slot.style.transform = ''; 
         });
@@ -518,7 +523,6 @@ document.addEventListener('DOMContentLoaded', () => {
         slot.addEventListener('mouseenter', () => {
             if(window.innerWidth > 1000) {
                 if(slot.classList.contains('selected')) return; 
-                
                 projectSlots.forEach(s => s.classList.remove('selected'));
                 slot.classList.add('selected');
                 safePlay('snd-hover');
