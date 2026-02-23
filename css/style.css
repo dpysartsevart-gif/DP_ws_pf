@@ -230,7 +230,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     top: 0px !important; 
     /* МАГІЯ ТУТ: від'ємний відступ вліво компенсує padding контейнера */
     /* Трикутник вилізе за межі обгортки і стане ближче до рамки Viewport */
-    left: -35px !important; 
+    left: -30px !important; 
     z-index: 50 !important;
     cursor: none; 
     width: 24px !important;
@@ -352,7 +352,7 @@ a, button, .menu-item, .project-slot, .back-hint, .shop-btn { cursor: none; }
 body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 203, 245, 0.1); border-color: var(--accent-color); }
 
 /* POPUP */
-.popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 20000; display: flex; align-items: center; justify-content: center; }
+.popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 20000; display: flex; align-items: center; justify-content: center; }
 .popup-content { background: #111; border: 2px solid var(--primary-color); padding: 40px; text-align: center; max-width: 500px; box-shadow: 0 0 30px rgba(247,213,62,0.2); }
 .email-box { background: #222; padding: 15px; margin: 20px 0; border: 1px dashed #555; color: #a3cbf5; font-size: 20px; user-select: text; cursor: text; }
 .popup-buttons { display: flex; gap: 20px; justify-content: center; }
@@ -377,7 +377,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     .ui-layer { padding: 15px; padding-top: 20px; height: 100%; overflow: hidden; }
     .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
 /* Збільшені шрифти для мобільного */
-    h1.glitch { font-size: 42px !important; letter-spacing: 1px; margin-bottom: 5px; } 
+    h1.glitch { font-size: 52px !important; letter-spacing: 1px; margin-bottom: 5px; } 
     .role-subtitle { font-size: 14px !important; margin-bottom: 25px !important; }
     .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
     .coffee-hud { top: 20px; right: 20px; transform: scale(0.8); transform-origin: top right; }
@@ -902,7 +902,7 @@ body.glitch-transition {
     }
     .gallery-viewport.active-screen { display: flex !important; }
     .viewport-frame { width: 100% !important; height: 100% !important; border: none !important; background: transparent !important; display: flex !important; flex-direction: column !important; margin-top: 0 !important; }
-    #viewport-content { flex-grow: 1 !important; overflow-y: auto !important; padding-bottom: 50px !important; display: block !important; }
+    #viewport-content { flex-grow: 1 !important; overflow-y: auto !important; padding: 0 0 50px 0 !important; display: block !important; }
 
 /* МОБІЛЬНИЙ ФІКС: Зображення на всю ширину, YouTube залишається 16:9 */
     .vp-content .img-wrapper { 
@@ -956,12 +956,29 @@ body.glitch-transition {
     /* ПОВНІСТЮ ХОВАЄМО АЧІВКИ НА МОБІЛЬНОМУ */
     .achievements-panel { display: none !important; }
 /* AUDIO & HUD WIDGET MOBILE */
-    #audio-toggle {
-        top: 5px !important;
-        right: 5px !important;
-        font-size: 9px !important;
-        padding: 4px 8px !important;
-    }   #hud-widget {
+#audio-toggle {
+        top: 15px !important;
+        right: 15px !important;
+        width: 32px !important; 
+        height: 32px !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center; 
+        justify-content: center;
+        font-size: 0 !important; /* Ховаємо текстовий напис */
+        border-radius: 8px !important;
+        color: transparent !important;
+    }
+    #audio-toggle::after {
+        content: "🔊";
+        font-size: 16px;
+        color: var(--primary-color);
+        position: absolute;
+    }
+    #audio-toggle.muted::after {
+        content: "🔇";
+    }  
+#hud-widget {
         display: none !important; 
     }
 }

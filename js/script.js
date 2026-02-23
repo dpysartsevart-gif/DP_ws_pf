@@ -447,6 +447,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         const extIdx = fileName.lastIndexOf('.');
                         const altSrc = `assets/images/` + fileName.substring(0, extIdx) + '_alt' + fileName.substring(extIdx);
                         const baseSrc = mediaEl.src;
+mediaEl.dataset.baseSrc = baseSrc;
+mediaEl.dataset.altSrc = altSrc;
 
                         altBtn.addEventListener('click', (e) => {
                             e.stopPropagation(); 
@@ -678,14 +680,49 @@ function closeLightbox() {
         }
     }
 
-    if(vpContent) {
+if(vpContent) {
         vpContent.addEventListener('click', (e) => {
             if(e.target.tagName === 'IMG') {
                 if (lightbox && lightboxImg) {
                     lightboxImg.src = e.target.src; 
                     lightbox.classList.add('active'); 
                     safePlay('snd-select');
-history.pushState({ screen: 'lightbox' }, '', '');
+                    history.pushState({ screen: 'lightbox' }, '', '');
+
+                    // ДИНАМІЧНИЙ ТРИКУТНИК ДЛЯ LIGHTBOX
+                    let lbAltBtn = document.getElementById('lb-alt-btn');
+                    if (!lbAltBtn) {
+                        lbAltBtn = document.createElement('div');
+                        lbAltBtn.id = 'lb-alt-btn';
+                        lbAltBtn.className = 'alt-toggle-btn';
+                        lbAltBtn.style.cssText = 'position: absolute; top: 30px; left: 40px; z-index: 30005; width: 36px !important; height: 36px !important;';
+                        lightbox.appendChild(lbAltBtn);
+                    }
+
+                    if (e.target.dataset.baseSrc && e.target.dataset.altSrc) {
+                        lbAltBtn.style.display = 'flex';
+                        let showingAlt = (e.target.src.includes('_alt.jpg')); 
+                        const iconMesh = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 20 2 20"></polygon><line x1="12" y1="2" x2="12" y2="20"></line><line x1="22" y1="20" x2="12" y2="12"></line><line x1="2" y1="20" x2="12" y2="12"></line></svg>`;
+                        const iconRender = `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 20 2 20"></polygon></svg>`;
+                        
+                        lbAltBtn.innerHTML = showingAlt ? iconRender : iconMesh;
+
+                        lbAltBtn.onclick = (event) => {
+                            event.stopPropagation();
+                            showingAlt = !showingAlt;
+                            lightboxImg.src = showingAlt ? e.target.dataset.altSrc : e.target.dataset.baseSrc;
+                            lbAltBtn.innerHTML = showingAlt ? iconRender : iconMesh;
+                            
+                            // Синхронізуємо картинку в галереї під лайтбоксом
+                            e.target.src = lightboxImg.src;
+                            const originalBtn = e.target.parentElement.querySelector('.alt-toggle-btn');
+                            if (originalBtn) originalBtn.innerHTML = lbAltBtn.innerHTML;
+                            
+                            safePlay('snd-hover');
+                        };
+                    } else {
+                        lbAltBtn.style.display = 'none';
+                    }
                 }
             }
         });
