@@ -159,8 +159,8 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
                     const centerY = rect.top + rect.height / 2;
                     
                     // Сила тяжіння (Збільшено до 0.10 для відчутності)
-                    const pullX = (mouseX - centerX) * 0.10; 
-                    const pullY = (mouseY - centerY) * 0.10; 
+                    const pullX = (mouseX - centerX) * 0.08; 
+                    const pullY = (mouseY - centerY) * 0.08; 
                     
                     const baseTranslate = target.classList.contains('menu-item') ? 'translateX(7px)' : '';
                     target.style.transform = `${baseTranslate} translate(${pullX}px, ${pullY}px)`;
