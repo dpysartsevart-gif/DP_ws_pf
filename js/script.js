@@ -593,8 +593,8 @@ item.addEventListener('mouseenter', () => {
             currentMenuIndex = index;
             safePlay('snd-hover');
             
-            // === РАНДОМНИЙ CIPHER ТІЛЬКИ ДЛЯ GALLERY (30% шанс) ===
-            if (item.id === 'btn-gallery' && Math.random() > 0.3) {
+            // === РАНДОМНИЙ CIPHER ТІЛЬКИ ДЛЯ GALLERY (20% шанс) ===
+            if (item.id === 'btn-gallery' && Math.random() > 0.2) {
                 scrambleText(item, 400); 
             }
         });
