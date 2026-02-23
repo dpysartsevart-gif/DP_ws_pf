@@ -64,8 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const donateBtn = document.getElementById('donate-btn');
     const backHints = document.querySelectorAll('.back-hint');
     const shopBtns = document.querySelectorAll('.shop-btn');
-    
-    // ДОДАНО: Змінні для Журналу
     const journalPopup = document.getElementById('journal-popup'); 
     const btnJournalClose = document.getElementById('btn-journal-close'); 
 
@@ -182,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             }
 
-            // === РОЗУМНИЙ ПИЛ (РОЗЛІТ ВІД КУРСОРУ) ===
             document.querySelectorAll('.dust-speck').forEach(speck => {
                 const rect = speck.getBoundingClientRect();
                 const speckX = rect.left + rect.width / 2;
@@ -280,7 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 target.classList.add('active-screen');
                 
                 if (screenId === 'gallery-screen') {
-                    // === ШАНС НА CRT-ГЛІТЧ (33% ймовірність) ===
                     if (Math.random() < 0.33) {
                         document.body.classList.add('glitch-transition');
                         safePlay('snd-gamestart'); 
@@ -465,12 +461,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-// === INTERACTION ===
+    // === INTERACTION (HOVER LOOP FIX) ===
     projectSlots.forEach(slot => {
         slot.addEventListener('click', () => {
-            // На десктопі не перезавантажуємо проект, якщо він вже відкритий
             if(window.innerWidth > 1000 && slot.classList.contains('selected')) return; 
-            
             projectSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
             safePlay('snd-select');
@@ -485,12 +479,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(vpContent) vpContent.scrollTop = 0;
             }
         });
-        
-        // === 3D ХОЛОГРАФІЧНИЙ НАХИЛ КАРТОК ===
+
+        // 3D Нахил
         slot.addEventListener('mousemove', (e) => {
-            if (window.innerWidth <= 1000) return; 
-            // ФІКС 1: Замість різкого 'none' робимо мікро-плавність тільки для 3D
-            slot.style.transition = 'transform 0.05s linear'; 
+            if (window.innerWidth <= 1000) return;
             
             const rect = slot.getBoundingClientRect();
             const x = e.clientX - rect.left; 
@@ -498,25 +490,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             
-            // Трохи зменшив кут (з 10 до 8), щоб рух був більш "преміальним" і стабільним
-            const rotateX = ((y - centerY) / centerY) * -8; 
-            const rotateY = ((x - centerX) / centerX) * 8;
+            // Зменшили кут нахилу, щоб мишка не злітала з картки
+            const rotateX = ((y - centerY) / centerY) * -5; 
+            const rotateY = ((x - centerX) / centerX) * 5;
             
-            // Додано perspective безпосередньо в transform для кращої стабілізації
-            slot.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            slot.style.transition = 'transform 0.1s linear';
+            // Не збільшуємо картку через JS (scale3d прибрано), щоб вона не "втікала" від курсора
+            slot.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
 
         slot.addEventListener('mouseleave', () => {
             if (window.innerWidth <= 1000) return;
-            // Повертаємо базову плавність CSS
             slot.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
             slot.style.transform = ''; 
         });
 
         slot.addEventListener('mouseenter', () => {
             if(window.innerWidth > 1000) {
-                // ФІКС 2 (КРИТИЧНИЙ): Якщо картка вже вибрана — ігноруємо наведення!
-                // Це повністю зупинить спам перезавантажень галереї.
+                // ГОЛОВНИЙ ЗАХИСТ ВІД ПЕТЛІ: Якщо картка вже обрана - ігноруємо
                 if(slot.classList.contains('selected')) return; 
                 
                 projectSlots.forEach(s => s.classList.remove('selected'));
