@@ -35,6 +35,18 @@
         </div>
     </div>
 
+<div id="journal-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h3 style="color:#ff3d00; font-size: 32px; margin-bottom: 20px;">/// DATA CORRUPTED ///</h3>
+            <p style="font-size: 18px; line-height: 1.6; color: #fff;">The personal journal module is currently offline.</p>
+            <br>
+            <p style="font-size: 14px; color: #888; font-family: 'Share Tech Mono', monospace;" class="blinking">Searching for backup sectors... (Estimated time: Unknown)</p>
+            <div class="popup-buttons" style="margin-top: 30px;">
+                <div class="buy-btn secondary" id="btn-journal-close">[ CLOSE MODULE ]</div>
+            </div>
+        </div>
+    </div>
+
     <div id="gallery-preloader" class="hidden">
         <div class="loader-content">
             <div class="loader-text">LOADING PROJECT DATA...</div>
@@ -91,10 +103,10 @@
                 <p class="role-subtitle">3D Character Artist \ LookDev</p>
             </div>
 
-            <ul class="menu-list">
+<ul class="menu-list">
                 <li class="menu-item active" data-action="email">New Game</li>
                 <li class="menu-item" data-target="gallery-screen" id="btn-gallery">Gallery</li>
-                <li class="menu-item" data-target="shop-screen">Shop</li>
+                <li class="menu-item" data-action="journal">Journal</li> <li class="menu-item" data-target="shop-screen">Shop</li>
                 <li class="menu-item" data-target="options-screen">Options</li>
                 <li class="menu-item" data-target="credits-screen">Credits</li>
             </ul>

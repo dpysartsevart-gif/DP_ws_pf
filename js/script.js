@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const pctText = document.querySelector('.loader-percentage');
     const loaderText = document.querySelector('.loader-text'); 
     const audioToggle = document.getElementById('audio-toggle');
-    
+    const journalPopup = document.getElementById('journal-popup'); // ДОДАНО
+    const btnJournalClose = document.getElementById('btn-journal-close'); // ДОДАНО
     let isMuted = localStorage.getItem('dp_audio_muted') === 'true';
 
     if (audioToggle && isMuted) {
@@ -177,8 +178,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 const moveY = (window.innerHeight / 2 - mouseY) * 0.02;
                 bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             }
-        });
-
+// === РОЗУМНИЙ ПИЛ (РОЗЛІТ ВІД КУРСОРУ) ===
+            document.querySelectorAll('.dust-speck').forEach(speck => {
+                const rect = speck.getBoundingClientRect();
+                const speckX = rect.left + rect.width / 2;
+                const speckY = rect.top + rect.height / 2;
+                const dist = Math.hypot(mouseX - speckX, mouseY - speckY);
+                
+                // Якщо курсор ближче ніж 120px, відштовхуємо
+                if (dist < 120) {
+                    const angle = Math.atan2(speckY - mouseY, speckX - mouseX);
+                    const force = (120 - dist) * 0.5; // Сила відштовхування
+                    speck.style.marginLeft = `${Math.cos(angle) * force}px`;
+                    speck.style.marginTop = `${Math.sin(angle) * force}px`;
+                    speck.style.transition = 'margin 0.1s ease-out';
+                } else {
+                    speck.style.marginLeft = '0px';
+                    speck.style.marginTop = '0px';
+                    speck.style.transition = 'margin 0.5s ease-in-out';
+                }
+            });
         function animateCursor() {
             circleX += (mouseX - circleX) * 0.15; 
             circleY += (mouseY - circleY) * 0.15;
@@ -255,7 +274,14 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 target.classList.add('active-screen');
                 
-                if (screenId === 'gallery-screen') {
+              if (screenId === 'gallery-screen') {
+                    // === ШАНС НА CRT-ГЛІТЧ (33% ймовірність) ===
+                    if (Math.random() < 0.33) {
+                        document.body.classList.add('glitch-transition');
+                        safePlay('snd-gamestart'); // Додаємо моторошний звук під час глітчу
+                        setTimeout(() => document.body.classList.remove('glitch-transition'), 400);
+                    }
+
                     const queenTitle = document.querySelector('.project-slot[data-id="queen"] .p-title');
                     if (queenTitle) {
                         scrambleText(queenTitle, 1500); 
@@ -457,6 +483,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadImages(slot.dataset.id);
             }
         });
+// === 3D ХОЛОГРАФІЧНИЙ НАХИЛ КАРТОК ===
+        slot.addEventListener('mousemove', (e) => {
+            if (window.innerWidth <= 1000) return; // Вимикаємо на мобілці
+            slot.style.transition = 'none'; // Вимикаємо плавний CSS-перехід, щоб мишка не "відставала"
+            
+            const rect = slot.getBoundingClientRect();
+            const x = e.clientX - rect.left; // X всередині картки
+            const y = e.clientY - rect.top;  // Y всередині картки
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // Чим далі від центру, тим більший кут (макс 10 градусів)
+            const rotateX = ((y - centerY) / centerY) * -10; 
+            const rotateY = ((x - centerX) / centerX) * 10;
+            
+            slot.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+
+        slot.addEventListener('mouseleave', () => {
+            if (window.innerWidth <= 1000) return;
+            slot.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'; // Повертаємо плавність
+            slot.style.transform = ''; // Скидаємо 3D
+        });
     });
 
     // === ACHIEVEMENTS ===
@@ -503,12 +552,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = item.dataset.target;
             const action = item.dataset.action;
             safePlay('snd-select');
-            if(action === 'email') {
+          if(action === 'email') {
                 if (window.innerWidth <= 1000) {
                     safePlay('snd-gamestart'); 
                     showAchievement("ACHIEVEMENT UNLOCKED", "NEW JOURNEY (Started a new project)", "🚀");
                     setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; }, 2000);
                 } else if(emailPopup) emailPopup.style.display = 'flex';
+            } else if (action === 'journal') { // ДОДАНО
+                safePlay('snd-hover');
+                if (journalPopup) journalPopup.style.display = 'flex';
             } else if (target) {
                 history.pushState({ screen: target }, '', `#${target.replace('-screen', '')}`);
                 showScreen(target);
@@ -552,6 +604,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; closeEmailPopup(); }, 2000);
     });
     if(btnEmailCancel) btnEmailCancel.addEventListener('click', () => { safePlay('snd-select'); closeEmailPopup(); });
+if(btnJournalClose) btnJournalClose.addEventListener('click', () => { safePlay('snd-select'); if(journalPopup) journalPopup.style.display = 'none'; });
 
     // === LIGHTBOX LOGIC ===
     function closeLightbox() {

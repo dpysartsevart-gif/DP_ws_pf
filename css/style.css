@@ -645,6 +645,22 @@ body::after {
 }
 @keyframes slotScan { 0% { top: -20%; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { top: 70%; opacity: 0; } }
 
+/* === RANDOM CRT GLITCH TRANSITION === */
+body.glitch-transition {
+    animation: crtGlitch 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+@keyframes crtGlitch {
+    0% { filter: hue-rotate(0deg); transform: skewX(0deg) scale(1); }
+    20% { filter: drop-shadow(6px 0px 0px rgba(255,0,0,0.8)) drop-shadow(-6px 0px 0px rgba(0,255,255,0.8)); transform: skewX(-2deg) scale(1.01); }
+    40% { filter: drop-shadow(-6px 0px 0px rgba(255,0,0,0.8)) drop-shadow(6px 0px 0px rgba(0,255,255,0.8)); transform: skewX(2deg); }
+    60% { filter: drop-shadow(2px 0px 0px rgba(255,0,0,0.5)); transform: skewX(0deg); }
+    100% { filter: none; transform: scale(1); }
+}
+
+/* Оновлення карток галереї для 3D (Додаємо перспективу батькам) */
+.projects-list { perspective: 1000px; transform-style: preserve-3d; }
+.project-slot { transform-style: preserve-3d; will-change: transform; }
+
 /* =========================================
    MOBILE FINAL FIXES (DLC Reordered)
    ========================================= */
