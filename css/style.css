@@ -208,6 +208,17 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important; /* Тінь тільки під картинкою */
 }
 
+/* === VIEWPORT IMAGES & VIDEO === */
+.img-wrapper img,
+.img-wrapper video {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* ДОДАНО: Благородне закруглення, як у YouTube-відео */
+    border-radius: 8px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); /* Легка тінь для об'єму */
+}
+
 /* 3. НАЛАШТУВАННЯ ВІДЕО ТА YOUTUBE */
 /* === YOUTUBE IFRAME FIX === */
 #viewport-content iframe {
