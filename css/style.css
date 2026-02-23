@@ -1008,4 +1008,31 @@ body.glitch-transition {
 #hud-widget {
         display: none !important; 
     }
+/* =========================================
+   V3.1  AAA UPDATE
+   ========================================= */
+
+/* 1. CINEMATIC FILM GRAIN (Легкий шум плівки) */
+body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 8999;
+    /* Використовуємо процедурний SVG шум - він не вантажить мережу і виглядає ідеально */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+    opacity: 0.7; mix-blend-mode: overlay;
+}
+
+/* 2. PROJECT CARDS GLOW SWEEP (Блік по картці) */
+.project-slot { overflow: hidden; position: relative; }
+.project-slot::after {
+    content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
+    /* Напівпрозорий жовтувато-білий градієнт */
+    background: linear-gradient(90deg, transparent, rgba(247, 213, 62, 0.1), rgba(255, 255, 255, 0.3), rgba(247, 213, 62, 0.1), transparent);
+    transform: skewX(-25deg); z-index: 10; pointer-events: none; transition: none;
+}
+.project-slot:hover::after { animation: shineSweep 0.6s ease-out forwards; }
+@keyframes shineSweep { 100% { left: 200%; } }
+
+/* 3. ОПТИМІЗАЦІЯ МАГНІТУ (Щоб кнопки не "смикались" від курсору) */
+.menu-item, .dlc-btn, .buy-btn { 
+    transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s, text-shadow 0.3s !important; 
+}
 }
