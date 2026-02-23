@@ -552,8 +552,7 @@ function showAchievement(title, desc, icon) {
         if (desc.includes("SUPPORTER")) document.getElementById('ach-supporter')?.classList.remove('locked');
         if (desc.includes("MUNCHKIN")) document.getElementById('ach-munchkin')?.classList.remove('locked');
         if (desc.includes("CHEATER")) document.getElementById('ach-cheater')?.classList.remove('locked');
-        if (desc.includes("HACKER MAN")) document.getElementById('ach-hacker')?.classList.remove('locked');
-    
+        if (desc.includes("HACKER MAN")) document.getElementById('ach-hacker')?.classList.remove('locked');  
     }
     
     function checkExplorer(id) {
