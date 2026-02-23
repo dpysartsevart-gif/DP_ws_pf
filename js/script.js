@@ -93,44 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     setFavicon(faviconDefault);
 
-    // === SYSTEM BOOT ===
-    function runSystemBoot() {
-        if (!preloader) return;
-        preloader.classList.remove('hidden');
-        preloader.style.display = 'flex';
-        preloader.style.opacity = '1';
-        
-        if(loaderText) loaderText.innerText = "SYSTEM BOOT SEQUENCE...";
-        
-        let loadPct = 0;
-        const interval = setInterval(() => {
-            loadPct += Math.floor(Math.random() * 10) + 5; 
-            if(loadPct > 100) loadPct = 100;
-            
-            if(barFill) barFill.style.width = `${loadPct}%`;
-            if(pctText) pctText.textContent = `${loadPct}%`;
-            
-            if(loadPct === 100) {
-                clearInterval(interval);
-                if(loaderText) loaderText.innerText = "ACCESS GRANTED";
-                
-                setTimeout(() => {
-                    preloader.style.transition = 'opacity 0.5s';
-                    preloader.style.opacity = '0';
-                    setTimeout(() => {
-                        preloader.classList.add('hidden');
-                        preloader.style.display = 'none';
-                        preloader.style.opacity = '1';
-                        
-                        if (window.innerWidth <= 1000 && banner) {
-                             banner.classList.add('active');
-                        }
-                    }, 500);
-                }, 500);
-            }
-        }, 50);
+// === SYSTEM BOOT ===
+    // Стартовий екран завантаження вимкнено. Одразу показуємо мобільний банер, якщо треба.
+    if (window.innerWidth <= 1000 && banner) {
+        banner.classList.add('active');
     }
-    runSystemBoot();
 
     // === PRELOADER ГАЛЕРЕЇ ===
     function runGalleryPreloader(callback) {
