@@ -188,13 +188,13 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     position: relative !important;
 }
 
-/* 1. РОБИМО ОБГОРТКУ НА ВСЮ ШИРИНУ VIEWPORT */
+/* 1. ОБГОРТКА ВПРИТУЛ ДО КАРТИНКИ (Щоб трикутник не з'їжджав) */
 .vp-content .img-wrapper {
-    display: flex !important; 
-    justify-content: center !important; /* Картинка завжди по центру */
-    align-items: center !important;
-    width: 100% !important; /* Займає всю ширину вікна */
-    box-shadow: none !important; /* Тінь на обгортці не потрібна */
+    display: block !important; 
+    width: fit-content !important; 
+    max-width: 100% !important;
+    margin: 0 auto !important; /* Центруємо саму картинку */
+    box-shadow: none !important; 
     background: transparent !important;
 }
 
@@ -209,10 +209,8 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     outline: none;
     background-color: #000; 
 
-    /* ФІКС: Більш густа і широка тінь з плюсовим розширенням */
-    box-shadow: 
-        0 20px 40px 5px rgba(0, 0, 0, 0.8), 
-        0 5px 15px rgba(0, 0, 0, 0.9) !important;
+    /* МАГІЯ ТІНІ: Тільки зліва (-15px) і знизу (15px), легка та м'яка */
+    box-shadow: -15px 15px 25px rgba(0, 0, 0, 0.4) !important;
         
     transition: all 0.3s ease; 
 }

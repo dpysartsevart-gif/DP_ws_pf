@@ -3,6 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // === HISTORY API ===
     history.replaceState({ screen: 'main-menu' }, '', '');
     window.addEventListener('popstate', (event) => {
+// ДОДАНО: Закриваємо картинку при свайпі назад на телефоні
+        const lightboxOverlay = document.getElementById('lightbox-overlay');
+        if (lightboxOverlay && lightboxOverlay.classList.contains('active')) {
+            lightboxOverlay.classList.remove('active');
+            setTimeout(() => { if(document.getElementById('lightbox-img')) document.getElementById('lightbox-img').src = ''; }, 300);
+            return; // Зупиняємо код, щоб галерея не закрилася
+        }
         if (window.innerWidth <= 1000 && document.querySelector('.gallery-viewport').classList.contains('active-screen')) {
             const viewport = document.querySelector('.gallery-viewport');
             const sidebar = document.querySelector('.gallery-sidebar');
@@ -653,11 +660,13 @@ function showAchievement(title, desc, icon) {
     if(btnJournalClose) btnJournalClose.addEventListener('click', () => { safePlay('snd-select'); if(journalPopup) journalPopup.style.display = 'none'; });
 
     // === LIGHTBOX LOGIC ===
-    function closeLightbox() {
+function closeLightbox() {
         if(lightbox && lightbox.classList.contains('active')) {
             lightbox.classList.remove('active');
             safePlay('snd-select');
             setTimeout(() => { lightboxImg.src = ''; }, 300);
+            // ДОДАНО: Якщо ми закрили хрестиком, стираємо "крок" з історії
+            if(history.state && history.state.screen === 'lightbox') { history.back(); }
         }
     }
 
@@ -676,6 +685,7 @@ function showAchievement(title, desc, icon) {
                     lightboxImg.src = e.target.src; 
                     lightbox.classList.add('active'); 
                     safePlay('snd-select');
+history.pushState({ screen: 'lightbox' }, '', '');
                 }
             }
         });
