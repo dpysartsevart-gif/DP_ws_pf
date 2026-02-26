@@ -361,7 +361,7 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3|alt.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
         'sequoia': ['youtube:gPoXD8hg3P0', 'Sequoia01.jpg', 'Sequoia02|alt.jpg', 'Sequoia03|alt.jpg', 'Sequoia04.jpg', 'Sequoia05.jpg', 'Sequoia06.jpg', 'Sequoia07.jpg', 'Sequoia08.jpg', 'Sequoia09.jpg', 'Sequoia10.jpg'],
         'mermaid': ['Marmeid01.jpg', 'Marmeid02.jpg', 'Marmeid03.jpg', 'Mermaid_tt.mp4'],
-        'scifi': ['sf01|alt.jpg', 'sf02.jpg', 'sf03.jpg', 'sf04.jpg', 'sf05.jpg', 'scifi_turntable.mp4'],
+        'scifi': ['sf01|alt.jpg', 'sf02.jpg', 'sf03.jpg', 'sf04.jpg', 'sf05.jpg', 'scifi_turntable.mp4', 'sf06|alt.jpg'],
         'wolverine': ['Wolverine01.jpg', 'Wolverine02.jpg', 'Wolverine03.jpg', 'Wolverine04.jpg', 'Wolverine05.jpg', 'wolv_turntable|alt.mp4'],
         'boy': ['boy1.jpg', 'boy2|alt.jpg', 'boy3.jpg', 'boy4.jpg', 'boy5.jpg', 'boy6.jpg', 'boy7.jpg', 'boy8.jpg'],
         'queen': ['Queen1|alt.jpg', 'Queen2.jpg', 'Queen3.jpg', 'Queen4.jpg', 'Queen5.jpg', 'Queen6.jpg', 'Queen7.jpg', 'Queen8.jpg', 'Queen9.jpg', 'Queen10.jpg'],
