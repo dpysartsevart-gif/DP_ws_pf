@@ -364,7 +364,7 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
         'scifi': ['sf01|alt.jpg', 'sf02.jpg', 'sf03.jpg', 'sf04.jpg', 'sf05.jpg', 'scifi_turntable.mp4', 'sf06|alt.jpg'],
         'wolverine': ['Wolverine01.jpg', 'Wolverine02.jpg', 'Wolverine03.jpg', 'Wolverine04.jpg', 'Wolverine05.jpg', 'wolv_turntable|alt.mp4'],
         'boy': ['boy1.jpg', 'boy2|alt.jpg', 'boy3.jpg', 'boy4.jpg', 'boy5.jpg', 'boy6.jpg', 'boy7.jpg', 'boy8.jpg'],
-        'queen': ['Queen1|alt.jpg', 'Queen2.jpg', 'Queen3.jpg', 'Queen4|alt.jpg', 'Queen5.jpg', 'Queen6.jpg', 'Queen_TT_DP.mp4', 'Queen8.jpg'],
+        'queen': ['Queen1|alt.jpg', 'Queen2.jpg', 'Queen3.jpg', 'Queen4|alt.jpg', 'Queen5.jpg', 'Queen6.jpg', 'Queen_TT_DP.mp4', 'Queen7|alt.jpg'],
         'halloween': ['Halloween1.jpg', 'Halloween2.jpg']
     };
 
