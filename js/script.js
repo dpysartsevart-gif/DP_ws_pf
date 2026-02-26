@@ -357,7 +357,7 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
 
     // === DATA ===
     const projectData = {
-        'wod': ['wod01.jpg', 'wod02.jpg', 'wod03.jpg', 'wod04.jpg', 'wod05|alt.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod09.jpg', 'wod_demo.mp4'],
+        'wod': ['wod01.jpg', 'wod02|alt.jpg', 'wod03|alt.jpg', 'wod04.jpg', 'wod05|alt.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod09.jpg', 'wod_demo.mp4'],
         'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3|alt.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
         'sequoia': ['youtube:gPoXD8hg3P0', 'Sequoia01.jpg', 'Sequoia02|alt.jpg', 'Sequoia03|alt.jpg', 'Sequoia04.jpg', 'Sequoia05.jpg', 'Sequoia06.jpg', 'Sequoia07.jpg', 'Sequoia08.jpg', 'Sequoia09.jpg', 'Sequoia10.jpg'],
         'mermaid': ['Marmeid01.jpg', 'Marmeid02.jpg', 'Marmeid03.jpg', 'Mermaid_tt.mp4'],
