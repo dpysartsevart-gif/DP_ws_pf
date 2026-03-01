@@ -981,7 +981,7 @@ body::before {
         padding: 15px !important; padding-top: 25px !important;
         box-sizing: border-box;
         /* ФІКС: Робимо фон на мобільних набагато темнішим, щоб текст легко читався */
-        background: rgba(12, 12, 12, 0.92) !important; 
+        background: rgba(12, 12, 12, 0.4) !important; 
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
         z-index: 10; display: none;
@@ -1246,9 +1246,10 @@ body::before {
     -webkit-backdrop-filter: blur(12px) !important;
     border-radius: 8px !important;
 }
-/* Глушимо глобальні прозорі стилі скла виключно для мобілки */
+
+/* Глушимо глобальні стилі скла для мобілки, але залишаємо фон напівпрозорим */
     #shop-screen, #options-screen, #credits-screen, #dlc-screen {
-        background: rgba(12, 12, 12, 0.3) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
     }
