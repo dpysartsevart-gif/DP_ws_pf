@@ -1230,7 +1230,7 @@ body::before {
 #dlc-screen .text-content.centered {
     border: 1px solid rgba(163, 203, 245, 0.3) !important;
     
-    /* Фон зроблено напівпрозорим (0.4), щоб блюр міг працювати */
+    /* Фон зроблено напівпрозорим (0.15), щоб блюр міг працювати */
     background: 
         linear-gradient(rgba(0, 0, 0, 0.2) 50%, transparent 50%),
         linear-gradient(90deg, rgba(0, 0, 0, 0.2) 50%, transparent 50%),
@@ -1251,7 +1251,7 @@ body::before {
 
 /* Глушимо глобальні стилі скла для мобілки, але залишаємо фон напівпрозорим */
     #shop-screen, #options-screen, #credits-screen, #dlc-screen {
-        background: rgba(0, 0, 0, 0.4) !important;
+        background: rgba(0, 0, 0, 0.15) !important;
         backdrop-filter: blur(4px) !important;
         -webkit-backdrop-filter: blur(4px) !important;
     }
