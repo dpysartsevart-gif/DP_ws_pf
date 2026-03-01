@@ -506,7 +506,12 @@ mediaEl.dataset.altSrc = altSrc;
 
                 slot.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
 // ДОДАНО: Зберігаємо зсув вправо (translateX 10px), щоб картка не обрізалась ліворуч
-                slot.style.transform = `perspective(1000px) translateX(10px) rotateX(0deg) rotateY(${rotateY}deg)`;
+slot.style.transform = `perspective(1000px) translateX(10px) rotateX(0deg) rotateY(${rotateY}deg)`;
+if (rotateY !== 0) {
+    slot.classList.add('is-tilted');
+} else {
+    slot.classList.remove('is-tilted');
+}
             }, 300); // 300мс зупинки курсора
         });
 
@@ -514,7 +519,8 @@ mediaEl.dataset.altSrc = altSrc;
             if (window.innerWidth <= 1000) return;
             if (hoverTimer) clearTimeout(hoverTimer); // Вбиваємо таймер
             slot.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
-            slot.style.transform = ''; 
+            slot.style.transform = '';
+slot.classList.remove('is-tilted'); 
         });
 
         slot.addEventListener('mouseenter', () => {
