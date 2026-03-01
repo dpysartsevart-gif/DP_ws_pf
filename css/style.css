@@ -134,28 +134,30 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .gallery-sidebar { width: 500px; display: flex; flex-direction: column; pointer-events: auto; flex-shrink: 0; }
 .projects-scroll-area { flex-grow: 0; height: 70vh; overflow-y: auto; padding-right: 25px; padding-top: 5px; padding-bottom: 5px; margin-top: -5px; }
 
-/* === ОНОВЛЕНИЙ СТАТИЧНИЙ ФОН КАРТОК (ТЕМНИЙ + ПРЯМІ КУТИ) === */
+/* === ОНОВЛЕНИЙ СТАТИЧНИЙ ФОН КАРТОК (ФІКС ВИЛІЗАННЯ СМУЖОК) === */
 .project-slot {
     padding: 10px;
-    
-    /* Твій новий темний колір */
     background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0, 0, 10, 0.1) 100%);
     border: 1px solid rgba(163, 203, 245, 0.15); 
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    
     margin-bottom: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 15px;
     pointer-events: auto;
-    border-radius: 0px; /* ПРЯМІ КУТИ ДЛЯ НЕАКТИВНИХ КАРТОК */
+    border-radius: 0px; 
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    transform-style: preserve-3d;
-    will-change: transform;
+    
     position: relative;
+    will-change: transform;
+    
+    /* МАГІЯ ФІКСУ: Забираємо preserve-3d і додаємо жорстке відсікання.
+       Тепер жодна смужка фізично не зможе впасти на сусідню картку! */
     overflow: hidden;
+    clip-path: inset(0); 
+    -webkit-clip-path: inset(0);
 }
 
 
@@ -847,8 +849,8 @@ body::before {
     opacity: 0.7; mix-blend-mode: overlay;
 }
 
-/* === ПРЕМІАЛЬНЕ СКЛО (РІВЕНЬ AWWWARDS) === */
 
+/* === ПРЕМІАЛЬНЕ СКЛО (РІВЕНЬ AWWWARDS) === */
 /* 1. GLASS GLARE: Ідеально гладкий блік (БЕЗ ЖОРСТКИХ КРАЇВ) */
 .project-slot::before {
     content: '';
@@ -873,8 +875,9 @@ body::before {
     opacity: 0;
     mix-blend-mode: screen; 
     
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
-    mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+    /* Замінили transparent на безпечні нульові значення для маски */
+    -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
     
     transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -894,13 +897,13 @@ body::before {
     width: 30%; 
     background: linear-gradient(
         to right,
-        transparent 0%,
+        rgba(0, 255, 255, 0) 0%,        /* Було: transparent */
         rgba(0, 255, 255, 0.15) 35%,   
         rgba(255, 255, 255, 0.5) 47%,  
         rgba(255, 255, 255, 0.95) 50%, 
         rgba(255, 170, 50, 0.3) 53%,   
         rgba(255, 0, 0, 0.05) 65%,     
-        transparent 100%
+        rgba(255, 0, 0, 0) 100%         /* Було: transparent */
     );
     transform: skewX(-22deg); 
     pointer-events: none;
@@ -910,6 +913,8 @@ body::before {
     filter: blur(1.5px); 
     transition: opacity 0.4s ease;
 }
+
+
 
 
 /* Анімація появи при нахилі (механіку не чіпаємо) */
@@ -970,13 +975,15 @@ body::before {
         z-index: 0 !important; opacity: 1 !important; display: block !important;
     }
 
-    .screen {
+.screen {
         position: fixed; top: 0; left: 0;
         width: 100% !important; height: 100% !important;
         padding: 15px !important; padding-top: 25px !important;
         box-sizing: border-box;
-        background: rgba(0, 0, 0, 0.15) !important; 
-        backdrop-filter: blur(2px);
+        /* ФІКС: Робимо фон на мобільних набагато темнішим, щоб текст легко читався */
+        background: rgba(12, 12, 12, 0.92) !important; 
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
         z-index: 10; display: none;
     }
     .screen.active-screen { display: flex !important; flex-direction: column; }
@@ -1024,11 +1031,12 @@ body::before {
         width: auto !important; height: auto !important;
     }
 
-    .shop-container, .text-content, .scroll-container {
+.shop-container, .text-content, .scroll-container {
         width: 100% !important; max-width: none !important;
         height: auto !important; flex-grow: 1; 
         margin: 0 !important; border: none !important; background: transparent !important;
-        padding: 0 !important; padding-right: 20px !important; padding-bottom: 80px !important;
+        /* ФІКС: Повертаємо симетричні відступи, щоб текст не прилипав до лівого краю */
+        padding: 0 15px 80px 15px !important; 
         overflow-y: auto !important;
     }
 
@@ -1238,3 +1246,9 @@ body::before {
     -webkit-backdrop-filter: blur(12px) !important;
     border-radius: 8px !important;
 }
+/* Глушимо глобальні прозорі стилі скла виключно для мобілки */
+    #shop-screen, #options-screen, #credits-screen, #dlc-screen {
+        background: rgba(12, 12, 12, 0.92) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
