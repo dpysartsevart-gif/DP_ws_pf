@@ -1062,7 +1062,7 @@ body::before {
     * { cursor: auto !important; }
 }
 
-/* --- 2. ІДЕАЛЬНЕ РОЗСІЮВАННЯ ТЕКСТУ (ФІКС: ТІЛЬКИ ДЛЯ ДЕСКТОПУ) --- */
+/* --- 2. ІДЕАЛЬНЕ РОЗСІЮВАННЯ ТЕКСТУ (ДЕСКТОП - ТАК, МОБІЛКА - ЖОРСТКЕ НІ) --- */
 @media (min-width: 1001px) {
     .settings-container, .text-content.scrollable {
         position: relative;
@@ -1085,5 +1085,13 @@ body::before {
         pointer-events: none;
         margin-top: -40px; 
         z-index: 100;
+    }
+}
+
+/* ГАРАНТОВАНО ВБИВАЄМО ЕФЕКТ НА МОБІЛЬНОМУ (Навіть якщо десь лишився старий код) */
+@media (max-width: 1000px) {
+    .settings-container::after, .text-content.scrollable::after {
+        display: none !important;
+        content: none !important;
     }
 }
