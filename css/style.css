@@ -1062,10 +1062,28 @@ body::before {
     * { cursor: auto !important; }
 }
 
-/* --- 3. ФІКС НАЇЗДУ OPTIONS НА КНОПКУ BACK (ДЛЯ НЕСТАНДАРТНИХ МОНІТОРІВ) --- */
+/* --- 2. ІДЕАЛЬНЕ РОЗСІЮВАННЯ ТЕКСТУ (ФІКС: ТІЛЬКИ ДЛЯ ДЕСКТОПУ) --- */
 @media (min-width: 1001px) {
-    .settings-container, .achievements-panel {
-        height: 64vh !important; /* Злегка зменшуємо висоту, щоб дати повітря знизу */
-        margin-bottom: 20px !important; /* Повертаємо такий самий відступ, як у віконця Credits */
+    .settings-container, .text-content.scrollable {
+        position: relative;
+        overflow-x: hidden !important; 
+        padding-bottom: 0 !important; 
+    }
+
+    .settings-container > *:last-child, .text-content.scrollable > *:last-child {
+        padding-bottom: 40px !important; 
+    }
+
+    .settings-container::after, .text-content.scrollable::after {
+        content: '';
+        position: sticky;
+        bottom: 0; 
+        display: block;
+        width: 100%;
+        height: 40px;
+        background: linear-gradient(to top, rgba(16, 16, 16, 0.98) 10%, transparent 100%);
+        pointer-events: none;
+        margin-top: -40px; 
+        z-index: 100;
     }
 }
