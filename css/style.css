@@ -1,12 +1,23 @@
 /* ========================
    GLOBAL VARIABLES (THEME)
    ======================== */
-/* === PRELOADER (ЕКРАН ЗАВАНТАЖЕННЯ) === */
+
+:root {
+    --primary-color: #f7d53e;       
+    --accent-color: #a3cbf5;        
+    --ui-bg: rgba(16, 16, 16, 0.85); 
+    --ui-border: #444;              
+    --ui-radius: 4px;               
+    --text-main: #e0e0e0;
+    --text-dim: #888;
+}
+
+/* === PRELOADER === */
 #gallery-preloader {
     position: fixed;
     inset: 0;
     background: #000;
-    z-index: 100000; /* Найвищий пріоритет */
+    z-index: 100000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,16 +31,6 @@
 .bar-fill { height: 100%; background: var(--primary-color); width: 0%; box-shadow: 0 0 10px var(--primary-color); transition: width 0.1s; }
 .loader-percentage { margin-top: 10px; font-size: 14px; color: #888; }
 .hidden { display: none !important; }
-
-:root {
-    --primary-color: #f7d53e;       
-    --accent-color: #a3cbf5;        
-    --ui-bg: rgba(16, 16, 16, 0.85); 
-    --ui-border: #444;              
-    --ui-radius: 4px;               
-    --text-main: #e0e0e0;
-    --text-dim: #888;
-}
 
 /* ОБНУЛЕННЯ */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -49,7 +50,6 @@ body {
     position: absolute; top: -5%; left: -5%; width: 110%; height: 110%; 
     background-image: url('../assets/bg.jpg'); background-size: cover; background-position: center;
     z-index: 1; 
-    /* Додали drop-shadow кольорів, щоб при русі фону він злегка розшаровувався */
     filter: brightness(0.6) drop-shadow(4px 0px 0px rgba(255,0,0,0.3)) drop-shadow(-4px 0px 0px rgba(0,255,255,0.3)); 
     transition: transform 0.1s ease-out; 
 }
@@ -60,22 +60,22 @@ body {
     background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 2;
 }
 
-/* DUST EFFECT (UPDATED) */
+/* DUST EFFECT */
 .dust-container { position: absolute; inset: 0; pointer-events: none; z-index: 3; overflow: hidden; }
 .dust-speck { 
     position: absolute; 
-    width: 3px; height: 3px; /* Трохи більші */
-    background: rgba(255, 255, 255, 0.4); /* Яскравіші */
+    width: 3px; height: 3px;
+    background: rgba(255, 255, 255, 0.4);
     border-radius: 50%; 
-    box-shadow: 0 0 3px rgba(255,255,255,0.3); /* Світіння */
-    animation: dustFloat 8s infinite linear; /* Швидше (було 10s) */
+    box-shadow: 0 0 3px rgba(255,255,255,0.3);
+    animation: dustFloat 8s infinite linear;
 }
 
 @keyframes dustFloat { 
     0% { transform: translateY(0) translateX(0); opacity: 0; } 
-    20% { opacity: 0.3; } /* Швидше з'являються */
+    20% { opacity: 0.3; }
     80% { opacity: 0.15; }
-    100% { transform: translateY(-150px) translateX(40px); opacity: 0; } /* Більший рух */
+    100% { transform: translateY(-150px) translateX(40px); opacity: 0; }
 }
 
 .ui-layer {
@@ -117,7 +117,7 @@ h1.glitch:hover { color: var(--primary-color); text-shadow: 0 0 20px rgba(247, 2
 h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border-bottom: 2px solid var(--primary-color); display: block; width: 100%; padding-bottom: 5px; margin-bottom: 25px; text-transform: uppercase; line-height: 1; }
 
 .sidebar-header-container h2 { margin-bottom: 0; width: 100%; border: none; padding-bottom: 0;}
-.sidebar-header-container { width: 100%; display: block; padding-top: 0; padding-bottom: 0; margin-bottom: 20px; flex-shrink: 0; box-sizing: border-box; height: auto; border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; }
+.sidebar-header-container { width: 100%; display: block; padding-top: 0; padding-bottom: 5px; margin-bottom: 20px; flex-shrink: 0; box-sizing: border-box; height: auto; border-bottom: 2px solid var(--primary-color); }
 .header-spacer { display: none; }
 
 .menu-list { list-style: none; margin-top: 20px; pointer-events: auto; }
@@ -125,7 +125,6 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .menu-item.active, .menu-item:hover { 
     color: #fff; 
     transform: translateX(20px); 
-    /* Ефект Хроматичної аберації: Червоний розмитий зліва, Блакитний розмитий справа */
     text-shadow: 1px 0 1px rgba(255, 0, 0, 0.8), -1px 0 1px rgba(0, 255, 255, 0.8); 
 }
 .menu-item.active::before { content: "▶"; color: var(--primary-color); font-size: 12px; margin-right: 15px; transform: translateY(-2px); }
@@ -134,8 +133,26 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .gallery-layout { display: flex !important; flex-direction: row !important; height: 100%; gap: 60px; align-items: flex-start; } 
 .gallery-sidebar { width: 500px; display: flex; flex-direction: column; pointer-events: auto; flex-shrink: 0; }
 .projects-scroll-area { flex-grow: 0; height: 70vh; overflow-y: auto; padding-right: 25px; padding-top: 5px; padding-bottom: 5px; margin-top: -5px; }
-.project-slot { padding: 10px; border: 1px solid #333; background: rgba(0,0,0,0.5); margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 15px; pointer-events: auto; border-radius: 0px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+
+.project-slot {
+    padding: 10px;
+    border: 1px solid #333;
+    background: rgba(0,0,0,0.5);
+    margin-bottom: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    pointer-events: auto;
+    border-radius: 0px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform-style: preserve-3d;
+    will-change: transform;
+    position: relative;
+    overflow: hidden;
+}
 .project-slot:hover, .project-slot.selected { border-color: var(--primary-color); background: rgba(247, 213, 62, 0.1); border-radius: 6px; transform: translateX(10px); }
+
 .slot-thumb { width: 80px; height: 50px; background-color: #222; background-size: cover; background-position: center; border: 1px solid #444; transition: 0.2s; border-radius: 2px;}
 .project-slot:hover .slot-thumb { border-color: #fff; border-radius: 4px; }
 
@@ -144,22 +161,24 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .p-desc { font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-top: 2px; }
 
 .gallery-viewport { flex-grow: 1; max-width: 1200px; pointer-events: auto; display: flex; flex-direction: column; }
+.gallery-viewport, .viewport-frame { min-width: 0 !important; }
 
-/* FIX: НОВИЙ КЛАС ДЛЯ ШАПКИ ГАЛЕРЕЇ ПРАВОРУЧ */
 .gallery-header-flex { display: flex; justify-content: space-between; align-items: flex-end; }
+.gallery-header-flex h2,
+.gallery-header-flex .vp-link {
+    white-space: nowrap !important;
+}
 .vp-link { 
     font-size: 14px; color: #fff; text-decoration: none; border: 1px solid var(--primary-color); padding: 2px 10px; transition: 0.2s; border-radius: 4px; 
-    margin-bottom: 5px; /* Щоб кнопка не прилипала до лінії */
+    margin-bottom: 5px;
 }
 .vp-link:hover { background: var(--primary-color); color: #000; }
 
 .viewport-frame { height: 70vh; background: linear-gradient(to bottom, rgba(16, 16, 16, 0.6) 0%, rgba(16, 16, 16, 0.2) 100%); display: flex; flex-direction: column; border: 1px solid #444; border-radius: 6px; box-shadow: 0 0 20px rgba(0,0,0,0.3); overflow: hidden; margin-top: 0; }
-.vp-header { display: none; } /* Приховали старий хедер */
+.vp-header { display: none; }
 .vp-footer { background: transparent; color: #666; padding: 10px 20px; font-size: 10px; border-top: none; text-align: right; flex-shrink: 0; }
-/* ЗАПОБІЖНИК: щоб галерея ніколи не розтягувала сайт по ширині */
-.gallery-viewport, .viewport-frame { min-width: 0 !important; }
 
-/* === VERTICAL FILMSTRIP SCROLL (SMART SNAP) === */
+/* === VERTICAL FILMSTRIP SCROLL === */
 .vp-content { 
     flex-grow: 1; 
     overflow-y: auto !important; 
@@ -167,16 +186,12 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    
     gap: 30vh !important; 
-    /* ДОДАНО: 40px відступів по боках, щоб тіні більше не вдарялися об стіни екрану */
     padding: 10vh 40px 15vh 40px !important; 
-    
     scroll-snap-type: y mandatory !important;
     scroll-behavior: smooth !important;
 }
 
-/* Налаштування самих кадрів */
 .vp-content .img-wrapper, 
 .vp-content video, 
 .vp-content iframe {
@@ -188,7 +203,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     position: relative !important;
 }
 
-/* === 1. ОБГОРТКА НА ВСЮ ШИРИНУ (Якір для трикутника) === */
+/* === ОБГОРТКА ЗОБРАЖЕНЬ === */
 .vp-content .img-wrapper {
     display: flex !important; 
     justify-content: center !important; 
@@ -200,7 +215,6 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     margin: 0 0 40px 0 !important; 
 }
 
-/* === 2. ЗОБРАЖЕННЯ ТА ВІДЕО (Без тіней, тільки скруглення) === */
 .vp-content .img-wrapper img,
 .vp-content .img-wrapper video {
     max-width: 100% !important;
@@ -208,31 +222,29 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     width: auto !important;
     display: block !important;
     border-radius: 8px !important; 
-    box-shadow: none !important; /* Тінь повністю вимкнено */
+    box-shadow: none !important;
     border: none !important;
-transform: translateZ(0); /* Вмикаємо 3D-прискорення GPU */
+    transform: translateZ(0);
     backface-visibility: hidden;
-    will-change: opacity; /* Попереджаємо браузер, що буде анімація */
+    will-change: opacity;
 }
 
-/* === 3. YOUTUBE ВІДЕО (Без тіней) === */
+/* === YOUTUBE ВІДЕО === */
 #viewport-content iframe {
     border-radius: 8px !important; 
     border: none !important;
     outline: none !important;
-    box-shadow: none !important; /* Тінь повністю вимкнено */
+    box-shadow: none !important;
     width: 100% !important;
     aspect-ratio: 16 / 9 !important;
     height: auto !important;
     background-color: #000 !important;
 }
 
-/* === 4. КНОПКА ТРИКУТНИК (Компенсуємо відступи) === */
+/* === КНОПКА-ТРИКУТНИК === */
 .alt-toggle-btn {
     position: absolute !important; 
     top: 0px !important; 
-    /* МАГІЯ ТУТ: від'ємний відступ вліво компенсує padding контейнера */
-    /* Трикутник вилізе за межі обгортки і стане ближче до рамки Viewport */
     left: -30px !important; 
     z-index: 50 !important;
     cursor: none; 
@@ -245,12 +257,29 @@ transform: translateZ(0); /* Вмикаємо 3D-прискорення GPU */
     border: none !important;
     padding: 0 !important;
     box-shadow: none !important;
+    color: var(--primary-color);
+    transition: transform 0.2s ease;
 }
 
+.alt-toggle-btn svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    filter: drop-shadow(0 0 4px var(--primary-color));
+    transition: all 0.2s ease;
+}
+
+.alt-toggle-btn:hover {
+    transform: scale(1.15); 
+}
+.alt-toggle-btn:hover svg {
+    filter: drop-shadow(0 0 12px var(--primary-color));
+}
 
 .vp-placeholder { margin-top: 250px; color: #444; animation: blink 2s infinite; font-size: 18px;}
 
-/* ICONS (З цифрою 2) */
+/* ICONS */
 .wod-thumb { background-image: url('../assets/images/icons/wod_icon.jpg'); }
 .seq-thumb { background-image: url('../assets/images/icons/sequoia2_icon.jpg'); }
 .mer-thumb { background-image: url('../assets/images/icons/Mermeid_icon.jpg'); } 
@@ -283,7 +312,6 @@ transform: translateZ(0); /* Вмикаємо 3D-прискорення GPU */
 .contact-link { color: #89b4fa; text-decoration: none; font-weight: bold; letter-spacing: 1px; border-bottom: 1px dashed #89b4fa; transition: 0.2s; }
 .contact-link:hover { color: #b4befe; border-bottom: 1px solid #b4befe; text-shadow: 0 0 8px rgba(137, 180, 250, 0.6); }
 
-
 .shop-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 15px; margin-bottom: 15px; border-radius: 8px; transition: 0.2s; }
 .shop-item.inactive { opacity: 0.6; filter: grayscale(0.8); }
 .shop-icon { width: 50px; height: 50px; background: #333; border-radius: 4px; margin-right: 20px; }
@@ -292,23 +320,40 @@ transform: translateZ(0); /* Вмикаємо 3D-прискорення GPU */
 .shop-desc { color: #aaa; font-size: 12px; }
 .shop-btn { padding: 10px 20px; border: 1px solid #555; color: #555; font-size: 12px; letter-spacing: 1px; font-weight: bold; cursor: not-allowed; }
 
-.settings-list { list-style: none; width: 550px; border-left: 2px solid #333; padding-left: 20px; }
+.settings-list { 
+    list-style: none;
+    width: 100% !important; 
+    max-width: 100% !important;
+    border-left: 2px solid #333;
+    padding-left: 20px;
+    padding-right: 20px;
+}
 .setting-category { color: #666; font-size: 14px; margin-top: 20px; margin-bottom: 8px; letter-spacing: 2px; }
-.setting-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 18px; color: #aaa; border-bottom: 1px solid #222; padding-bottom: 2px; }
+.setting-item { 
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 18px;
+    color: #aaa;
+    border-bottom: 1px solid #222;
+    padding-bottom: 2px;
+}
 .set-val { color: #ccc; } .set-val.on { color: #4caf50; font-weight: bold; } .set-val.max { color: #ff3d00; font-weight: bold; } .set-val.disabled { color: #444; text-decoration: line-through; font-size: 14px;}
 
 .footer-hint { position: fixed; bottom: 45px; left: 0; width: 100%; text-align: center; color: #666; font-size: 14px; letter-spacing: 2px; z-index: 200; pointer-events: none; }
-/* === FIXED BACK BUTTON (DESKTOP) === */
+
+/* === BACK BUTTON === */
 .back-hint { 
     position: fixed; 
-    bottom: 45px; /* Ідеально на одній лінії з копірайтом та текстом навігації */
-    left: 60px;   /* На одній вертикалі з лівим краєм меню і кнопкою DLC */
+    bottom: 45px;
+    left: 60px;
     margin: 0; 
     color: #666; 
     font-size: 14px; 
     font-weight: bold;
     letter-spacing: 1px;
-    cursor: none; /* Щоб діяв кастомний курсор */
+    cursor: none;
     pointer-events: auto;
     z-index: 200;
     transition: all 0.2s ease;
@@ -328,11 +373,11 @@ transform: translateZ(0); /* Вмикаємо 3D-прискорення GPU */
 
 .coffee-hud { 
     position: absolute; 
-    top: 55px; /* Спустили трохи нижче, щоб не прилипало до AUDIO (було 40px) */
-    right: 20px; /* МАГІЯ ТУТ: тепер відступ такий самий, як у кнопки AUDIO (було 60px) */
+    top: 55px;
+    right: 20px;
     display: flex; 
     flex-direction: column; 
-    align-items: flex-end; /* Весь вміст батареї вирівнюється по правому краю */
+    align-items: flex-end;
     font-family: 'Oxanium', monospace; 
     z-index: 10; 
 }
@@ -350,7 +395,7 @@ transform: translateZ(0); /* Вмикаємо 3D-прискорення GPU */
 @keyframes textBlink { 0% { opacity: 0.4; } 100% { opacity: 1; } }
 
 a, button, .menu-item, .project-slot, .back-hint, .shop-btn { cursor: none; }
-.cursor-dot, .cursor-circle { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
+.cursor-dot, .cursor-circle { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; z-index: 100000 !important; transform: translate(-50%, -50%); }
 .cursor-dot { width: 8px; height: 8px; background: var(--accent-color); }
 .cursor-circle { width: 30px; height: 30px; border: 1px solid rgba(163, 203, 245, 0.5); transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s; }
 body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 203, 245, 0.1); border-color: var(--accent-color); }
@@ -358,6 +403,8 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 /* POPUP */
 .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 20000; display: flex; align-items: center; justify-content: center; }
 .popup-content { background: #111; border: 2px solid var(--primary-color); padding: 40px; text-align: center; max-width: 500px; box-shadow: 0 0 30px rgba(247,213,62,0.2); }
+.popup-title { color: var(--primary-color); font-size: 24px; margin-bottom: 20px; }
+.popup-text { color: #aaa; font-size: 14px; margin-bottom: 30px; line-height: 1.6; }
 .email-box { background: #222; padding: 15px; margin: 20px 0; border: 1px dashed #555; color: #a3cbf5; font-size: 20px; user-select: text; cursor: text; }
 .popup-buttons { display: flex; gap: 20px; justify-content: center; }
 
@@ -374,53 +421,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .banner-icon { font-size: 40px; margin-bottom: 15px; }
 .banner-btn { margin-top: 20px; border: 1px solid var(--primary-color); padding: 10px 20px; color: var(--primary-color); font-weight: bold; display: inline-block; cursor: pointer; }
 
-/* === MOBILE ADAPTATION === */
-@media (max-width: 1000px) {
-    html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
-    .bg-layer { position: fixed; inset: 0; width: 100vw; height: 100dvh; background-size: cover; background-position: center; z-index: 0; }
-    .ui-layer { padding: 15px; padding-top: 20px; height: 100%; overflow: hidden; }
-    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
-/* Збільшені шрифти для мобільного */
-    h1.glitch { font-size: 52px !important; letter-spacing: 1px; margin-bottom: 5px; } 
-    .role-subtitle { font-size: 14px !important; margin-bottom: 25px !important; }
-    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
-    .coffee-hud { top: 20px; right: 20px; transform: scale(0.8); transform-origin: top right; }
-    .dlc-wrapper { position: fixed !important; bottom: 50px !important; left: 50% !important; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0; top: auto; }
-    .copyright-fixed { bottom: 15px !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; text-align: center !important; width: 100% !important; color: #666 !important; display: block !important; }
-    .menu-list { margin-top: 5px; width: 100%; padding-left: 10px; }
-    .menu-item { font-size: 24px; margin-bottom: 10px; padding: 5px 0; }
-    .gallery-layout { flex-direction: column !important; gap: 0; }
-    .gallery-sidebar { width: 100%; height: auto; display: flex; flex-grow: 1; padding-bottom: 120px; }
-    .projects-scroll-area { height: 100%; padding-right: 2px; }
-    .gallery-viewport { display: none; width: 100%; height: 100%; margin-top: 0; }
-    .viewport-frame { height: 100%; margin-top: 0; }
-    .header-spacer, .back-hint { display: none; }
-.sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 25px; padding-left: 5px; }
-    h2 { font-size: 24px; margin-bottom: 10px; margin-top: 5px; }
-    .mobile-nav-btn { display: block !important; background: #111; color: var(--primary-color); text-align: center; padding: 15px; border: 1px solid var(--primary-color); margin-bottom: 10px; font-weight: bold; text-transform: uppercase; border-radius: 4px; font-size: 16px; pointer-events: auto; width: 100%; z-index: 100; }
-    .shop-container, .text-content, .scroll-container { width: 100%; max-width: 100%; height: 95dvh; max-height: 95dvh; padding: 15px; margin-bottom: 0; }
-    .project-slot { padding: 15px; }
-    .slot-thumb { width: 100px; height: 60px; }
-    .p-title { font-size: 18px; }
-    .settings-list { width: 100%; padding-left: 0; border: none; }
-    .setting-item { font-size: 16px; padding: 10px 0; }
-    .dlc-btn { width: 100%; text-align: center; background: rgba(16, 16, 16, 0.95); border: 2px solid var(--primary-color); padding: 15px; font-size: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
-    #email-popup { display: none !important; }
-    .screen.dlc-centered { display: flex !important; flex-direction: column !important; padding-top: 20px !important; align-items: center; justify-content: flex-start !important; }
-    .screen.dlc-centered .mobile-nav-btn { order: 1; width: 100%; margin-bottom: 20px; }
-    .coffee-hud { position: relative !important; top: auto !important; right: auto !important; transform: scale(1) !important; order: 2; margin-bottom: 30px; align-self: center; }
-    .screen.dlc-centered .text-content.centered { order: 3; width: 100%; margin-top: 0; }
-    * { cursor: auto !important; }
-}
-.mobile-nav-btn { display: none; }
-/* css/style.css - ВСТАВИТИ В САМИЙ КІНЕЦЬ */
-
-/* 1. Виправляємо курсор, щоб він був поверх усього (в т.ч. popup) */
-.cursor-dot, .cursor-circle {
-    z-index: 100000 !important;
-}
-
-/* 2. Стилі для Ачівки (їх не було в оригіналі) */
+/* === ACHIEVEMENT POPUP === */
 #achievement-popup {
     position: fixed;
     bottom: 80px;
@@ -465,7 +466,7 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     background: rgba(0, 0, 0, 0.1);
     padding: 3px 6px; 
     border: 1px solid var(--primary-color);
-    border-radius: 4px; /* ДОДАНО: Акуратне скруглення в стилі всього UI */
+    border-radius: 4px;
     cursor: none;
 }
 #audio-toggle:hover {
@@ -487,9 +488,9 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 /* === HUD WIDGET === */
 #hud-widget {
     position: fixed;
-    bottom: 65px; /* Одразу над копірайтом (який на 45px) */
-    right: 20px;  /* Притискаємо до правого краю */
-    top: auto;    /* Скидаємо позицію зверху */
+    bottom: 65px;
+    right: 20px;
+    top: auto;
     left: auto;
     color: var(--primary-color);
     font-family: 'Share Tech Mono', monospace;
@@ -502,23 +503,24 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     text-align: right;
 }
 .hud-time { margin-bottom: 2px; }
+
 /* === FULLSCREEN LIGHTBOX === */
 #lightbox-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.95);
-    z-index: 30000; /* Вище за всі меню і попапи */
+    z-index: 30000;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     opacity: 0;
-    pointer-events: none; /* Щоб не заважав клікати, коли прозорий */
+    pointer-events: none;
     transition: opacity 0.3s ease;
 }
 #lightbox-overlay.active {
     opacity: 1;
-    pointer-events: auto; /* Вмикаємо кліки, коли видимий */
+    pointer-events: auto;
 }
 #lightbox-img {
     max-width: 95vw;
@@ -543,10 +545,11 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     color: #fff;
     text-shadow: 0 0 10px #fff;
 }
+
 /* === TERMINAL EASTER EGG === */
 #dev-terminal {
     position: fixed; top: 0; left: 0; width: 100%; height: 45vh;
-    background: rgba(10, 15, 10, 0.95); /* Темно-зеленуватий відтінок */
+    background: rgba(10, 15, 10, 0.95);
     border-bottom: 2px solid #4caf50;
     z-index: 40000; font-family: 'Share Tech Mono', monospace; color: #4caf50;
     padding: 20px; display: flex; flex-direction: column;
@@ -562,18 +565,16 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 .term-msg { margin-bottom: 5px; }
 .term-err { color: #ff3d00; }
 .term-sys { color: #a3cbf5; }
-
-/* Стиль скролу для терміналу */
 #term-output::-webkit-scrollbar { width: 4px; }
 #term-output::-webkit-scrollbar-thumb { background: #4caf50; }
 
 /* === IMAGE ALT TOGGLE (VIEW MESH) === */
 .img-wrapper { 
     position: relative; 
-    display: block; /* Змушує кожну картинку падати на новий рядок */
-    width: fit-content; /* Обгортка стискається рівно до ширини самої картинки */
+    display: block;
+    width: fit-content;
     max-width: 100%; 
-    margin: 0 auto 20px auto; /* Центрує картинку по горизонталі */
+    margin: 0 auto 20px auto;
 }
 .vp-content .img-wrapper img { 
     max-height: 65vh; 
@@ -583,67 +584,22 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
     display: block;
 }
 
-
-/* === КНОПКА-ТРИКУТНИК (VIEW MESH / RENDER) === */
-.alt-toggle-btn {
-    position: absolute; 
-    top: 4px; /* Трохи відступили від самого краю, щоб дихало */
-    left: 10px;
-    z-index: 50;
-    cursor: none; 
-
-    /* Жорстко фіксуємо розмір саме для іконки */
-    width: 22px !important;
-    height: 22px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-
-    /* Примусово вбиваємо рамки та фони від старої текстової кнопки */
-    background: transparent !important; 
-    border: none !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-
-    color: var(--primary-color);
-    transition: transform 0.2s ease;
-}
-
-/* Стиль самої SVG іконки */
-.alt-toggle-btn svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-    pointer-events: none; /* МАГІЯ: Тепер мишка ігнорує лінії SVG і бачить тільки саму кнопку */
-    filter: drop-shadow(0 0 4px var(--primary-color));
-    transition: all 0.2s ease;
-}
-
-/* Ефект при наведенні (Пульсація) */
-.alt-toggle-btn:hover {
-    transform: scale(1.15); 
-}
-.alt-toggle-btn:hover svg {
-    filter: drop-shadow(0 0 12px var(--primary-color)); /* Яскравий неон */
-}
 /* =========================================
-   V2.8 POLISH UPDATE (PREMIUM DETAILS)
+   V2.8 POLISH UPDATE
    ========================================= */
 
-/* 1. MICRO-DIRT / CRT VIGNETTE (Ефект старого екрану) */
+/* 1. CRT VIGNETTE */
 body::after {
     content: ''; 
     position: fixed; 
     inset: 0; 
     pointer-events: none; 
     z-index: 9000; 
-    /* Зменшили непрозорість чорного з 0.5 до 0.15 (стало набагато світліше) */
     background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.1) 150%);
-    /* Тінь по краях екрану теж зробили легшою (з 0.5 до 0.25) */
     box-shadow: inset 0 0 80px rgba(0,0,0,0.15);
 }
 
-/* 2. SPINNER LOADING (Для галереї) */
+/* 2. SPINNER LOADING */
 .skeleton-loader {
     min-width: 100px; 
     min-height: 200px;
@@ -667,11 +623,11 @@ body::after {
 }
 @keyframes spinLoader { 100% { transform: rotate(360deg); } }
 
-/* 3. MAGNETIC CURSOR (Зміна форми при наведенні) */
+/* 3. MAGNETIC CURSOR */
 .cursor-circle.magnetic {
     width: 30px; 
     height: 30px;
-    border-radius: 6px; /* Стає злегка квадратним */
+    border-radius: 6px;
     background: rgba(247, 213, 62, 0.1);
     border-color: var(--primary-color);
     transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, border-radius 0.2s;
@@ -691,27 +647,32 @@ body::after {
     flex-grow: 1; 
     max-width: 800px; 
     margin-bottom: 0; 
-    height: 70vh; 
+    height: 70vh;
+    position: relative;
+    overflow-x: hidden !important;
+    padding-bottom: 0 !important;
 }
-/* РОЗТЯГУЄМО СПИСОК ОПЦІЙ НА ВСЮ ШИРИНУ */
-.settings-list { 
-    width: 100% !important; 
-    max-width: 100% !important; /* Вбиваємо старе обмеження */
-    padding-right: 20px; /* Безпечний відступ від скролбару, щоб текст на нього не наліз */
+.settings-container > *:last-child {
+    padding-bottom: 40px !important; 
+}
+.settings-container::after {
+    content: '';
+    position: sticky;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(to top, rgba(16, 16, 16, 0.98) 10%, transparent 100%);
+    pointer-events: none;
+    margin-top: -40px;
+    z-index: 100;
 }
 
-/* ГАРАНТУЄМО, ЩО ПАРАМЕТРИ РОЗЛІТАЮТЬСЯ ПО КРАЯХ */
-.setting-item {
-    width: 100%;
-    display: flex;
-    justify-content: space-between; /* Розштовхує ліву і праву колонки максимально в сторони */
-}
-/* ВУЗЬКА ПАНЕЛЬ ДЛЯ 1 КОЛОНКИ */
 .achievements-panel { 
-    width: 90px; /* Звузили панель, щоб виглядала як витончений HUD */
+    width: 90px;
     background: rgba(0,0,0,0.6); 
     border: 1px solid #333; 
-    padding: 15px 10px; /* Менші відступи по боках */
+    padding: 15px 10px;
     border-radius: 6px; 
     flex-shrink: 0; 
     height: 70vh; 
@@ -719,61 +680,50 @@ body::after {
     flex-direction: column;
 }
 
-
-/* ЗМЕНШЕНИЙ ЗАГОЛОВОК (ФІКС ЛІМІТІВ БРАУЗЕРА) */
 .ach-panel-title { 
-    font-size: 10px; /* Ставимо мінімальний дозволений браузером розмір */
+    font-size: 10px;
     color: var(--primary-color); 
-    letter-spacing: 0px; /* Прибрали розрядку, щоб зекономити місце */
+    letter-spacing: 0px;
     margin-bottom: 10px; 
     border-bottom: 1px dashed #444; 
     padding-bottom: 8px; 
     text-align: center; 
     flex-shrink: 0; 
     line-height: 1.6; 
-    white-space: nowrap; /* Жорстко забороняємо розривати слово */
-    
-    /* МАГІЯ: Візуально зменшуємо блок ще на 20% */
+    white-space: nowrap;
     transform: scale(0.8); 
-    transform-origin: center top; /* Щоб при стисненні він залишався рівно по центру */
+    transform-origin: center top;
 }
-/* СІТКА ІНВЕНТАРЮ: 1 КОЛОНКА, ЩО ЗАЙМАЄ ВСЮ ВИСОТУ */
+
 .ach-grid { 
     display: flex; 
     flex-direction: column; 
     justify-content: space-between; 
     align-items: center;
     flex-grow: 1; 
-    overflow: visible; /* МАГІЯ ТУТ: Повертаємо видимість тултіпам! (було hidden) */
+    overflow: visible;
     gap: 5px; 
 }
 
-/* ІДІАЛЬНО КВАДРАТНІ СЛОТИ */
 .ach-slot { 
     width: 100%; 
-    max-width: 50px; /* Обмежили розмір самої клітинки */
+    max-width: 50px;
     aspect-ratio: 1/1; 
     max-height: 50px; 
     background: #111; border: 1px solid #333; 
     border-radius: 4px; display: flex; align-items: center; justify-content: center; 
-    font-size: 22px; /* Менший розмір емодзі, щоб влазили ідеально */
+    font-size: 22px;
     position: relative; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
     cursor: default;
 }
 
-/* Силует (Заблоковано) */
 .ach-slot.locked { filter: grayscale(100%) contrast(0%) brightness(20%); opacity: 0.5; }
-/* Ховаємо підказку для невідкритих ачівок (прибираємо баг з тінню) */
-.ach-slot.locked::after {
-    display: none !important; 
-}
-/* Відкрито */
+.ach-slot.locked::after { display: none !important; }
 .ach-slot:not(.locked) { 
     border-color: var(--primary-color); background: rgba(247, 213, 62, 0.1); 
     filter: none; opacity: 1; box-shadow: 0 0 10px rgba(247, 213, 62, 0.2); 
 }
 
-/* TOOLTIP: Тепер спливає ЗЛІВА (бо панель притиснута до правого краю) */
 .ach-slot::after {
     content: attr(data-tooltip); position: absolute; 
     top: 50%; right: 120%; 
@@ -783,8 +733,7 @@ body::after {
 }
 .ach-slot:hover::after { opacity: 1; right: 135%; }
 
-
-/* === RANDOM CRT GLITCH TRANSITION === */
+/* === CRT GLITCH TRANSITION === */
 body.glitch-transition {
     animation: crtGlitch 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
@@ -796,11 +745,9 @@ body.glitch-transition {
     100% { transform: translateX(0); filter: none; }
 }
 
-/* Оновлення карток галереї для 3D (Додаємо перспективу батькам) */
 .projects-list { perspective: 1000px; transform-style: preserve-3d; }
-.project-slot { transform-style: preserve-3d; will-change: transform; }
 
-/* === ЗАКРУГЛЕННЯ УСІХ ЕЛЕМЕНТІВ (PREMIUM UI) === */
+/* === ROUNDED ELEMENTS === */
 .popup-content, 
 #achievement-popup, 
 .dlc-btn,
@@ -811,16 +758,121 @@ body.glitch-transition {
 .scroll-container {
     border-radius: 8px !important;
 }
+
 /* =========================================
-   MOBILE FINAL FIXES (DLC Reordered)
+   AAA UPDATE
    ========================================= */
+
+/* 1. CINEMATIC FILM GRAIN */
+body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 8999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+    opacity: 0.7; mix-blend-mode: overlay;
+}
+
+/* 2. PROJECT CARDS GLOW SWEEP */
+.project-slot::after {
+    content: '';
+    position: absolute;
+    top: -15%;
+    right: 6%;
+    height: 130%;
+    width: 32%;
+    background: linear-gradient(
+        108deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.14) 42%,
+        rgba(255, 255, 255, 0.06) 48%,
+        transparent 65%
+    );
+    transform: skewX(-16deg);
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    mix-blend-mode: screen;
+    filter: blur(6px);
+    transition: opacity 0.35s ease;
+}
+
+/* 3. PHOTOREAL GLASS SPECULAR */
+.project-slot::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: 7%;
+    height: 120%;
+    width: 18%;
+    background: linear-gradient(
+        108deg,
+        transparent 28%,
+        rgba(190, 255, 255, 0.05) 32%,
+        rgba(150, 235, 255, 0.09) 34%,
+        rgba(255, 255, 255, 0.28) 36%,
+        rgba(255, 255, 255, 0.55) 38.5%,
+        rgba(255, 255, 255, 0.98) 40.5%,
+        rgba(255, 255, 255, 0.62) 41.6%,
+        rgba(255, 255, 255, 0.22) 43%,
+        rgba(255, 255, 255, 0.48) 45%,
+        rgba(255, 180, 110, 0.11) 47%,
+        rgba(255, 255, 255, 0.07) 52%,
+        transparent 62%
+    );
+    transform: skewX(-16deg);
+    pointer-events: none;
+    z-index: 6;
+    opacity: 0;
+    mix-blend-mode: color-dodge;
+    filter: blur(0.25px);
+    transition: opacity 0.35s ease;
+}
+
+.project-slot.is-tilted::before { opacity: 1; }
+.project-slot.is-tilted::after { opacity: 0.9; }
+
+/* 4. ОПТИМІЗАЦІЯ МАГНІТУ */
+.menu-item, .dlc-btn, .buy-btn { 
+    transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s, text-shadow 0.3s !important; 
+}
+
+/* 5. SHINE SWEEP ON HOVER */
+@keyframes shineSweep {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+/* === TEXT CONTENT FADE === */
+.text-content.scrollable {
+    position: relative;
+    overflow-x: hidden !important;
+    padding-bottom: 0 !important;
+}
+.text-content.scrollable > *:last-child {
+    padding-bottom: 40px !important; 
+}
+.text-content.scrollable::after {
+    content: '';
+    position: sticky;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(to top, rgba(16, 16, 16, 0.98) 10%, transparent 100%);
+    pointer-events: none;
+    margin-top: -40px;
+    z-index: 100;
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+.mobile-nav-btn { display: none; }
 
 @media (max-width: 1000px) {
     html, body { 
         height: 100%; margin: 0; overflow: hidden; background: #000; 
     }
-    
-    /* 1. ФОН */
+
     .bg-layer {
         position: fixed !important; inset: 0 !important;
         width: 100% !important; height: 100% !important;
@@ -828,7 +880,6 @@ body.glitch-transition {
         z-index: 0 !important; opacity: 1 !important; display: block !important;
     }
 
-    /* 2. ІНТЕРФЕЙС (Прозорість 0.15) */
     .screen {
         position: fixed; top: 0; left: 0;
         width: 100% !important; height: 100% !important;
@@ -840,36 +891,25 @@ body.glitch-transition {
     }
     .screen.active-screen { display: flex !important; flex-direction: column; }
 
-  /* ВСТАВИТИ ВСЕРЕДИНУ @media (max-width: 1000px) */
-
-    /* 3. DLC FIX (КНОПКА МАКСИМАЛЬНО ВГОРУ) */
     .screen.dlc-centered {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: flex-start !important;
-        /* Мінімальний відступ зверху (було 40px) */
         padding-top: 5px !important; 
         gap: 15px !important;
     }
-    
-    /* 1. Кнопка "Main Menu" (ЗВЕРХУ) - ВИПРАВЛЕНИЙ ВІДСТУП */
+
     #dlc-screen .mobile-nav-btn {
         position: relative !important;
         order: 1;
         width: 100%;
-        /* Ставимо великий відступ в 50 пікселів, щоб точно відсунути текст */
         margin-bottom: 50px !important; 
         flex-shrink: 0;
         z-index: 50;
         display: block !important;
     }
-    /* Додаткова гарантія: текст під кнопкою не має лізти вгору */
-    .screen.dlc-centered .text-content.centered {
-         margin-top: 0 !important;
-    }
 
-    /* 2. Текст "Support Creator" (ПО ЦЕНТРУ) */
     .screen.dlc-centered .text-content.centered {
         order: 2;
         width: 100% !important;
@@ -879,8 +919,7 @@ body.glitch-transition {
         background: rgba(16,16,16,0.7) !important;
         border: 1px solid var(--primary-color) !important;
     }
-    
-    /* 3. Батарейка (ЗНИЗУ) */
+
     .coffee-hud {
         position: relative !important;
         top: auto !important; right: auto !important; left: auto !important;
@@ -895,7 +934,6 @@ body.glitch-transition {
         width: auto !important; height: auto !important;
     }
 
-    /* 4. ІНШІ СТИЛІ */
     .shop-container, .text-content, .scroll-container {
         width: 100% !important; max-width: none !important;
         height: auto !important; flex-grow: 1; 
@@ -903,25 +941,24 @@ body.glitch-transition {
         padding: 0 !important; padding-right: 20px !important; padding-bottom: 80px !important;
         overflow-y: auto !important;
     }
-    
+
     .setting-item { font-size: 14px !important; padding: 8px 0 !important; }
     .shop-title { font-size: 16px !important; }
-    
+
     .ui-layer { padding: 0 !important; width: 100vw; height: 100dvh; display: flex; flex-direction: column; z-index: 10; }
     .gallery-layout { padding: 0 !important; flex-direction: column !important; }
     .gallery-sidebar { width: 100% !important; height: 100% !important; padding: 0 !important; display: flex !important; flex-direction: column !important; }
     .projects-scroll-area { flex-grow: 1 !important; height: auto !important; overflow-y: auto !important; padding-bottom: 60px !important; padding-right: 5px !important; }
 
-.gallery-viewport {
+    .gallery-viewport {
         position: fixed !important; top: 0; left: 0; width: 100% !important; height: 100% !important;
         background: #000 !important; z-index: 5000 !important; display: none; flex-direction: column; padding: 15px !important;
-        backdrop-filter: none !important; /* ВИМИКАЄМО БЛЮР ДЛЯ ШВИДКОДІЇ */
+        backdrop-filter: none !important;
     }
     .gallery-viewport.active-screen { display: flex !important; }
     .viewport-frame { width: 100% !important; height: 100% !important; border: none !important; background: transparent !important; display: flex !important; flex-direction: column !important; margin-top: 0 !important; }
     #viewport-content { flex-grow: 1 !important; overflow-y: auto !important; padding: 0 0 50px 0 !important; display: block !important; }
 
-/* МОБІЛЬНИЙ ФІКС: Зображення на всю ширину, YouTube залишається 16:9 */
     .vp-content .img-wrapper { 
         height: auto !important; 
         max-height: none !important; 
@@ -932,7 +969,7 @@ body.glitch-transition {
         height: auto !important; 
         max-width: 100% !important; 
         display: block !important; 
-        aspect-ratio: auto !important; /* ЖОДНИХ 16/9 ДЛЯ КАРТИНОК! */
+        aspect-ratio: auto !important;
     }
     .vp-content iframe { 
         width: 100% !important; 
@@ -941,49 +978,46 @@ body.glitch-transition {
         margin-bottom: 40px !important;
     }
     .gallery-header-flex { 
-        flex-direction: column !important; /* Вибудовуємо елементи один під одним */
+        flex-direction: column !important;
         justify-content: flex-start !important; 
-        align-items: flex-start !important; /* Притискаємо до лівого краю */
+        align-items: flex-start !important;
         width: 100%; 
         margin-bottom: 15px; 
-        gap: 8px !important; /* Акуратна відстань між текстом і кнопкою */
+        gap: 8px !important;
     }
     .gallery-header-flex h2 { font-size: 18px !important; border: none !important; margin: 0 !important; width: auto !important; line-height: 1.1 !important; }
- 
-    /* Додаємо точковий стиль для самої кнопки на мобільному */
+
     .vp-link {
-        font-size: 11px !important; /* Робимо шрифт акуратнішим */
-        padding: 5px 10px !important; /* Зменшуємо "рамку" */
+        font-size: 11px !important;
+        padding: 5px 10px !important;
         margin-bottom: 0 !important;
         letter-spacing: 1px;
     }
 
     .menu-item { font-size: 30px !important; padding: 12px 0 !important; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%; }
     h2 { font-size: 26px !important; margin-bottom: 15px !important; border-bottom: 2px solid var(--primary-color) !important; }
-    
+
     .mobile-nav-btn {
         font-size: 16px !important; padding: 15px !important; margin-bottom: 15px !important;
         width: 100%; background: #111; border: 1px solid var(--primary-color);
         z-index: 500; text-align: center; display: block !important;
     }
-/* Mobile Options & Achievements */
+
     .options-layout { flex-direction: column !important; gap: 20px !important; display: block !important; }
     .settings-container { height: 65vh !important; max-height: 65vh !important; width: 100% !important; }
 
-/* ПОВЕРТАЄМО ТРИКУТНИК У ВЬЮВПОРТ */
     .alt-toggle-btn {
         left: 10px !important;
         top: 10px !important;
         width: 36px !important;
         height: 36px !important;
-        background: rgba(0,0,0,0.5) !important; /* Легкий фон, щоб не губився на світлих рендерах */
+        background: rgba(0,0,0,0.5) !important;
         border-radius: 8px !important;
     }
-    
-    /* ПОВНІСТЮ ХОВАЄМО АЧІВКИ НА МОБІЛЬНОМУ */
+
     .achievements-panel { display: none !important; }
-/* AUDIO & HUD WIDGET MOBILE */
-#audio-toggle {
+
+    #audio-toggle {
         top: 15px !important;
         right: 15px !important;
         width: 32px !important; 
@@ -992,7 +1026,7 @@ body.glitch-transition {
         display: flex !important;
         align-items: center; 
         justify-content: center;
-        font-size: 0 !important; /* Ховаємо текстовий напис */
+        font-size: 0 !important;
         border-radius: 8px !important;
         color: transparent !important;
     }
@@ -1004,66 +1038,34 @@ body.glitch-transition {
     }
     #audio-toggle.muted::after {
         content: "🔇";
-    }  
-#hud-widget {
+    }
+    #hud-widget {
         display: none !important; 
     }
-/* =========================================
-   V3.1  AAA UPDATE
-   ========================================= */
 
-/* 1. CINEMATIC FILM GRAIN (Легкий шум плівки) */
-body::before {
-    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 8999;
-    /* Використовуємо процедурний SVG шум - він не вантажить мережу і виглядає ідеально */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
-    opacity: 0.7; mix-blend-mode: overlay;
-}
-
-/* 2. PROJECT CARDS GLOW SWEEP (Блік по картці) */
-.project-slot { overflow: hidden; position: relative; }
-.project-slot::after {
-    content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
-    /* Напівпрозорий жовтувато-білий градієнт */
-    background: linear-gradient(90deg, transparent, rgba(247, 213, 62, 0.1), rgba(255, 255, 255, 0.3), rgba(247, 213, 62, 0.1), transparent);
-    transform: skewX(-25deg); z-index: 10; pointer-events: none; transition: none;
-}
-.project-slot:hover::after { animation: shineSweep 0.6s ease-out forwards; }
-@keyframes shineSweep { 100% { left: 200%; } }
-
-/* 3. ОПТИМІЗАЦІЯ МАГНІТУ (Щоб кнопки не "смикались" від курсору) */
-.menu-item, .dlc-btn, .buy-btn { 
-    transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s, text-shadow 0.3s !important; 
-}
-/* === PROJECT CARDS GLOW SWEEP (FIXED 3D) === */
-.project-slot {
-    position: relative;
-    overflow: hidden;
+    /* Мобільний першоджерельний блок */
+    .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
+    h1.glitch { font-size: 52px !important; letter-spacing: 1px; margin-bottom: 5px; }
+    .role-subtitle { font-size: 14px !important; margin-bottom: 25px !important; }
+    .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
+    .dlc-wrapper { position: fixed !important; bottom: 50px !important; left: 50% !important; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0; top: auto; }
+    .copyright-fixed { bottom: 15px !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; text-align: center !important; width: 100% !important; color: #666 !important; display: block !important; }
+    .menu-list { margin-top: 5px; width: 100%; padding-left: 10px; }
+    .header-spacer, .back-hint { display: none; }
+    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 25px; padding-left: 5px; }
+    .project-slot { padding: 15px; }
+    .slot-thumb { width: 100px; height: 60px; }
+    .p-title { font-size: 18px; }
+    .settings-list { width: 100%; padding-left: 0; border: none; }
+    .dlc-btn { width: 100%; text-align: center; background: rgba(16, 16, 16, 0.95); border: 2px solid var(--primary-color); padding: 15px; font-size: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
+    #email-popup { display: none !important; }
+    * { cursor: auto !important; }
 }
 
-.project-slot::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 60%;
-    height: 100%;
-    /* Зробив градієнт яскравішим (білий + жовтий), щоб його точно було видно */
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255,255,255,0) 100%);
-    /* translateZ(20px) гарантовано витягує блік поверх картинки і тексту в 3D просторі */
-    transform: skewX(-25deg) translateZ(20px);
-    z-index: 100;
-    pointer-events: none;
-    opacity: 0;
-}
-
-.project-slot:hover::after {
-    animation: shineSweep 0.65s ease-out forwards;
-    opacity: 1;
-}
-
-@keyframes shineSweep {
-    0% { left: -100%; }
-    100% { left: 200%; }
-}
+/* --- 3. ФІКС НАЇЗДУ OPTIONS НА КНОПКУ BACK (ДЛЯ НЕСТАНДАРТНИХ МОНІТОРІВ) --- */
+@media (min-width: 1001px) {
+    .settings-container, .achievements-panel {
+        height: 64vh !important; /* Злегка зменшуємо висоту, щоб дати повітря знизу */
+        margin-bottom: 20px !important; /* Повертаємо такий самий відступ, як у віконця Credits */
+    }
 }
