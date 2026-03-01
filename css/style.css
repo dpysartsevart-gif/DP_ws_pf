@@ -1035,8 +1035,10 @@ body::before {
         width: 100% !important; max-width: none !important;
         height: auto !important; flex-grow: 1; 
         margin: 0 !important; border: none !important; background: transparent !important;
-        /* ФІКС: Повертаємо симетричні відступи, щоб текст не прилипав до лівого краю */
-        padding: 0 15px 80px 15px !important; 
+        
+        /* ФІКС: Додано 25px зверху, щоб контент не прилипав до верхнього краю вікна */
+        padding: 25px 15px 80px 15px !important; 
+        
         overflow-y: auto !important;
     }
 
