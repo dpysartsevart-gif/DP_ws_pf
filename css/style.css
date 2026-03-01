@@ -1248,7 +1248,7 @@ body::before {
 }
 /* Глушимо глобальні прозорі стилі скла виключно для мобілки */
     #shop-screen, #options-screen, #credits-screen, #dlc-screen {
-        background: rgba(12, 12, 12, 0.92) !important;
+        background: rgba(12, 12, 12, 0.3) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
     }
