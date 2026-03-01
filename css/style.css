@@ -151,7 +151,30 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     position: relative;
     overflow: hidden;
 }
-.project-slot:hover, .project-slot.selected { border-color: var(--primary-color); background: rgba(247, 213, 62, 0.1); border-radius: 6px; transform: translateX(10px); }
+
+
+/* === 1. GLASSMORPHISM BASE: Легка тінь + Текстура скла (Повна сітка CRT) === */
+.project-slot:hover, .project-slot.selected { 
+    border-color: rgba(247, 213, 62, 0.5); 
+    
+    /* МАГІЯ ТЕКСТУРИ: Горизонтальні + Вертикальні лінії + Колір скла */
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.15) 50%, transparent 50%),   /* Горизонтальні смуги */
+        linear-gradient(90deg, rgba(0, 0, 0, 0.15) 50%, transparent 50%), /* Вертикальні смуги */
+        linear-gradient(135deg, rgba(247, 213, 62, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%); /* Скло */
+    background-size: 100% 2px, 2px 100%, 100% 100%; /* Розмір сітки: 2px на 2px */
+    
+    border-radius: 6px; 
+    transform: translateX(10px); 
+    
+    box-shadow: 
+        inset 1px 1px 1px rgba(255, 255, 255, 0.3),   
+        inset -1px -1px 1px rgba(0, 0, 0, 0.2),       
+        4px 8px 12px rgba(0, 0, 0, 0.15);             
+        
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
 
 .slot-thumb { width: 80px; height: 50px; background-color: #222; background-size: cover; background-position: center; border: 1px solid #444; transition: 0.2s; border-radius: 2px;}
 .project-slot:hover .slot-thumb { border-color: #fff; border-radius: 4px; }
@@ -770,64 +793,77 @@ body::before {
     opacity: 0.7; mix-blend-mode: overlay;
 }
 
-/* 2. PROJECT CARDS GLOW SWEEP */
-.project-slot::after {
-    content: '';
-    position: absolute;
-    top: -15%;
-    right: 6%;
-    height: 130%;
-    width: 32%;
-    background: linear-gradient(
-        108deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.14) 42%,
-        rgba(255, 255, 255, 0.06) 48%,
-        transparent 65%
-    );
-    transform: skewX(-16deg);
-    pointer-events: none;
-    z-index: 5;
-    opacity: 0;
-    mix-blend-mode: screen;
-    filter: blur(6px);
-    transition: opacity 0.35s ease;
-}
-
-/* 3. PHOTOREAL GLASS SPECULAR */
+/* === ПРЕМІАЛЬНЕ СКЛО (РІВЕНЬ AWWWARDS) === */
+/* === 1. GLASS GLARE: Ідеально гладкий блік (БЕЗ ЖОРСТКИХ КРАЇВ) === */
 .project-slot::before {
     content: '';
     position: absolute;
-    top: -10%;
-    right: 7%;
-    height: 120%;
-    width: 18%;
+    top: -20%; 
+    right: -20%; 
+    height: 140%;
+    width: 100%; /* Зробили блок вдвічі ширшим */
     background: linear-gradient(
-        108deg,
-        transparent 28%,
-        rgba(190, 255, 255, 0.05) 32%,
-        rgba(150, 235, 255, 0.09) 34%,
-        rgba(255, 255, 255, 0.28) 36%,
-        rgba(255, 255, 255, 0.55) 38.5%,
-        rgba(255, 255, 255, 0.98) 40.5%,
-        rgba(255, 255, 255, 0.62) 41.6%,
-        rgba(255, 255, 255, 0.22) 43%,
-        rgba(255, 255, 255, 0.48) 45%,
-        rgba(255, 180, 110, 0.11) 47%,
-        rgba(255, 255, 255, 0.07) 52%,
-        transparent 62%
+        to right,
+        rgba(255, 255, 255, 0) 0%,      
+        rgba(255, 255, 255, 0) 40%,     /* Довгий прозорий вступ */
+        rgba(255, 255, 255, 0.05) 60%,
+        rgba(255, 255, 255, 0.95) 65%,  /* Гострий центр */
+        rgba(247, 213, 62, 0.8) 68%,    /* Жовтий шлейф */
+        rgba(247, 213, 62, 0.05) 85%,
+        rgba(247, 213, 62, 0) 100%      
     );
-    transform: skewX(-16deg);
+    transform: skewX(-20deg) translateX(80px); /* Ховаємо блік далі вправо */
     pointer-events: none;
-    z-index: 6;
+    z-index: 5;
     opacity: 0;
-    mix-blend-mode: color-dodge;
-    filter: blur(0.25px);
-    transition: opacity 0.35s ease;
+    mix-blend-mode: screen; 
+    
+    /* МАГІЯ АНТИ-СМУЖКИ: Ця маска розчиняє лівий і правий фізичні краї блоку */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+    
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.project-slot.is-tilted::before { opacity: 1; }
-.project-slot.is-tilted::after { opacity: 0.9; }
+.project-slot.is-tilted::before {
+    opacity: 1;
+    transform: skewX(-20deg) translateX(-10px); 
+}
+
+/* 2. GLASS SPECULAR — ШАР 2: Основний блік з фізичною Хроматичною Аберацією */
+.project-slot::after {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: 5%; /* Розташування справа */
+    height: 120%;
+    width: 30%; /* Ширший градієнт для плавного переходу */
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 255, 255, 0.15) 35%,   /* Легке ціанове світіння (холодний край лінзи) */
+        rgba(255, 255, 255, 0.5) 47%,  /* М'який вхід у блік */
+        rgba(255, 255, 255, 0.95) 50%, /* Гострий, яскравий центр */
+        rgba(255, 170, 50, 0.3) 53%,   /* Теплий помаранчевий (теплий край лінзи) */
+        rgba(255, 0, 0, 0.05) 65%,     /* Ледь помітний червоний шлейф розсіювання */
+        transparent 100%
+    );
+    transform: skewX(-22deg); /* Більш динамічний нахил світла */
+    pointer-events: none;
+    z-index: 7;
+    opacity: 0;
+    mix-blend-mode: color-dodge; /* Додає фізичне світіння замість звичайної фарби */
+    filter: blur(1.5px); /* Робить блік більш "об'ємним" і реалістичним */
+    transition: opacity 0.4s ease;
+}
+
+/* Анімація появи при нахилі (механіку не чіпаємо) */
+.project-slot.is-tilted::before,
+.project-slot.is-tilted::after {
+    opacity: 1;
+}
+
+
 
 /* 4. ОПТИМІЗАЦІЯ МАГНІТУ */
 .menu-item, .dlc-btn, .buy-btn { 
