@@ -909,8 +909,8 @@ body::before {
     pointer-events: none;
     z-index: 7;
     opacity: 0;
-    mix-blend-mode: color-dodge; 
-    filter: blur(1.5px); 
+    mix-blend-mode: screen;
+    /* blur видалено: filter:blur всередині overflow:hidden дає артефакт-смужку */
     transition: opacity 0.4s ease;
 }
 
@@ -997,11 +997,12 @@ body::before {
         gap: 15px !important;
     }
 
-    #dlc-screen .mobile-nav-btn {
+#dlc-screen .mobile-nav-btn {
         position: relative !important;
+        top: 0 !important; /* ВАЖЛИВО: Вбиваємо інлайн-стиль top:100px з HTML */
         order: 1;
         width: 100%;
-        margin-bottom: 50px !important; 
+        margin-bottom: 25px !important; /* Акуратний відступ від віконця */
         flex-shrink: 0;
         z-index: 50;
         display: block !important;
@@ -1036,8 +1037,8 @@ body::before {
         height: auto !important; flex-grow: 1; 
         margin: 0 !important; border: none !important; background: transparent !important;
         
-        /* ФІКС: Додано 25px зверху, щоб контент не прилипав до верхнього краю вікна */
-        padding: 25px 15px 80px 15px !important; 
+        /* ФІКС: 30px зверху (щоб текст не липнув), 15px з боків, 80px знизу */
+        padding: 30px 15px 80px 15px !important; 
         
         overflow-y: auto !important;
     }
@@ -1162,6 +1163,14 @@ body::before {
     * { cursor: auto !important; }
 }
 
+/* Глушимо глобальні стилі скла для мобілки, але залишаємо фон напівпрозорим */
+    #shop-screen, #options-screen, #credits-screen, #dlc-screen, .popup-overlay {
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+
 /* --- 2. ІДЕАЛЬНЕ РОЗСІЮВАННЯ ТЕКСТУ (ЧЕРЕЗ МАСКУ, БЕЗ ЧОРНИХ СМУГ) --- */
 @media (min-width: 1001px) {
     .settings-container, .text-content.scrollable {
@@ -1208,50 +1217,43 @@ body::before {
     will-change: transform, backdrop-filter;
 }
 
-/* === ЗАТЕМНЕННЯ ФОНУ ТА ФІКС ЗАТРИМКИ БЛЮРУ === */
+/* === 1. ГЛОБАЛЬНЕ ЗАТЕМНЕННЯ ФОНУ (100% ОДНАКОВЕ ДЛЯ ВСІХ ЕКРАНІВ ТА ПОПАПІВ) === */
 #shop-screen, 
 #options-screen, 
-#credits-screen {
-    background: rgba(0, 0, 0, 0.15) !important; /* Затемнюємо бекграунд, як у попапів */
-    backdrop-filter: blur(2px); /* Трохи розмиваємо задній фон сайту */
-    -webkit-backdrop-filter: blur(2px);
-    
-    /* ГОЛОВНИЙ ХАК: Вимикаємо плавну появу. Без неї браузер рендерить скло миттєво і без стрибків! */
-    transition: none !important; 
+#credits-screen,
+#dlc-screen,
+.popup-overlay {
+    background: rgba(0, 0, 0, 0.15) !important; 
+    backdrop-filter: blur(2px) !important; 
+    -webkit-backdrop-filter: blur(2px) !important;
 }
 
-/* Також вимикаємо плавну появу для DLC, щоб і там скло вантажилося одразу */
+/* Вимикаємо анімацію появи, щоб блюр стартував миттєво */
+#shop-screen, 
+#options-screen, 
+#credits-screen,
 #dlc-screen {
     transition: none !important; 
 }
 
-/* === 3. СКЛЯНІ ВІКОНЦЯ (DLC, JOURNAL) - ТЕМНЕ SCI-FI СКЛО === */
-.popup-content,
+/* === 2. ЄДИНИЙ СТИЛЬ СКЛА ДЛЯ ВСІХ ВНУТРІШНІХ ВІКОН (ГАРАНТІЯ ОДНАКОВОСТІ) === */
+.shop-container, 
+.text-content, 
+.scroll-container, 
+.popup-content, 
+.achievements-panel,
 #dlc-screen .text-content.centered {
     border: 1px solid rgba(163, 203, 245, 0.3) !important;
-    
-    /* Фон зроблено напівпрозорим (0.15), щоб блюр міг працювати */
     background: 
         linear-gradient(rgba(0, 0, 0, 0.2) 50%, transparent 50%),
         linear-gradient(90deg, rgba(0, 0, 0, 0.2) 50%, transparent 50%),
         linear-gradient(135deg, rgba(16, 16, 16, 0.4) 0%, rgba(163, 203, 245, 0.1) 100%) !important;
     background-size: 100% 2px, 2px 100%, 100% 100% !important;
-    
-    /* Об'ємні відблиски скла */
     box-shadow: 
         inset 1px 1px 2px rgba(255, 255, 255, 0.1),   
         inset -1px -1px 2px rgba(0, 0, 0, 0.5),       
         0 15px 30px rgba(0, 0, 0, 0.7) !important;
-        
-    /* Сильне розмиття фону */
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
     border-radius: 8px !important;
 }
-
-/* Глушимо глобальні стилі скла для мобілки, але залишаємо фон напівпрозорим */
-    #shop-screen, #options-screen, #credits-screen, #dlc-screen {
-        background: rgba(0, 0, 0, 0.15) !important;
-        backdrop-filter: blur(4px) !important;
-        -webkit-backdrop-filter: blur(4px) !important;
-    }
