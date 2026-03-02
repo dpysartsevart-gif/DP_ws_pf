@@ -997,12 +997,32 @@ body::before {
         gap: 15px !important;
     }
 
-#dlc-screen .mobile-nav-btn {
+/* === 1. МАЛЮЄМО ЖОВТИЙ ЗАГОЛОВОК ДЛЯ DLC (ТІЛЬКИ НА МОБІЛЬНОМУ) === */
+    #dlc-screen::before {
+        content: 'DLC MODULE'; /* Можеш змінити текст на 'SUPPORT CREATOR' за бажанням */
+        display: block;
+        width: 100%;
+        font-size: 26px;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        font-weight: bold;
+        line-height: 1;
+        order: 0; /* Гарантовано ставимо на самісінький верх */
+        flex-shrink: 0;
+        text-align: left;
+    }
+
+    /* === 2. ПОВЕРТАЄМО КНОПЦІ РІВНІ ВІДСТУПИ === */
+    #dlc-screen .mobile-nav-btn {
         position: relative !important;
-        top: 0 !important; /* ВАЖЛИВО: Вбиваємо інлайн-стиль top:100px з HTML */
+        top: 0 !important; 
         order: 1;
         width: 100%;
-        margin-bottom: 25px !important; /* Акуратний відступ від віконця */
+        margin-top: 0 !important; /* Прибрали 45px, бо заголовок сам посунув кнопку */
+        margin-bottom: 25px !important; 
         flex-shrink: 0;
         z-index: 50;
         display: block !important;
