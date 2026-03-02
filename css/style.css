@@ -134,16 +134,28 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .gallery-sidebar { width: 500px; display: flex; flex-direction: column; pointer-events: auto; flex-shrink: 0; }
 .projects-scroll-area { flex-grow: 0; height: 70vh; overflow-y: auto; padding-right: 25px; padding-top: 5px; padding-bottom: 5px; margin-top: -5px; }
 
-/* === ОНОВЛЕНИЙ СТАТИЧНИЙ ФОН КАРТОК (БЕЗ БЛЮРУ = БЕЗ СМУЖОК) === */
+
+
+
+/* === 1. БЕЗПЕЧНА БАЗОВА КАРТКА === */
 .project-slot {
     padding: 10px;
     
-    /* Зробили фон трохи темнішим/щільнішим, щоб компенсувати відсутність розмиття */
-    background: linear-gradient(135deg, rgba(10, 10, 15, 0.8) 0%, rgba(5, 5, 15, 0.4) 100%);
+    /* 4 ШАРИ ФОНУ */
+    background-image: 
+        linear-gradient(rgba(0,0,0,0) 50%, transparent 50%),
+        linear-gradient(90deg, rgba(0,0,0,0) 50%, transparent 50%),
+        /* ФІКС КОЛЬОРУ: Тепер він делікатний блакитний і напівпрозорий (max 0.4) */
+        linear-gradient(110deg, transparent 0%, transparent 45%, rgba(163,203,245,0.05) 48%, rgba(255,255,255,0.4) 50%, rgba(163,203,245,0.15) 52%, transparent 55%, transparent 100%),
+        linear-gradient(135deg, rgba(10, 10, 15, 0.8) 0%, rgba(5, 5, 15, 0.4) 100%);
+        
+    background-size: 100% 2px, 2px 100%, 200% 100%, 100% 100%;
+    
+    /* Паркуємо блік далеко СПРАВА (-100%) */
+    background-position: 0 0, 0 0, -100% 0, 0 0; 
+    background-repeat: repeat, repeat, no-repeat, no-repeat;
+    
     border: 1px solid rgba(163, 203, 245, 0.15); 
-    
-    /* ВИДАЛИЛИ backdrop-filter, який розрізав картку відеокартою! */
-    
     margin-bottom: 8px;
     cursor: pointer;
     display: flex;
@@ -151,45 +163,25 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     gap: 15px;
     pointer-events: auto;
     border-radius: 0px; 
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    
     position: relative;
     overflow: hidden;
+    
+    transition: border-color 0.3s ease, transform 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease;
 }
 
-
-/* === 1. БЕЗПЕЧНА БАЗОВА КАРТКА (БЕЗ 3D-БАГІВ) === */
-.project-slot {
-    padding: 10px;
-    
-    /* Темний красивий фон (без backdrop-filter, щоб уникнути смужок) */
-    background: linear-gradient(135deg, rgba(10, 10, 15, 0.8) 0%, rgba(5, 5, 15, 0.4) 100%);
-    border: 1px solid rgba(163, 203, 245, 0.15); 
-    
-    margin-bottom: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    pointer-events: auto;
-    border-radius: 0px; 
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    
-    position: relative;
-    overflow: hidden;
-    /* ЖОДНОГО preserve-3d, will-change чи backdrop-filter! */
-}
-
-/* === 2. ХОВЕР-СТАН (CRT СІТКА) === */
+/* === 2. ХОВЕР-СТАН === */
 .project-slot:hover, .project-slot.selected { 
     border-color: rgba(247, 213, 62, 0.5); 
     
-    /* Малюємо сітку і жовте скло */
-    background: 
+    background-image: 
         linear-gradient(rgba(0, 0, 0, 0.15) 50%, transparent 50%),
         linear-gradient(90deg, rgba(0, 0, 0, 0.15) 50%, transparent 50%),
+        /* Той самий легкий блакитний блік */
+        linear-gradient(110deg, transparent 0%, transparent 45%, rgba(163,203,245,0.05) 48%, rgba(255,255,255,0.4) 50%, rgba(163,203,245,0.15) 52%, transparent 55%, transparent 100%),
         linear-gradient(135deg, rgba(247, 213, 62, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-    background-size: 100% 2px, 2px 100%, 100% 100%;
+    
+    /* Блік продовжує чекати СПРАВА (-100%) */
+    background-position: 0 0, 0 0, -100% 0, 0 0;
     
     border-radius: 6px; 
     transform: translateX(10px); 
@@ -198,6 +190,17 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
         inset 1px 1px 1px rgba(255, 255, 255, 0.3),   
         inset -1px -1px 1px rgba(0, 0, 0, 0.2),       
         4px 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* === 3. СПАЛАХ ПРОМЕНЯ ПРИ НАХИЛІ === */
+.project-slot.is-tilted {
+    animation: beamSweep 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards !important;
+}
+
+/* ФІКС НАПРЯМКУ: Тепер летить ЗПРАВА (-100%) НАЛІВО (200%) */
+@keyframes beamSweep {
+    0%   { background-position: 0 0, 0 0, -100% 0, 0 0; }
+    100% { background-position: 0 0, 0 0, 200% 0, 0 0; }
 }
 
 
