@@ -993,24 +993,25 @@ body::before {
         flex-direction: column !important;
         align-items: center !important;
         justify-content: flex-start !important;
-        padding-top: 5px !important; 
-        gap: 15px !important;
+        padding-top: 25px !important; 
+        gap: 0px !important;
     }
 
-/* === 1. МАЛЮЄМО ЖОВТИЙ ЗАГОЛОВОК ДЛЯ DLC (ТІЛЬКИ НА МОБІЛЬНОМУ) === */
+/* === МАЛЮЄМО ЖОВТИЙ ЗАГОЛОВОК ДЛЯ DLC === */
     #dlc-screen::before {
-        content: 'DLC MODULE'; /* Можеш змінити текст на 'SUPPORT CREATOR' за бажанням */
+        content: 'DLC 'SUPPORT CREATOR''; 
         display: block;
         width: 100%;
-        font-size: 26px;
+        font-size: 26px !important;
         color: var(--primary-color);
-        border-bottom: 2px solid var(--primary-color);
-        padding-bottom: 5px;
-        margin-bottom: 15px;
+        border-bottom: 2px solid var(--primary-color) !important;
+        /* ФІКС: Копіюємо поведінку справжніх заголовків */
+        padding-bottom: 0 !important; 
+        margin-bottom: 15px !important; 
         text-transform: uppercase;
         font-weight: bold;
-        line-height: 1;
-        order: 0; /* Гарантовано ставимо на самісінький верх */
+        line-height: 1.1 !important; 
+        order: 0; 
         flex-shrink: 0;
         text-align: left;
     }
