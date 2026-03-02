@@ -358,7 +358,7 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
     // === DATA ===
     const projectData = {
         'wod': ['wod01.jpg', 'wod02|alt.jpg', 'wod03|alt.jpg', 'wod04.jpg', 'wod05|alt.jpg', 'wod06.jpg', 'wod07.jpg', 'wod08.jpg', 'wod09.jpg', 'wod_demo.mp4'],
-        'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3|alt.jpg', 'jinxr4.jpg', 'jinxr5.jpg'], 
+        'jinx': ['jinxr1.jpg', 'jinxr2.jpg', 'jinxr3|alt.jpg', 'jinxr4.jpg', 'jinxr5.jpg', 'Jinx_Gun_TT.mp4'], 
         'sequoia': ['youtube:gPoXD8hg3P0', 'Sequoia01.jpg', 'Sequoia02|alt.jpg', 'Sequoia03|alt.jpg', 'Sequoia04.jpg', 'Sequoia05.jpg', 'Sequoia06.jpg', 'Sequoia07.jpg', 'Sequoia08.jpg', 'Sequoia09.jpg', 'Sequoia10.jpg'],
         'mermaid': ['Marmeid01.jpg', 'Marmeid02.jpg', 'Marmeid03.jpg', 'Mermaid_tt.mp4'],
         'scifi': ['sf01|alt.jpg', 'sf02.jpg', 'sf03.jpg', 'sf04.jpg', 'sf05.jpg', 'scifi_turntable.mp4', 'sf06|alt.jpg', 'sf07|alt.jpg'],
@@ -463,6 +463,17 @@ mediaEl.dataset.altSrc = altSrc;
     }
 
     // === INTERACTION (HOVER INTENT / DEBOUNCE 3D) ===
+
+    // Фікс: після повернення у вкладку скидаємо is-tilted якщо залишився
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            projectSlots.forEach(slot => {
+                slot.classList.remove('is-tilted');
+                slot.style.transform = '';
+            });
+        }
+    });
+
     projectSlots.forEach(slot => {
         let hoverTimer = null; // Індивідуальний таймер для кожної картки
 
