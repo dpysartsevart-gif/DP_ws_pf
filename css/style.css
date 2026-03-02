@@ -988,24 +988,24 @@ body::before {
     }
     .screen.active-screen { display: flex !important; flex-direction: column; }
 
+/* === 1. ВИРІВНЮЄМО ЕКРАН DLC З ІНШИМИ ВІКНАМИ === */
     .screen.dlc-centered {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: flex-start !important;
-        padding-top: 25px !important; 
-        gap: 0px !important;
+        padding-top: 25px !important; /* Опускаємо в рівень з іншими меню */
+        gap: 0 !important; 
     }
 
-/* === МАЛЮЄМО ЖОВТИЙ ЗАГОЛОВОК ДЛЯ DLC === */
+    /* === 2. МАЛЮЄМО ЖОВТИЙ ЗАГОЛОВОК DLC === */
     #dlc-screen::before {
-        content: 'DLC 'SUPPORT CREATOR''; 
+        content: 'DLC MODULE'; 
         display: block;
         width: 100%;
         font-size: 26px !important;
         color: var(--primary-color);
         border-bottom: 2px solid var(--primary-color) !important;
-        /* ФІКС: Копіюємо поведінку справжніх заголовків */
         padding-bottom: 0 !important; 
         margin-bottom: 15px !important; 
         text-transform: uppercase;
@@ -1016,13 +1016,13 @@ body::before {
         text-align: left;
     }
 
-    /* === 2. ПОВЕРТАЄМО КНОПЦІ РІВНІ ВІДСТУПИ === */
+    /* === 3. КНОПКА MAIN MENU === */
     #dlc-screen .mobile-nav-btn {
         position: relative !important;
         top: 0 !important; 
         order: 1;
         width: 100%;
-        margin-top: 0 !important; /* Прибрали 45px, бо заголовок сам посунув кнопку */
+        margin-top: 0 !important; 
         margin-bottom: 25px !important; 
         flex-shrink: 0;
         z-index: 50;
