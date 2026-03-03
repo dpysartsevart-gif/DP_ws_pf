@@ -126,17 +126,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 30);
     }
 // === VISITOR COUNTER ===
-    const visitorEl = document.getElementById('sys-visitors');
-    if (visitorEl) {
-fetch('https://hits.sh/dpysartsev.com/portfolio.json')
-            .then(r => r.json())
-            .then(data => {
-                if (data && data.value) {
- visitorEl.innerText = String(data.value + 4713).padStart(4, '0');
-                }
-            })
-            .catch(() => { visitorEl.innerText = 'N/A'; });
-    }
+const visitorEl = document.getElementById('sys-visitors');
+if (visitorEl) {
+    fetch('https://hits.sh/dpysartsev.com/portfolio.json')
+        .then(r => r.json())
+        .then(data => {
+            if (data && data.count) {
+                visitorEl.innerText = String(data.count + 4713).padStart(4, '0');
+            }
+        })
+        .catch(() => { visitorEl.innerText = 'N/A'; });
+}
 
     if(closeBanner) {
         closeBanner.addEventListener('click', () => { 
