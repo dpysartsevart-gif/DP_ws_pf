@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // === VISITOR COUNTER ===
     const visitorEl = document.getElementById('sys-visitors');
     if (visitorEl) {
-        fetch('https://api.countapi.xyz/hit/dpysartsev/portfolio-visits')
+fetch('https://hits.sh/dpysartsev.com/portfolio.json')
             .then(r => r.json())
             .then(data => {
                 if (data && data.value) {
