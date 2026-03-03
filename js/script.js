@@ -125,6 +125,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 30);
     }
+// === VISITOR COUNTER ===
+    const visitorEl = document.getElementById('sys-visitors');
+    if (visitorEl) {
+        fetch('https://api.countapi.xyz/hit/dpysartsev/portfolio-visits')
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.value) {
+ visitorEl.innerText = String(data.value + 4713).padStart(4, '0');
+                }
+            })
+            .catch(() => { visitorEl.innerText = 'N/A'; });
+    }
 
     if(closeBanner) {
         closeBanner.addEventListener('click', () => { 
