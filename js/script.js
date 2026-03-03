@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // === VISITOR COUNTER ===
 const visitorEl = document.getElementById('sys-visitors');
 if (visitorEl) {
-fetch('https://hits.sh/dpysartsev.art.json')
+fetch('https://hits.sh/dpysartsev.art')
         .then(r => r.json())
         .then(data => {
             if (data && data.count) {
