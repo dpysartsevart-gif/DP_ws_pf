@@ -135,7 +135,7 @@ fetch('https://hits.sh/dpysartsev.art')
                 visitorEl.innerText = String(data.count + 4713).padStart(4, '0');
             }
         })
-        .catch(() => { visitorEl.innerText = 'N/A'; });
+.catch(() => { visitorEl.innerText = 'N/A LAST_DATA:4713'; });
 }
 
     if(closeBanner) {
