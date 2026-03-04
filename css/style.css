@@ -1051,7 +1051,24 @@ body::before {
     html, body { 
         height: 100%; margin: 0; overflow: hidden; background: #000; 
     }
-
+/* ДОДАЙ ЦЕЙ БЛОК СЮДИ, ОДРАЗУ ПІСЛЯ html, body */
+    .mobile-desktop-hint {
+        display: block !important; /* Вмикаємо на мобільному */
+        color: var(--primary-color);
+        font-family: 'Share Tech Mono', monospace; 
+        font-size: 11px;
+        text-align: center;
+        margin-top: auto; /* Відштовхуємо від меню */
+        margin-bottom: 25px; /* Відступ до кнопки DLC */
+        letter-spacing: 1px;
+        opacity: 0.6;
+        width: 100%;
+        position: fixed; /* Прив'язуємо до низу екрану */
+        bottom: 110px; /* Висота над кнопкою DLC */
+        left: 0;
+        z-index: 100;
+    }
+    /* ============================================ */
     .bg-layer {
         position: fixed !important; inset: 0 !important;
         width: 100% !important; height: 100% !important;
@@ -1276,17 +1293,6 @@ body::before {
     }
 
 
-.mobile-desktop-hint {
-        display: block;
-        color: var(--primary-color);
-        font-family: 'Share Tech Mono', monospace; 
-        font-size: 12px;
-        text-align: center;
-        margin-top: 30px; /* Відступ вниз від меню Credits */
-        margin-bottom: 10px; /* Відступ до кнопки DLC */
-        letter-spacing: 1px;
-        opacity: 0.6; /* Робимо його трохи приглушеним, щоб не кричав */
-    }
 
 /* --- 2. ІДЕАЛЬНЕ РОЗСІЮВАННЯ ТЕКСТУ (ЧЕРЕЗ МАСКУ, БЕЗ ЧОРНИХ СМУГ) --- */
 @media (min-width: 1001px) {
