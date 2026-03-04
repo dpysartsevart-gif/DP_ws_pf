@@ -1,4 +1,4 @@
-/* ========================
+mem/* ========================
    GLOBAL VARIABLES (THEME)
    ======================== */
 
@@ -1044,7 +1044,7 @@ body::before {
 /* =========================================
    MOBILE
    ========================================= */
-
+.mobile-desktop-hint { display: none; }
 .mobile-nav-btn { display: none; }
 
 @media (max-width: 1000px) {
@@ -1275,6 +1275,18 @@ body::before {
         -webkit-backdrop-filter: blur(4px) !important;
     }
 
+
+.mobile-desktop-hint {
+        display: block;
+        color: var(--primary-color);
+        font-family: 'Share Tech Mono', monospace; 
+        font-size: 12px;
+        text-align: center;
+        margin-top: 30px; /* Відступ вниз від меню Credits */
+        margin-bottom: 10px; /* Відступ до кнопки DLC */
+        letter-spacing: 1px;
+        opacity: 0.6; /* Робимо його трохи приглушеним, щоб не кричав */
+    }
 
 /* --- 2. ІДЕАЛЬНЕ РОЗСІЮВАННЯ ТЕКСТУ (ЧЕРЕЗ МАСКУ, БЕЗ ЧОРНИХ СМУГ) --- */
 @media (min-width: 1001px) {
