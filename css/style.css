@@ -1040,10 +1040,10 @@ body::before {
     margin-top: -40px;
     z-index: 100;
 }
-
 /* =========================================
    MOBILE
    ========================================= */
+
 .mobile-desktop-hint { display: none; }
 .mobile-nav-btn { display: none; }
 
