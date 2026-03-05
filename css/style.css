@@ -1277,7 +1277,9 @@ body::before {
     .copyright-fixed { bottom: 15px !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; text-align: center !important; width: 100% !important; color: #666 !important; display: block !important; }
     .menu-list { margin-top: 5px; width: 100%; padding-left: 10px; }
     .header-spacer, .back-hint { display: none; }
-    .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 25px; padding-left: 5px; }
+.sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 25px; padding-left: 5px; }
+    
+    .sidebar-header-container h2 { border-bottom: none !important; padding-bottom: 0 !important; margin-bottom: 0 !important; }
     .project-slot { padding: 15px; }
     .slot-thumb { width: 100px; height: 60px; }
     .p-title { font-size: 18px; }
