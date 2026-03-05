@@ -49,7 +49,7 @@ body {
     position: absolute; top: -5%; left: -5%; width: 110%; height: 110%; 
     background-image: url('../assets/bg.jpg'); background-size: cover; background-position: center;
     z-index: 1; 
-    filter: brightness(0.6) drop-shadow(4px 0px 0px rgba(255,0,0,0.3)) drop-shadow(-4px 0px 0px rgba(0,255,255,0.3)); 
+    filter: brightness(0.75) drop-shadow(4px 0px 0px rgba(255,0,0,0.3)) drop-shadow(-4px 0px 0px rgba(0,255,255,0.3)); 
     transition: transform 0.1s ease-out; 
 }
 
@@ -57,6 +57,7 @@ body {
     position: absolute; inset: 0;
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
     background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 2;
+opacity: 0.6;
 }
 
 /* DUST EFFECT */
@@ -1380,3 +1381,25 @@ body::before {
     -webkit-backdrop-filter: blur(12px) !important;
     border-radius: 8px !important;
 }
+
+
+/* === JOURNAL TEXT OVERRIDES === */
+.journal-content-area {
+    display: block !important; /* Вимикаємо flex, щоб текст йшов суцільним потоком */
+    scroll-snap-type: none !important; /* Вимикаємо прилипання */
+    padding: 30px 40px !important;
+    text-align: left;
+}
+
+.journal-entry-wrap {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.journal-h3 { color: var(--primary-color); font-size: 24px; margin-bottom: 10px; text-transform: uppercase; }
+.journal-note { color: #888; font-size: 14px; font-family: 'Share Tech Mono', monospace; margin-bottom: 30px; border-left: 2px solid var(--primary-color); padding-left: 10px;}
+.journal-h4 { color: #fff; font-size: 18px; margin-top: 30px; margin-bottom: 15px; border-bottom: 1px dashed #444; padding-bottom: 5px; }
+
+/* Використовуємо твій готовий клас cv-list для ігор */
+.journal-content-area .cv-list li { margin-bottom: 5px; font-size: 15px; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

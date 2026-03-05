@@ -229,13 +229,57 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
         }
     }
 
-    // === SCREEN LOGIC ===
+// === SCREEN LOGIC ===
     function showScreen(screenId) {
         if(screenId === 'gallery-screen' && !inSubMenu) {
             runGalleryPreloader(() => { activateScreen(screenId); });
+        } else if (screenId === 'journal-screen' && !inSubMenu) {
+            runJournalPreloader(() => { activateScreen(screenId); });
         } else {
             activateScreen(screenId);
         }
+    }
+
+    function runJournalPreloader(callback) {
+        const jPreloader = document.getElementById('journal-preloader');
+        if (!jPreloader) { callback(); return; }
+        
+        jPreloader.classList.remove('hidden');
+        jPreloader.style.display = 'flex';
+        jPreloader.style.opacity = '1';
+        safePlay('snd-hover'); 
+        
+        const jBar = document.getElementById('j-bar-fill');
+        const jPct = document.getElementById('j-pct-text');
+        const jText = document.getElementById('j-loader-text');
+        
+        if(jBar) jBar.style.width = '0%';
+        if(jPct) jPct.textContent = '0%';
+        if(jText) jText.innerText = "SEARCHING TEXT MODULES...";
+        
+        let loadPct = 0;
+        const messages = ["SEARCHING TEXT MODULES...", "DECRYPTING LOG FILES...", "MOUNTING DATABASE..."];
+        
+        const interval = setInterval(() => {
+            loadPct += Math.floor(Math.random() * 20) + 5; 
+            if(loadPct > 100) loadPct = 100;
+            
+            if(jBar) jBar.style.width = `${loadPct}%`;
+            if(jPct) jPct.textContent = `${loadPct}%`;
+            
+            if (loadPct > 35 && loadPct < 75 && jText) jText.innerText = messages[1];
+            if (loadPct >= 75 && jText) jText.innerText = messages[2];
+
+            if(loadPct === 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    jPreloader.classList.add('hidden'); 
+                    jPreloader.style.display = 'none';
+                    safePlay('snd-gamestart'); 
+                    callback();
+                }, 400);
+            }
+        }, 50);
     }
 
     // === SCRAMBLE TEXT LOGIC ===
@@ -380,6 +424,137 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
         'halloween': ['Halloween1.jpg', 'Halloween2.jpg']
     };
 
+// === JOURNAL DATA ===
+    const journalData = {
+        'blog': `
+            <div class="journal-entry-wrap">
+                <h3 class="journal-h3" style="color: #ff3d00;">/// PERSONAL BLOG</h3>
+                <p class="journal-note" style="border-color: #ff3d00; color: #ff3d00;">[ ERROR 404 ] MODULE OFFLINE / UNDER CONSTRUCTION</p>
+                <p style="color: #ccc; font-size: 16px; line-height: 1.6;">This memory sector is currently unavailable. Work is underway to restore and populate the database.<br><br>Please try connecting later.</p>
+            </div>
+        `,
+        'gaming_exp': `
+            <div class="journal-entry-wrap">
+                <h3 class="journal-h3">/// GAMING EXPERIENCE</h3>
+                <p class="journal-note">SYSTEM NOTE: Partial memory bank dump. Data is incomplete and continuously updating...</p>
+                
+                <p style="color: #aaa; font-size: 14px; margin-bottom: 20px; font-style: italic;">
+                    * The data below is not complete. The database is constantly updated during synchronization with the real world.
+                </p>
+
+                <h4 class="journal-h4">1. RPG and Action-RPG</h4>
+                <ul class="cv-list">
+                    <li>Baldur's Gate (II, 3)</li><li>Dark Souls</li><li>Dark Messiah of Might and Magic</li><li>Darksiders (I, II, III)</li><li>Diablo (I, II: LoD, III, IV)</li><li>Disciples II</li><li>Divine Divinity</li><li>Divinity: Original Sin (I, II)</li><li>Dragon Age (Origins,2, Inquisition)</li><li>Dragon's Dogma 2</li><li>Dungeon Siege (I, II)</li><li>Clair Obscur: Expedition 33</li><li>Cat Quest 1,2,3</li><li>ELEX (I, II)</li><li>Enclave</li><li>Fable (TLC, II)</li><li>Fallout (1, 2, 3, New Vegas, 4)</li><li>Gothic (1, 2: NotR, 3)</li><li>Guild Wars 2</li><li>Hades</li><li>Hellgate: London</li><li>Hogwarts Legacy</li><li>Immortals Fenyx Rising</li><li>Kingdom Come: Deliverance</li><li>Kingdoms of Amalur: Reckoning</li><li>Mass Effect (1, 2, 3)</li><li>Neverwinter (2013), Neverwinter Nights (1, 2)</li><li>NieR: Automata</li><li>Nox</li><li>Overlord (1,2)</li><li>Path of Exile</li><li>Pillars of Eternity (I, II: Deadfire)</li><li>Risen (1,2,3)</li><li>Sacred (1, 2)</li><li>Sekiro: Shadows Die Twice</li><li>Star Wars: KOTOR 1,2</li><li>The Elder Scrolls (Morrowind, Oblivion, Skyrim)</li><li>The Outer Worlds</li><li>The Witcher (1, 2, 3)</li><li>Titan Quest (+ Immortal Throne)</li><li>Torchlight (I, II)</li><li>Vampire: The Masquerade – Bloodlines</li><li>World of Warcraft</li>
+                </ul>
+
+                <h4 class="journal-h4">2. Action / Shooters</h4>
+                <ul class="cv-list">
+                    <li>Alan Wake (I, American Nightmare, II)</li><li>Assassin's Creed (I, II, III, Origins, Odyssey, Valhalla, Mirage)</li><li>Battlefield (1942, 1, 2)</li><li>BioShock (1, 2, Infinite)</li><li>BloodRayne (1,2)</li><li>Borderlands (1, 2)</li><li>Bulletstorm</li><li>Call of Duty (1..MW3)</li><li>Call of Duty: Warzone</li><li>Call of Juarez 1,2</li><li>Control</li><li>Counter-Strike 1.6</li><li>Crysis</li><li>Cyberpunk 2077</li><li>Dead Space 1,2,3</li><li>Death Stranding (1, 2)</li><li>Deus Ex</li><li>Dino Crisis (1, 2)</li><li>Dishonored (1, 2)</li><li>Doom (I, II, 3, Eternal)</li><li>Duke Nukem series</li><li>F.E.A.R. 1,2,3</li><li>Far Cry (1, 3, 4)</li><li>Gears of War (1, 2, 3)</li><li>Ghost of Tsushima</li><li>Ghost of Yōtei</li><li>God of War (2018, Ragnarök)</li><li>GoldenEye 007</li><li>GTA (Vice City, San Andreas, IV)</li><li>Half-Life (I, Opposing Force, 2)</li><li>Hellblade: Senua's Sacrifice</li><li>Hitman (Codename 47, 2, Blood Money)</li><li>Horizon (Zero Dawn, Forbidden West)</li><li>Just Cause 1,2</li><li>L.A. Noire</li><li>Legacy of Kain: Soul Reaver</li><li>Mafia (I,II)</li><li>Marvel's Spider-Man (1, Miles Morales, 2)</li><li>Marvel's Guardians of the Galaxy</li><li>Manhunt</li><li>Max Payne (1, 2, 3)</li><li>MechWarrior 2</li><li>Medal of Honor series</li><li>Metal Gear (NES, Solid)</li><li>Metal Slug</li><li>Metro (2033, Last Light)</li><li>Middle-earth: Shadow of Mordor</li><li>Mirror's Edge</li><li>Operation Flashpoint</li><li>Overwatch</li><li>Painkiller</li><li>Perfect Dark</li><li>Prey (2006, 2017)</li><li>Prince of Persia series</li><li>Quake (I, II, III, 4)</li><li>Rainbow Six: Vegas</li><li>Resident Evil (1, 2, 3, Village, 4 Remake)</li><li>Silent Hill (1, 2, 3, 4)</li><li>Sniper Elite (V2) / Sniper: Ghost Warrior</li><li>Spider-Man (2000)</li><li>Splinter Cell series</li><li>Star Wars: Battlefront II / Republic Commando / Dark Forces</li><li>Star Wars Jedi: Fallen Order</li><li>Syphon Filter (2, 3)</li><li>System Shock (I, II)</li><li>The Last of Us Part I, II</li><li>Thief (The Dark Project, II, Deadly Shadows)</li><li>Tomb Raider (1996, 2013)</li><li>Turok</li><li>Uncharted 4</li><li>Unreal / Unreal Tournament</li><li>Vigilante 8</li><li>Wolfenstein series</li><li>Will Rock</li>
+                </ul>
+
+                <h4 class="journal-h4">3. Strategy and Simulations</h4>
+                <ul class="cv-list">
+                    <li>Civilization (I, II, IV, V, VI)</li><li>Command & Conquer series</li><li>Company of Heroes</li><li>Cossacks: European Wars</li><li>Dune II</li><li>Heroes of Might and Magic (II, III)</li><li>Homeworld (1, 2)</li><li>Jurassic World: Evolution 1,2</li><li>Master of Orion</li><li>Microsoft Flight Simulator</li><li>SimCity (1990, 2000)</li><li>StarCraft (I, II)</li><li>The Sims</li><li>Warcraft ( II, III: Frozen Throne)</li><li>Warhammer 40,000: Dawn of War (I, II)</li>
+                </ul>
+
+                <h4 class="journal-h4">4. Arcade and Platformers</h4>
+                <ul class="cv-list">
+                    <li>Adventure Island II</li><li>Aladdin</li><li>Astro Bot</li><li>Battle City</li><li>Battletoads (& Double Dragon)</li><li>Chip 'n Dale (1, 2)</li><li>Concrete Genie</li><li>Crash Bandicoot (1, 2, 3, 4)</li><li>Cuphead</li><li>Darkwing Duck</li><li>Donkey Kong Country</li><li>Duck Hunt</li><li>DuckTales 2</li><li>Earthworm Jim 2</li><li>Felix the Cat</li><li>Hollow Knight (+ SilkSong waiting room)</li><li>Jungle Book</li><li>Kena: Bridge of Spirits</li><li>Kirby's Dream Land</li><li>Little Big Adventure</li><li>Ori (Blind Forest, Will of the Wisps)</li><li>Pokémon (Red/Blue, Violet)</li><li>Ratchet & Clank (PS4, Rift Apart)</li><li>Rayman (+ Raving Rabbids)</li><li>The Simpsons Hit & Run</li><li>Spyro the Dragon (1, 2, 3)</li><li>Super Mario Bros. (3, Wonder)</li><li>TMNT (1990, IV)</li><li>The Legend of Zelda: Breath of the Wild</li><li>Tiny Toon Adventures</li><li>Tunic</li>
+                </ul>
+
+                <h4 class="journal-h4">5. Sport, Races, Fightings</h4>
+                <ul class="cv-list">
+                    <li>2XKO</li><li>Burnout Paradise</li><li>Carmageddon</li><li>Colin McRae Rally 2.0</li><li>CTR</li><li>Destruction Derby</li><li>FlatOut (1, 2)</li><li>Forza Horizon 5</li><li>Hot Wheels Unleashed 1,2</li><li>Gran Turismo 7</li><li>Injustice</li><li>Killer Instinct</li><li>Mortal Kombat (I, II, 3, 9, X, 1)</li><li>Need for Speed (III, Underground 1,2, Most Wanted)</li><li>Onrush</li><li>Rocket League</li><li>Street Fighter II</li><li>Tekken (3,7)</li><li>Test Drive Unlimited</li><li>Tony Hawk's</li><li>TrackMania</li><li>Twisted Metal (3, 4)</li><li>Wave Race 64</li><li>Wipeout</li>
+                </ul>
+
+                <h4 class="journal-h4">6. Adventure, Horror, etc</h4>
+                <ul class="cv-list">
+                    <li>Animal Crossing: New Horizons</li><li>Beat Saber</li><li>Brothers: A Tale of Two Sons</li><li>Century: Age of Ashes</li><li>Firewatch</li><li>Harry Potter and the Philosopher's Stone</li><li>Inside</li><li>King's Bounty 1,2</li><li>Lemmings</li><li>Limbo</li><li>Machinarium</li><li>Myst</li><li>Orcs Must Die! 1,2,3</li><li>Plants vs. Zombies 1,2</li><li>RoboCop</li><li>Solitaire</li><li>Sims4</li><li>Spore</li><li>Stardew Valley</li><li>Star Fox</li><li>Stubbs the Zombie</li><li>Subnautica</li><li>Super Meat Boy</li><li>Super Smash Bros. Ultimate</li><li>Syberia 1,2</li><li>The Witness</li><li>This War of Mine</li><li>Trine 1,2,3,4</li><li>Unravel 1,2</li><li>Undertale</li><li>Until Dawn</li><li>World of Goo</li><li>Worms</li>
+                </ul>
+            </div>
+`,
+'artist_path': `
+            <div class="journal-entry-wrap">
+                <h3 class="journal-h3" style="color: #a3cbf5;">/// ARTIST PATH</h3>
+                <p class="journal-note" style="border-color: #a3cbf5; color: #a3cbf5;">[ ACCESS DENIED ] DATA ENCRYPTED / DECRYPTION KEY MISSING</p>
+                <p style="color: #ccc; font-size: 16px; line-height: 1.6;">
+                    This section contains a personal story, notes on skill development, and reasons for choosing the ‘3D Character Artist’ class..
+                    <br><br>
+                    <span style="color: #888;">Currently, the data is encrypted and unavailable for public reading. The process of defragmenting memories is ongoing... Perhaps decryption will occur in future system patches.</span>
+                </p>
+            </div>
+        `
+    };
+
+const journalScreen = document.getElementById('journal-screen');
+    const journalSlots = document.querySelectorAll('.journal-slot');
+    const journalContent = document.getElementById('journal-content');
+    const btnJournalBack = document.getElementById('btn-journal-back');
+
+    journalSlots.forEach(slot => {
+        
+        // 1. ЛОГІКА ДЛЯ КОМП'ЮТЕРА (ПЕРЕМИКАННЯ ПРИ НАВЕДЕННІ)
+        slot.addEventListener('mouseenter', () => {
+            if (window.innerWidth > 1000) {
+                if (slot.classList.contains('selected')) return;
+                
+                journalSlots.forEach(s => s.classList.remove('selected'));
+                slot.classList.add('selected');
+                safePlay('snd-hover');
+                
+                if (journalContent) {
+                    journalContent.innerHTML = journalData[slot.dataset.id] || '<div class="vp-placeholder">NO DATA</div>';
+                    journalContent.scrollTop = 0;
+                }
+            }
+        });
+
+        // 2. ЛОГІКА ДЛЯ ТЕЛЕФОНУ (ВІДКРИТТЯ ПРИ КЛІКУ)
+        slot.addEventListener('click', () => {
+            // На комп'ютері клік ігноруємо, бо все вже зробив ховер
+            if (window.innerWidth > 1000) return; 
+
+            journalSlots.forEach(s => s.classList.remove('selected'));
+            slot.classList.add('selected');
+            safePlay('snd-select');
+            
+            if (journalContent) {
+                journalContent.innerHTML = journalData[slot.dataset.id] || '<div class="vp-placeholder">NO DATA</div>';
+                journalContent.scrollTop = 0;
+            }
+
+            // Мобільна логіка: Ховаємо ліве меню, показуємо текст
+            if(window.innerWidth <= 1000 && journalScreen) {
+                history.pushState({ screen: 'mobile-journal-view' }, '', '');
+                const jSidebar = journalScreen.querySelector('.gallery-sidebar');
+                const jViewport = journalScreen.querySelector('.gallery-viewport');
+                
+                if(jSidebar) jSidebar.style.display = 'none';
+                if(jViewport) {
+                    jViewport.style.display = 'flex';
+                    jViewport.classList.add('active-screen');
+                }
+            }
+        });
+    });
+
+// Автоматично завантажуємо ARTIST PATH при відкритті сторінки
+    if(journalContent && journalData['artist_path']) {
+        journalContent.innerHTML = journalData['artist_path'];
+    }
+
+    // Кнопка НАЗАД для мобільної версії Журналу
+    if(btnJournalBack) {
+        btnJournalBack.addEventListener('click', () => {
+            const jSidebar = journalScreen.querySelector('.gallery-sidebar');
+            const jViewport = journalScreen.querySelector('.gallery-viewport');
+            if(jViewport) { jViewport.classList.remove('active-screen'); jViewport.style.display = 'none'; }
+            if(jSidebar) jSidebar.style.display = 'flex';
+            safePlay('snd-select');
+        });
+    }
+
+
     function loadImages(id) {
         checkExplorer(id);
         if(!vpContent) return;
@@ -474,6 +649,10 @@ mediaEl.dataset.altSrc = altSrc;
         }
     }
 
+
+
+
+
     // === INTERACTION (HOVER INTENT / DEBOUNCE 3D) ===
 
     // Фікс: після повернення у вкладку скидаємо is-tilted якщо залишився
@@ -490,6 +669,7 @@ mediaEl.dataset.altSrc = altSrc;
         let hoverTimer = null; // Індивідуальний таймер для кожної картки
 
         slot.addEventListener('click', () => {
+if (slot.classList.contains('journal-slot')) return; // <--- ДОДАЙ ЦЕЙ РЯДОК
             if(window.innerWidth > 1000 && slot.classList.contains('selected')) return; 
             projectSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
@@ -547,6 +727,7 @@ slot.classList.remove('is-tilted');
         });
 
         slot.addEventListener('mouseenter', () => {
+if (slot.classList.contains('journal-slot')) return; // <--- І ДОДАЙ СЮДИ ТАКОЖ
             if(window.innerWidth > 1000) {
                 if(slot.classList.contains('selected')) return; 
                 projectSlots.forEach(s => s.classList.remove('selected'));
