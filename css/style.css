@@ -49,7 +49,7 @@ body {
     position: absolute; top: -5%; left: -5%; width: 110%; height: 110%; 
     background-image: url('../assets/bg.jpg'); background-size: cover; background-position: center;
     z-index: 1; 
-    filter: brightness(0.75) drop-shadow(4px 0px 0px rgba(255,0,0,0.3)) drop-shadow(-4px 0px 0px rgba(0,255,255,0.3)); 
+    filter: brightness(0.7) drop-shadow(4px 0px 0px rgba(255,0,0,0.3)) drop-shadow(-4px 0px 0px rgba(0,255,255,0.3)); 
     transition: transform 0.1s ease-out; 
 }
 
@@ -57,7 +57,7 @@ body {
     position: absolute; inset: 0;
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
     background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 2;
-opacity: 0.85;
+opacity: 0.9;
 }
 
 /* DUST EFFECT */
@@ -79,12 +79,12 @@ opacity: 0.85;
 }
 
 .ui-layer {
-    position: absolute; inset: 0; padding: 60px; padding-top: 80px;
+    position: absolute; inset: 0; padding: 60px; padding-top: 60px;
     display: flex; flex-direction: column; justify-content: flex-start; z-index: 100; pointer-events: none;
 }
 
 .screen {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 60px; padding-top: 80px;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 60px; padding-top: 60px;
     display: flex; flex-direction: column; transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     opacity: 0; pointer-events: none; visibility: hidden;
 }

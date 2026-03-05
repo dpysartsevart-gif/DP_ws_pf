@@ -223,7 +223,7 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
         if (isMuted) return; 
         const audio = document.getElementById(id);
         if(audio) { 
-            audio.volume = 0.15; 
+            audio.volume = 0.04; 
             audio.currentTime = 0; 
             audio.play().catch(() => {}); 
         }
@@ -270,12 +270,12 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
             if (loadPct > 35 && loadPct < 75 && jText) jText.innerText = messages[1];
             if (loadPct >= 75 && jText) jText.innerText = messages[2];
 
-            if(loadPct === 100) {
+if(loadPct === 100) {
                 clearInterval(interval);
                 setTimeout(() => {
                     jPreloader.classList.add('hidden'); 
                     jPreloader.style.display = 'none';
-                    safePlay('snd-gamestart'); 
+                    // Звук прибрано
                     callback();
                 }, 400);
             }
@@ -1113,7 +1113,7 @@ function processCommand(cmd) {
                 audioToggle.innerText = "[ AUDIO : OFF ]";
                 audioToggle.classList.add('muted');
             } else {
-                audioToggle.innerText = "[ AUDIO : ON ]";
+                audioToggle.innerText = "[ AUDIO : ON  ]";
                 audioToggle.classList.remove('muted');
                 safePlay('snd-select'); 
             }
