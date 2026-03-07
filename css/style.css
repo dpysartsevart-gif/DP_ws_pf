@@ -1278,10 +1278,13 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     /* Мобільний першоджерельний блок */
     .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
     h1.glitch { font-size: 52px !important; letter-spacing: 1px; margin-bottom: 5px; }
-.role-subtitle { 
-        font-size: 10px !important; /* Зменшуємо шрифт */
-        margin-bottom: 30px !important; 
-        white-space: nowrap !important; /* Змушуємо текст бути в один рядок */
+/* 1. Лагодимо підзаголовок (дозволяємо перенос, вбиваємо горизонтальний скрол) */
+    .role-subtitle { 
+        font-size: 11px !important; 
+        margin-bottom: 25px !important; 
+        white-space: normal !important; /* Текст зможе акуратно перенестися, якщо не влазить */
+        line-height: 1.4 !important;
+        padding-right: 15px !important;
     }
     .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
     .dlc-wrapper { position: fixed !important; bottom: 50px !important; left: 50% !important; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0; top: auto; }
@@ -1289,26 +1292,31 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 
 
 /* Повертаємо великий розмір кнопкам Головного меню */
-/* РОЗУМНЕ ГОЛОВНЕ МЕНЮ */
+/* 2. Лагодимо меню (ущільнюємо відступи, щоб не було вертикального скролу) */
     .menu-list { 
-        margin-top: 15px !important; 
+        margin-top: 5px !important; 
         width: 100%; 
-        padding-left: 10px; 
-        
+        padding-left: 5px !important; 
+    }       
         /* МАГІЯ ТУТ: Захист від налізання на текст знизу */
         overflow-y: auto !important; 
         max-height: 48vh !important; /* Меню ніколи не займе більше половини екрану */
         padding-bottom: 20px !important;
     }
     
-    .menu-item { 
-        /* Функція min() обере 32px для довгих екранів, але трохи зменшить шрифт для коротких */
-        font-size: min(32px, 5vh) !important; 
-        padding: min(15px, 2vh) 0 !important; 
+.menu-item { 
+        font-size: 32px !important; /* Великий, солідний розмір шрифту */
+        padding: 10px 0 !important; /* Оптимальні відступи (не занадто гігантські) */
         border-bottom: 1px solid rgba(255,255,255,0.1); 
         width: 100%; 
         line-height: 1 !important;
     }
+
+/* 3. АБСОЛЮТНИЙ ЗАПОБІЖНИК: Забороняємо Головному меню мати скролбари */
+    #main-menu {
+        overflow: hidden !important;
+    }
+
     .header-spacer, .back-hint { display: none; }
 .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 25px; padding-left: 5px; border-bottom: none !important; }
     .project-slot { padding: 15px; }
