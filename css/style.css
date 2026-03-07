@@ -1278,13 +1278,13 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     /* Мобільний першоджерельний блок */
     .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
     h1.glitch { font-size: 52px !important; letter-spacing: 1px; margin-bottom: 5px; }
-/* 1. Лагодимо підзаголовок (дозволяємо перенос, вбиваємо горизонтальний скрол) */
+
+/* Лагодимо підзаголовок (в 1 рядок, адаптивний шрифт, без скролу) */
     .role-subtitle { 
-        font-size: 11px !important; 
+        font-size: clamp(9px, 2.8vw, 12px) !important; /* Магія: шрифт сам стиснеться на вузьких телефонах */
         margin-bottom: 25px !important; 
-        white-space: normal !important; /* Текст зможе акуратно перенестися, якщо не влазить */
-        line-height: 1.4 !important;
-        padding-right: 15px !important;
+        white-space: nowrap !important; /* Жорстко в 1 рядок */
+        padding-right: 0 !important;
     }
     .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
     .dlc-wrapper { position: fixed !important; bottom: 50px !important; left: 50% !important; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0; top: auto; }
@@ -1429,7 +1429,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 .journal-content-area {
     display: block !important; /* Вимикаємо flex, щоб текст йшов суцільним потоком */
     scroll-snap-type: none !important; /* Вимикаємо прилипання */
-    padding: 30px 40px !important;
+padding: 10px 0px 80px 0px !important;
     text-align: left;
 }
 
