@@ -1440,13 +1440,16 @@ padding: 10px 0px 80px 0px !important;
 .journal-h3 { color: var(--primary-color); font-size: 24px; margin-bottom: 10px; text-transform: uppercase; }
 .journal-note { color: #888; font-size: 14px; font-family: 'Share Tech Mono', monospace; margin-bottom: 30px; border-left: 2px solid var(--primary-color); padding-left: 10px;}
 .journal-h4 { color: #fff; font-size: 18px; margin-top: 30px; margin-bottom: 15px; border-bottom: 1px dashed #444; padding-bottom: 5px; }
-/* Розширюємо текст Журналу на телефоні (вбиваємо десктопні відступи) */
+/* Розширюємо текст Журналу на телефоні */
     .journal-content-area {
         padding: 10px 0px 80px 0px !important;
     }
 
-} /* <--- ОСЬ ЦЯ ДУЖКА НАЙГОЛОВНІША! ВОНА ЗАКРИВАЄ ВЕСЬ БЛОК @MEDIA. ПЕРЕКОНАЙСЯ, ЩО ВОНА ТАМ Є! */
+} /* <--- ОСЬ ЦЯ ДУЖКА РЯТУЄ ДЕСКТОП! ВОНА ЗАКРИВАЄ @MEDIA */
 
-/* === (А далі вже йдуть інші стилі, наприклад, те скло, що ми робили раніше) === */
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* === АНІМАЦІЇ (ВОНИ МАЮТЬ БУТИ ЗОВНІ) === */
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
