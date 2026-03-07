@@ -1297,7 +1297,6 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
         margin-top: 5px !important; 
         width: 100%; 
         padding-left: 5px !important; 
-    }       
         /* МАГІЯ ТУТ: Захист від налізання на текст знизу */
         overflow-y: auto !important; 
         max-height: 48vh !important; /* Меню ніколи не займе більше половини екрану */
