@@ -1426,9 +1426,9 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 
 /* === JOURNAL TEXT OVERRIDES === */
 .journal-content-area {
-    display: block !important; /* Вимикаємо flex, щоб текст йшов суцільним потоком */
-    scroll-snap-type: none !important; /* Вимикаємо прилипання */
-padding: 10px 0px 80px 0px !important;
+    display: block !important; 
+    scroll-snap-type: none !important; 
+    padding: 10px 0px 80px 0px !important;
     text-align: left;
 }
 
@@ -1439,13 +1439,6 @@ padding: 10px 0px 80px 0px !important;
 .journal-h3 { color: var(--primary-color); font-size: 24px; margin-bottom: 10px; text-transform: uppercase; }
 .journal-note { color: #888; font-size: 14px; font-family: 'Share Tech Mono', monospace; margin-bottom: 30px; border-left: 2px solid var(--primary-color); padding-left: 10px;}
 .journal-h4 { color: #fff; font-size: 18px; margin-top: 30px; margin-bottom: 15px; border-bottom: 1px dashed #444; padding-bottom: 5px; }
-/* Розширюємо текст Журналу на телефоні */
-    .journal-content-area {
-        padding: 10px 0px 80px 0px !important;
-    }
-
-} /* <--- ОСЬ ЦЯ ДУЖКА РЯТУЄ ДЕСКТОП! ВОНА ЗАКРИВАЄ @MEDIA */
-
 
 /* === АНІМАЦІЇ (ВОНИ МАЮТЬ БУТИ ЗОВНІ) === */
 @keyframes fadeIn { 
