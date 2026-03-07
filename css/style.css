@@ -1059,14 +1059,12 @@ body::before {
         font-family: 'Share Tech Mono', monospace; 
         font-size: 11px;
         text-align: center;
-        /* Робимо його гнучким: він природно впаде вниз, але не дасть меню на себе налізти */
-        margin-top: auto !important; 
-        margin-bottom: 80px !important; /* Відступ, щоб не перекрити кнопку DLC */
         letter-spacing: 1px;
         opacity: 0.6;
         width: 100%;
-        position: relative !important; /* Знімаємо жорстку фіксацію */
-        bottom: auto !important;
+        position: fixed !important; /* Повертаємо фіксацію, щоб меню не стискалося */
+        bottom: 110px !important; /* Висить рівно над кнопкою DLC */
+        left: 0;
         z-index: 100;
     }
     /* ============================================ */
@@ -1172,7 +1170,14 @@ body::before {
     .ui-layer { padding: 0 !important; width: 100vw; height: 100dvh; display: flex; flex-direction: column; z-index: 10; }
     .gallery-layout { padding: 0 !important; flex-direction: column !important; }
     .gallery-sidebar { width: 100% !important; height: 100% !important; padding: 0 !important; display: flex !important; flex-direction: column !important; }
-    .projects-scroll-area { flex-grow: 1 !important; height: auto !important; overflow-y: auto !important; padding-bottom: 60px !important; padding-right: 5px !important; }
+.projects-scroll-area { 
+        flex-grow: 1 !important; 
+        height: auto !important; 
+        overflow-y: auto !important; 
+        overflow-x: hidden !important; /* ОСЬ ВІН! Вбиває фальшиву жовту лінію знизу */
+        padding-bottom: 60px !important; 
+        padding-right: 5px !important; 
+    }
 
     .gallery-viewport {
         position: fixed !important; top: 0; left: 0; width: 100% !important; height: 100% !important;
@@ -1273,7 +1278,11 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     /* Мобільний першоджерельний блок */
     .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
     h1.glitch { font-size: 52px !important; letter-spacing: 1px; margin-bottom: 5px; }
-    .role-subtitle { font-size: 14px !important; margin-bottom: 25px !important; }
+.role-subtitle { 
+        font-size: 10px !important; /* Зменшуємо шрифт */
+        margin-bottom: 30px !important; 
+        white-space: nowrap !important; /* Змушуємо текст бути в один рядок */
+    }
     .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
     .dlc-wrapper { position: fixed !important; bottom: 50px !important; left: 50% !important; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0; top: auto; }
     .copyright-fixed { bottom: 15px !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; text-align: center !important; width: 100% !important; color: #666 !important; display: block !important; }
