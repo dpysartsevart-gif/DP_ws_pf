@@ -2,29 +2,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === HISTORY API ===
     history.replaceState({ screen: 'main-menu' }, '', '');
-    window.addEventListener('popstate', (event) => {
-// ДОДАНО: Закриваємо картинку при свайпі назад на телефоні
+window.addEventListener('popstate', (event) => {
         const lightboxOverlay = document.getElementById('lightbox-overlay');
         if (lightboxOverlay && lightboxOverlay.classList.contains('active')) {
             lightboxOverlay.classList.remove('active');
             setTimeout(() => { if(document.getElementById('lightbox-img')) document.getElementById('lightbox-img').src = ''; }, 300);
-            return; // Зупиняємо код, щоб галерея не закрилася
+            return; 
         }
-        if (window.innerWidth <= 1000 && document.querySelector('.gallery-viewport').classList.contains('active-screen')) {
-            const viewport = document.querySelector('.gallery-viewport');
-            const sidebar = document.querySelector('.gallery-sidebar');
-            const vpContent = document.getElementById('viewport-content');
+
+        // Універсальне закриття мобільного модуля (Галерея або Журнал)
+        const activeViewport = document.querySelector('.gallery-viewport.active-screen');
+        if (window.innerWidth <= 1000 && activeViewport) {
+            const parentScreen = activeViewport.closest('.screen');
+            const currentSidebar = parentScreen.querySelector('.gallery-sidebar');
             
-            viewport.classList.remove('active-screen');
-            viewport.style.display = 'none';
-            sidebar.style.display = 'flex';
+            activeViewport.classList.remove('active-screen');
+            activeViewport.style.display = 'none';
+            if (currentSidebar) currentSidebar.style.display = 'flex';
             
-            if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
             document.querySelectorAll('.project-slot').forEach(s => s.classList.remove('selected'));
             return;
         }
 
-        if (event.state && event.state.screen && event.state.screen !== 'mobile-project-view') {
+        if (event.state && event.state.screen && event.state.screen !== 'mobile-project-view' && event.state.screen !== 'mobile-journal-view') {
             showScreen(event.state.screen); 
         } else {
             showScreen('main-menu');
@@ -353,31 +353,33 @@ if(loadPct === 100) {
         
         inSubMenu = (screenId !== 'main-menu');
         
-        if (screenId !== 'gallery-screen') {
-            if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
-            projectSlots.forEach(s => s.classList.remove('selected'));
-        }
-        
-        if(screenId === 'gallery-screen' && window.innerWidth <= 1000) {
-            if(sidebar) sidebar.style.display = 'flex';
-            if(viewport) {
-                viewport.style.display = 'none';
-                viewport.classList.remove('active-screen');
+if((screenId === 'gallery-screen' || screenId === 'journal-screen') && window.innerWidth <= 1000) {
+            const currentSidebar = document.querySelector(`#${screenId} .gallery-sidebar`);
+            const currentViewport = document.querySelector(`#${screenId} .gallery-viewport`);
+            if(currentSidebar) currentSidebar.style.display = 'flex';
+            if(currentViewport) {
+                currentViewport.style.display = 'none';
+                currentViewport.classList.remove('active-screen');
             }
         }
     }
 
-    function goBack() {
+function goBack() {
         if(emailPopup && emailPopup.style.display === 'flex') { closeEmailPopup(); return; }
         if(journalPopup && journalPopup.style.display === 'flex') { journalPopup.style.display = 'none'; return; }
         
-        if(window.innerWidth <= 1000 && viewport && viewport.classList.contains('active-screen')) {
-             viewport.classList.remove('active-screen');
-             viewport.style.display = 'none';
-             sidebar.style.display = 'flex';
+        // Універсальне закриття відкритого модуля (і Галереї, і Журналу)
+        const activeViewport = document.querySelector('.gallery-viewport.active-screen');
+        if(window.innerWidth <= 1000 && activeViewport) {
+             const parentScreen = activeViewport.closest('.screen');
+             const currentSidebar = parentScreen.querySelector('.gallery-sidebar');
+             
+             activeViewport.classList.remove('active-screen');
+             activeViewport.style.display = 'none';
+             if (currentSidebar) currentSidebar.style.display = 'flex';
+             
              safePlay('snd-select');
-             if(vpContent) vpContent.innerHTML = '<div class="vp-placeholder">SELECT A PROJECT FILE...</div>';
-             projectSlots.forEach(s => s.classList.remove('selected'));
+             document.querySelectorAll('.project-slot').forEach(s => s.classList.remove('selected'));
              return;
         }
 
@@ -543,9 +545,10 @@ const journalScreen = document.getElementById('journal-screen');
         journalContent.innerHTML = journalData['artist_path'];
     }
 
-    // Кнопка НАЗАД для мобільної версії Журналу
+// Кнопка НАЗАД для мобільної версії Журналу
     if(btnJournalBack) {
         btnJournalBack.addEventListener('click', () => {
+            history.back(); // <--- ДОДАЙ ЦЕЙ РЯДОК
             const jSidebar = journalScreen.querySelector('.gallery-sidebar');
             const jViewport = journalScreen.querySelector('.gallery-viewport');
             if(jViewport) { jViewport.classList.remove('active-screen'); jViewport.style.display = 'none'; }
