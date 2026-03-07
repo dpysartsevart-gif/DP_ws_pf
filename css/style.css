@@ -1286,7 +1286,19 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
     .dlc-wrapper { position: fixed !important; bottom: 50px !important; left: 50% !important; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0; top: auto; }
     .copyright-fixed { bottom: 15px !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; text-align: center !important; width: 100% !important; color: #666 !important; display: block !important; }
-    .menu-list { margin-top: 5px; width: 100%; padding-left: 10px; }
+/* Повертаємо великий розмір кнопкам Головного меню */
+    .menu-list { 
+        margin-top: 20px !important; /* Відштовхуємо меню трохи вниз від підзаголовка */
+        width: 100%; 
+        padding-left: 10px; 
+    }
+.menu-item { 
+        font-size: 34px !important; /* Робимо текст великим (раніше було 30px, але 34px виглядає ще солідніше на телефоні) */
+        padding: 15px 0 !important; /* Додаємо більше простору між кнопками */
+        border-bottom: 1px solid rgba(255,255,255,0.1); 
+        width: 100%; 
+        line-height: 1 !important;
+    }
     .header-spacer, .back-hint { display: none; }
 .sidebar-header-container { height: auto; margin-bottom: 10px; padding-top: 25px; padding-left: 5px; border-bottom: none !important; }
     .project-slot { padding: 15px; }
