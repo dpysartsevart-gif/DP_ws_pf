@@ -1080,6 +1080,7 @@ body::before {
         width: 100% !important; height: 100% !important;
         padding: 15px !important; padding-top: 25px !important;
         box-sizing: border-box;
+overflow: hidden;
         /* ФІКС: Робимо фон на мобільних набагато темнішим, щоб текст легко читався */
         background: rgba(12, 12, 12, 0.4) !important; 
         backdrop-filter: blur(10px) !important;
