@@ -1294,19 +1294,17 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 
 /* Повертаємо великий розмір кнопкам Головного меню */
 /* 2. Лагодимо меню (ущільнюємо відступи, щоб не було вертикального скролу) */
-    .menu-list { 
+.menu-list { 
         margin-top: 5px !important; 
         width: 100%; 
-        padding-left: 5px !important; 
-        /* МАГІЯ ТУТ: Захист від налізання на текст знизу */
-        overflow-y: auto !important; 
-        max-height: 48vh !important; /* Меню ніколи не займе більше половини екрану */
-        padding-bottom: 20px !important;
+        padding-left: 5px !important;
+        overflow: hidden !important;
+        padding-bottom: 10px !important;
     }
     
-.menu-item { 
-        font-size: 32px !important; /* Великий, солідний розмір шрифту */
-        padding: 10px 0 !important; /* Оптимальні відступи (не занадто гігантські) */
+    .menu-item { 
+        font-size: 30px !important;
+        padding: 8px 0 !important;
         border-bottom: 1px solid rgba(255,255,255,0.1); 
         width: 100%; 
         line-height: 1 !important;
