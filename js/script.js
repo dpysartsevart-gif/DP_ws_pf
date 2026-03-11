@@ -125,37 +125,28 @@ window.addEventListener('popstate', (event) => {
             }
         }, 30);
     }
-// === VISITOR COUNTER ===
-    const visitorEl = document.getElementById('sys-visitors');
-    if (visitorEl) {
-        fetch('https://hits.sh/dpysartsev.art')
-            .then(r => r.json())
-            .then(data => {
-                if (data && data.count) {
-                    // Форматуємо цифру
-                    visitorEl.innerText = String(data.count + 4713).padStart(4, '0');
-                    // Запускаємо кібер-декодування на 1.5 секунди
-                    scrambleText(visitorEl, 1500); 
-                }
-            })
-            .catch(() => { visitorEl.innerText = 'ERR (LAST:4713)'; });
-    }
-// === СИСТЕМА: РЕАЛЬНИЙ ЛІЧИЛЬНИК ВІДВІДУВАНЬ ===
+// === СИСТЕМА: ЄДИНИЙ РЕАЛЬНИЙ ЛІЧИЛЬНИК (COUNTERAPI + SCRAMBLE) ===
     const visitorsEl = document.getElementById('sys-visitors');
     if (visitorsEl) {
-        // Використовуємо безкоштовне API для підрахунку глобальних візитів
+        // Використовуємо CounterAPI, який у тебе працював
         fetch('https://api.counterapi.dev/v1/dpysartsev-portfolio/visits/up')
             .then(response => response.json())
             .then(data => {
-                // Стилізуємо цифру: додаємо нулі спереду для кібер-естетики (напр. 4713)
-                visitorsEl.textContent = data.count.toString().padStart(4, '4713');
+                // Додаємо базове число 4713 до реальних візитів для солідності
+                const totalVisits = data.count + 4713;
+                visitorsEl.textContent = totalVisits.toString().padStart(4, '0');
+                
+                // Запускаємо ефект Scramble (декодування)
+                if (typeof scrambleText === "function") {
+                    scrambleText(visitorsEl, 1500);
+                }
             })
             .catch(error => {
-                // Fallback на випадок, якщо API недоступне (зберігаємо атмосферу)
-                console.warn('SYS_WARN: N/A (LAST_DATA:4713)');
-                visitorsEl.textContent = 'ERR';
+                console.warn('SYS_WARN: Telemetry offline.');
+                visitorsEl.textContent = '4713'; // Fallback цифра
             });
     }
+
 
 
     if(closeBanner) {
