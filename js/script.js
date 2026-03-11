@@ -126,6 +126,20 @@ window.addEventListener('popstate', (event) => {
         }, 30);
     }
 // === VISITOR COUNTER ===
+    const visitorEl = document.getElementById('sys-visitors');
+    if (visitorEl) {
+        fetch('https://hits.sh/dpysartsev.art')
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.count) {
+                    // Форматуємо цифру
+                    visitorEl.innerText = String(data.count + 4713).padStart(4, '0');
+                    // Запускаємо кібер-декодування на 1.5 секунди
+                    scrambleText(visitorEl, 1500); 
+                }
+            })
+            .catch(() => { visitorEl.innerText = 'ERR (LAST:4713)'; });
+    }
 // === СИСТЕМА: РЕАЛЬНИЙ ЛІЧИЛЬНИК ВІДВІДУВАНЬ ===
     const visitorsEl = document.getElementById('sys-visitors');
     if (visitorsEl) {
