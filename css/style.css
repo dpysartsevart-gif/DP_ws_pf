@@ -1347,7 +1347,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     }
 
     .settings-container > *:last-child, .text-content.scrollable > *:last-child {
-        padding-bottom: 40px !important; 
+        padding-bottom: 20px !important; 
     }
 
     /* Вбиваємо старий ::after, який малював чорну смугу */
@@ -1453,7 +1453,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 #options-screen .text-content {
     /* Зменшуємо верхній та нижній відступи для вікна інформації */
     padding-top: 15px !important; 
-    padding-bottom: 20px !important;
+    padding-bottom: 15px !important;
 }
 /* === OPTIONS SCREEN PADDING FIX === */
 #options-screen .settings-container {
@@ -1468,6 +1468,6 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     #options-screen .journal-content-area,
     .options-wrapper .journal-content-area {
         padding-top: 10px !important;
-        padding-bottom: 15px !important;
+        padding-bottom: 10px !important;
     }
 }
