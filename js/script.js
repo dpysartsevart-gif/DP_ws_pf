@@ -126,17 +126,23 @@ window.addEventListener('popstate', (event) => {
         }, 30);
     }
 // === VISITOR COUNTER ===
-const visitorEl = document.getElementById('sys-visitors');
-if (visitorEl) {
-fetch('https://hits.sh/dpysartsev.art')
-        .then(r => r.json())
-        .then(data => {
-            if (data && data.count) {
-                visitorEl.innerText = String(data.count + 4713).padStart(4, '0');
-            }
-        })
-.catch(() => { visitorEl.innerText = 'N/A (LAST_DATA:4713)'; });
-}
+// === СИСТЕМА: РЕАЛЬНИЙ ЛІЧИЛЬНИК ВІДВІДУВАНЬ ===
+    const visitorsEl = document.getElementById('sys-visitors');
+    if (visitorsEl) {
+        // Використовуємо безкоштовне API для підрахунку глобальних візитів
+        fetch('https://api.counterapi.dev/v1/dpysartsev-portfolio/visits/up')
+            .then(response => response.json())
+            .then(data => {
+                // Стилізуємо цифру: додаємо нулі спереду для кібер-естетики (напр. 4713)
+                visitorsEl.textContent = data.count.toString().padStart(4, '4713');
+            })
+            .catch(error => {
+                // Fallback на випадок, якщо API недоступне (зберігаємо атмосферу)
+                console.warn('SYS_WARN: N/A (LAST_DATA:4713)');
+                visitorsEl.textContent = 'ERR';
+            });
+    }
+
 
     if(closeBanner) {
         closeBanner.addEventListener('click', () => { 

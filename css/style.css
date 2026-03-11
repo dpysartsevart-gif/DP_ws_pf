@@ -1447,3 +1447,20 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     from { opacity: 0; transform: translateY(10px); } 
     to { opacity: 1; transform: translateY(0); } 
 }
+/* === OPTIONS SCREEN OVERRIDES (UI PATCH) === */
+#options-screen .journal-content-area,
+.options-wrapper .journal-content-area,
+#options-screen .text-content {
+    /* Зменшуємо верхній та нижній відступи для вікна інформації */
+    padding-top: 15px !important; 
+    padding-bottom: 20px !important;
+}
+
+/* Якщо на мобільному треба ще щільніше: */
+@media (max-width: 1000px) {
+    #options-screen .journal-content-area,
+    .options-wrapper .journal-content-area {
+        padding-top: 10px !important;
+        padding-bottom: 15px !important;
+    }
+}
