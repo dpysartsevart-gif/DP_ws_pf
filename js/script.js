@@ -1127,7 +1127,7 @@ function processCommand(cmd) {
                 audioToggle.innerText = "[ AUDIO : OFF ]";
                 audioToggle.classList.add('muted');
             } else {
-                audioToggle.innerText = "[ AUDIO : ON  ]";
+                audioToggle.innerText = "[ AUDIO : OnN  ]";
                 audioToggle.classList.remove('muted');
                 safePlay('snd-select'); 
             }
