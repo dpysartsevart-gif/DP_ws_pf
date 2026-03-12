@@ -833,6 +833,7 @@ body::after {
     transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, border-radius 0.2s;
 }
 
+
 /* === OPTIONS LAYOUT & ACHIEVEMENTS PANEL === */
 .options-layout { 
     display: flex; 
@@ -1427,13 +1428,15 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     will-change: transform, backdrop-filter;
 }
 
-/* === 1. ГЛОБАЛЬНЕ ЗАТЕМНЕННЯ ФОНУ (100% ОДНАКОВЕ ДЛЯ ВСІХ ЕКРАНІВ ТА ПОПАПІВ) === */
+/* === 1. ГЛОБАЛЬНЕ ЗАТЕМНЕННЯ ФОНУ і БЛЮР (100% ОДНАКОВЕ ДЛЯ ВСІХ ЕКРАНІВ ТА ПОПАПІВ) === */         
+#gallery-screen,     
+#journal-screen,
 #shop-screen, 
 #options-screen, 
 #credits-screen,
-#dlc-screen,
+#dlc-screen,        
 .popup-overlay {
-    background: rgba(0, 0, 0, 0.15) !important; 
+    background: rgba(0, 0, 0, 0.05) !important; 
     backdrop-filter: blur(2px) !important; 
     -webkit-backdrop-filter: blur(2px) !important;
 }
@@ -1519,3 +1522,5 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
         padding-bottom: 10px !important;
     }
 }
+
+

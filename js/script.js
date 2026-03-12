@@ -174,6 +174,9 @@ window.addEventListener('popstate', (event) => {
             }
         }, 30);
     }
+
+
+
 // === СИСТЕМА: ЄДИНИЙ РЕАЛЬНИЙ ЛІЧИЛЬНИК (COUNTERAPI + SCRAMBLE) ===
     const visitorsEl = document.getElementById('sys-visitors');
     if (visitorsEl) {
@@ -268,34 +271,37 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
         });
 
 function animateCursor() {
-            dotX += (mouseX - dotX) * 0.5; 
-            dotY += (mouseY - dotY) * 0.5;
-const prevCircleX = circleX;
-const prevCircleY = circleY;
-circleX += (mouseX - circleX) * 0.16;
-circleY += (mouseY - circleY) * 0.16;
+    // Dot — жорстко до миші, нуль затримки
+    dotX = mouseX;
+    dotY = mouseY;
 
-const vx = circleX - prevCircleX;
-const vy = circleY - prevCircleY;
-const speed = Math.sqrt(vx * vx + vy * vy);
+    // Circle — інерція (0.3 — швидко і чутливо)
+    const prevCircleX = circleX;
+    const prevCircleY = circleY;
+    circleX += (mouseX - circleX) * 0.3;
+    circleY += (mouseY - circleY) * 0.3;
 
-if (circle) {
-    const caStrength = Math.min(speed * 0.6, 5);
-    circle.style.setProperty('--ca-x', `${(vx / (speed || 1)) * caStrength}px`);
-    circle.style.setProperty('--ca-y', `${(vy / (speed || 1)) * caStrength}px`);
-    if (speed > 0.3) {
-        circle.classList.add('moving');
-    } else {
-        circle.classList.remove('moving');
-    }
-}
-            
-            // Апаратне прискорення через translate3d
-            if(dot) { dot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) translate(-50%, -50%)`; }
-            if(circle) { circle.style.transform = `translate3d(${circleX}px, ${circleY}px, 0) translate(-50%, -50%)`; }
-            
-            requestAnimationFrame(animateCursor);
+    // Аберація — рахується по швидкості circle
+    const vx = circleX - prevCircleX;
+    const vy = circleY - prevCircleY;
+    const speed = Math.sqrt(vx * vx + vy * vy);
+
+    if (circle) {
+        const caStrength = Math.min(speed * 0.6, 5);
+        circle.style.setProperty('--ca-x', `${(vx / (speed || 1)) * caStrength}px`);
+        circle.style.setProperty('--ca-y', `${(vy / (speed || 1)) * caStrength}px`);
+        if (speed > 0.3) {
+            circle.classList.add('moving');
+        } else {
+            circle.classList.remove('moving');
         }
+    }
+
+    if(dot) dot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) translate(-50%, -50%)`;
+    if(circle) circle.style.transform = `translate3d(${circleX}px, ${circleY}px, 0) translate(-50%, -50%)`;
+
+    requestAnimationFrame(animateCursor);
+}
         animateCursor();
     }
 
@@ -409,7 +415,11 @@ if(loadPct === 100) {
             target.style.display = 'flex'; 
             setTimeout(() => {
                 target.classList.add('active-screen');
-                
+
+
+
+
+              
                 if (screenId === 'gallery-screen') {
                     if (Math.random() < 0.33) {
                         document.body.classList.add('glitch-transition');
