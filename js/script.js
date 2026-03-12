@@ -223,8 +223,8 @@ function animateCursor() {
             dotY += (mouseY - dotY) * 0.5;
 const prevCircleX = circleX;
 const prevCircleY = circleY;
-circleX += (mouseX - circleX) * 0.25;
-circleY += (mouseY - circleY) * 0.25;
+circleX += (mouseX - circleX) * 0.16;
+circleY += (mouseY - circleY) * 0.16;
 
 const vx = circleX - prevCircleX;
 const vy = circleY - prevCircleY;
