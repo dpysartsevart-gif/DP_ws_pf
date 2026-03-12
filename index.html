@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Dmytro Pysartsev — Senior 3D Character Artist. AAA-quality assets, UE5, ZBrush, LookDev.">
+<meta property="og:title" content="Dmytro Pysartsev — 3D Artist Portfolio">
+<meta property="og:description" content="Senior 3D Character Artist. GameDev, LookDev, ZBrush.">
+<meta property="og:image" content="assets/og-preview.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
     <title>Dmytro Pysartsev — 3D Artist</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;500;700&family=Teko:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
    <link rel="stylesheet" href="css/style.css?v=2">
+<!-- Boot sequence overlay -->
+<div id="boot-screen" style="position:fixed;inset:0;background:#000;z-index:999999;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Share Tech Mono',monospace;color:#f7d53e;">
+  <div id="boot-lines" style="font-size:13px;line-height:2;color:#888;width:300px;"></div>
+</div>
 </head>
 <body>
 
@@ -81,28 +91,15 @@
         </div>
     </div>
 
-    <audio id="snd-hover" src="assets/hover.mp3"></audio>
-    <audio id="snd-select" src="assets/select.mp3"></audio>
-    <audio id="snd-gamestart" src="assets/gamestart.mp3"></audio>
-    <audio id="snd-achievement" src="assets/select.mp3"></audio> 
+<audio id="snd-hover" src="assets/hover.mp3" preload="none"></audio>
+<audio id="snd-select" src="assets/select.mp3" preload="none"></audio>
+<audio id="snd-gamestart" src="assets/gamestart.mp3" preload="none"></audio>
+<audio id="snd-achievement" src="assets/select.mp3" preload="none"></audio> 
 
     <div class="bg-layer" id="parallax-bg"></div>
     <div class="scanlines"></div>
     
-    <div class="dust-container">
-        <div class="dust-speck" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
-        <div class="dust-speck" style="top: 30%; left: 80%; animation-delay: 2s;"></div>
-        <div class="dust-speck" style="top: 70%; left: 40%; animation-delay: 4s;"></div>
-        <div class="dust-speck" style="top: 50%; left: 10%; animation-delay: 1s;"></div>
-        <div class="dust-speck" style="top: 80%; left: 90%; animation-delay: 3s;"></div>
-        <div class="dust-speck" style="top: 20%; left: 60%; animation-delay: 5s;"></div>
-        <div class="dust-speck" style="top: 15%; left: 35%; animation-delay: 0.5s; opacity: 0.6;"></div>
-        <div class="dust-speck" style="top: 85%; left: 25%; animation-delay: 2.5s; opacity: 0.4;"></div>
-        <div class="dust-speck" style="top: 45%; left: 75%; animation-delay: 1.5s; opacity: 0.7;"></div>
-        <div class="dust-speck" style="top: 60%; left: 50%; animation-delay: 3.5s; opacity: 0.5;"></div>
-        <div class="dust-speck" style="top: 5%; left: 95%; animation-delay: 4.5s; opacity: 0.3;"></div>
-        <div class="dust-speck" style="top: 90%; left: 5%; animation-delay: 1.2s; opacity: 0.6;"></div>
-    </div>
+<div class="dust-container" id="dust-container"></div>
 
     <div class="ui-layer">
         <div id="main-menu" class="screen active-screen">
@@ -115,7 +112,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="role-subtitle">3D Character Artist \ GameDev \ LookDev</p>
+<p class="role-subtitle"><span id="typed-subtitle"></span><span class="cursor-blink">|</span></p>
             </div>
 
 <ul class="menu-list">
@@ -159,7 +156,7 @@
             <div class="gallery-viewport">
                 <div class="sidebar-header-container gallery-header-flex">
                     <h2 style="border: none; padding-bottom: 0; margin-bottom: 0; width: auto;">VISUAL DATA STREAM</h2>
-                    <a href="https://www.artstation.com/dpysartsev" target="_blank" class="vp-link" style="margin-bottom: 5px;">[ FULL DATA ON ARTSTATION ↗ ]</a>
+                    <a href="https://www.artstation.com/dpysartsev" target="_blank" rel="noopener noreferrer" class="vp-link" style="margin-bottom: 5px;">[ FULL DATA ON ARTSTATION ↗ ]</a>
                 </div>
 
                 <div class="mobile-nav-btn" id="btn-back-to-list">◀ BACK TO LIST</div>
@@ -336,9 +333,9 @@
                 <div class="bio-section">
                     <p class="section-header">/// CONTACT LINKS</p>
                     <ul class="cv-list">
-                        <li><a href="https://www.artstation.com/dpysartsev" target="_blank" class="contact-link">ARTSTATION PROFILE</a></li>
-                        <li><a href="https://www.linkedin.com/in/dpysartsev/" target="_blank" class="contact-link">LINKEDIN PROFILE</a></li>
-                        <li><a href="assets/cv.pdf" target="_blank" class="contact-link">PERSONAL FILE [OPEN CV] ▼</a></li>
+                        <li><a href="https://www.artstation.com/dpysartsev" target="_blank" rel="noopener noreferrer" class="contact-link">ARTSTATION PROFILE</a></li>
+                        <li><a href="https://www.linkedin.com/in/dpysartsev/" target="_blank" rel="noopener noreferrer" class="contact-link">LINKEDIN PROFILE</a></li>
+                        <li><a href="assets/cv.pdf" target="_blank" rel="noopener noreferrer" class="contact-link">PERSONAL FILE [OPEN CV] ▼</a></li>
                     </ul>
                 </div>
 
