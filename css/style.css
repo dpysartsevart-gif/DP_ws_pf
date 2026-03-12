@@ -136,6 +136,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 
 
 
+
 /* =========================================
    ФІНАЛЬНІ КАРТКИ З УСІМА ЕФЕКТАМИ (БЕЗ СМУЖОК)
    ========================================= */
@@ -549,7 +550,7 @@ a, button, .menu-item, .project-slot, .back-hint, .shop-btn { cursor: none; }
 .cursor-dot, .cursor-circle { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; z-index: 100000 !important; transform: translate3d(-50%, -50%, 0); will-change: transform; }
 .cursor-dot { width: 8px; height: 8px; background: var(--accent-color); }
 .cursor-circle { width: 30px; height: 30px; border: 1px solid rgba(163, 203, 245, 0.5); transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s; }
-.cursor-blink { animation: blink 1s step-end infinite; color: var(--primary-color); }
+
 .cursor-circle::before,
 .cursor-circle::after {
     content: '';
@@ -574,30 +575,6 @@ a, button, .menu-item, .project-slot, .back-hint, .shop-btn { cursor: none; }
     opacity: 1;
 }
 body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 203, 245, 0.1); border-color: var(--accent-color); }
-
-/* === CURSOR UPGRADE === */
-.cursor-dot {
-    transition: transform 0.1s ease, background-color 0.2s ease;
-}
-.cursor-circle {
-    transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                border-color 0.2s ease,
-                width 0.2s ease,
-                height 0.2s ease;
-}
-/* Коли наводимо на кнопки — курсор збільшується */
-body:has(.menu-item:hover) .cursor-circle,
-body:has(.project-slot:hover) .cursor-circle,
-body:has(.buy-btn:hover) .cursor-circle {
-    transform: translate(-50%, -50%) scale(2.5);
-    border-color: var(--primary-color);
-}
-body:has(.menu-item:hover) .cursor-dot,
-body:has(.project-slot:hover) .cursor-dot {
-    background-color: var(--primary-color);
-    transform: translate(-50%, -50%) scale(0.5);
-}
-
 
 /* POPUP */
 .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.15); backdrop-filter: blur(2px); z-index: 20000; display: flex; align-items: center; justify-content: center; }
@@ -832,7 +809,6 @@ body::after {
     border-color: var(--primary-color);
     transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, border-radius 0.2s;
 }
-
 
 /* === OPTIONS LAYOUT & ACHIEVEMENTS PANEL === */
 .options-layout { 
@@ -1428,15 +1404,13 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     will-change: transform, backdrop-filter;
 }
 
-/* === 1. ГЛОБАЛЬНЕ ЗАТЕМНЕННЯ ФОНУ і БЛЮР (100% ОДНАКОВЕ ДЛЯ ВСІХ ЕКРАНІВ ТА ПОПАПІВ) === */         
-#gallery-screen,     
-#journal-screen,
+/* === 1. ГЛОБАЛЬНЕ ЗАТЕМНЕННЯ ФОНУ (100% ОДНАКОВЕ ДЛЯ ВСІХ ЕКРАНІВ ТА ПОПАПІВ) === */
 #shop-screen, 
 #options-screen, 
 #credits-screen,
-#dlc-screen,        
+#dlc-screen,
 .popup-overlay {
-    background: rgba(0, 0, 0, 0.05) !important; 
+    background: rgba(0, 0, 0, 0.15) !important; 
     backdrop-filter: blur(2px) !important; 
     -webkit-backdrop-filter: blur(2px) !important;
 }
@@ -1521,14 +1495,4 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
         padding-top: 10px !important;
         padding-bottom: 10px !important;
     }
-}
-
-/* === CURTAIN TRANSITION === */
-@keyframes screenWipeIn {
-    0%   { transform: translateX(60px); opacity: 0; }
-    100% { transform: translateX(0);    opacity: 1; }
-}
-
-.screen.active-screen {
-    animation: screenWipeIn 0.2s ease-out forwards;
 }
