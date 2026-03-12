@@ -1523,4 +1523,46 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     }
 }
 
+/* === SCREEN TRANSITION: LONG SOFT WIPE === */
+.screen.active-screen {
+  display: flex !important;
+  /* 0.4s - золота середина між швидкістю та видимістю ефекту */
+  animation: screenWipeIn 0.4s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  will-change: mask-position, transform, opacity;
+}
 
+/* === SCREEN TRANSITION: SOFT WIPE REVEAL === */
+@keyframes screenWipeIn {
+  0% {
+    /* Робимо чітку, але розмиту межу: 
+       чорний (видимо) до 45%, потім розмиття до 55%, потім прозоро */
+    -webkit-mask-image: linear-gradient(to right, 
+        #000 0%, 
+        #000 45%, 
+        transparent 55%, 
+        transparent 100%);
+    mask-image: linear-gradient(to right, 
+        #000 0%, 
+        #000 45%, 
+        transparent 55%, 
+        transparent 100%);
+    
+    -webkit-mask-size: 250% 100%;
+    mask-size: 250% 100%;
+    
+    /* Маска зсунута вправо — ми бачимо тільки прозору частину */
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+    
+    opacity: 0;
+    /* Додаємо легкий рух самого контенту для підсилення ефекту */
+    transform: translateX(-20px);
+  }
+  100% {
+    /* Маска заїхала вліво — ми бачимо тільки чорну (видиму) частину */
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
