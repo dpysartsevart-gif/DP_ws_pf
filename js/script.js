@@ -1,5 +1,54 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+// === BOOT SEQUENCE ===
+const bootScreen = document.getElementById('boot-screen');
+const bootLines = document.getElementById('boot-lines');
+const bootMessages = [
+  '> INITIALIZING DPYSARTSEV_OS v2.0.26...',
+  '> LOADING ASSET REGISTRY... [OK]',
+  '> MOUNTING 3D ENGINE... [OK]',
+  '> CALIBRATING RENDER PIPELINE... [OK]',
+  '<span style="color:#f7d53e">> SYSTEM READY.</span>'
+];
+let bi = 0;
+function typeBootLine() {
+  if (bi < bootMessages.length) {
+    bootLines.innerHTML += bootMessages[bi] + '<br>';
+    bi++;
+    setTimeout(typeBootLine, 80);
+  } else {
+    setTimeout(() => {
+      bootScreen.style.transition = 'opacity 0.5s ease';
+      bootScreen.style.opacity = '0';
+      setTimeout(() => bootScreen.remove(), 100);
+    }, 100);
+  }
+}
+typeBootLine();
+
+// === DYNAMIC DUST ===
+const dustContainer = document.getElementById('dust-container');
+for (let i = 0; i < 12; i++) {
+  const d = document.createElement('div');
+  d.className = 'dust-speck';
+  d.style.cssText = `top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${(Math.random()*6).toFixed(1)}s;opacity:${(0.3 + Math.random()*0.5).toFixed(1)}`;
+  dustContainer.appendChild(d);
+}
+
+// === TYPING SUBTITLE ===
+const subtitleEl = document.getElementById('typed-subtitle');
+const subtitleText = '3D CHARACTER ARTIST \\ GAMEDEV \\ LOOKDEV';
+let si = 0;
+function typeSubtitle() {
+  if (si <= subtitleText.length) {
+    subtitleEl.textContent = subtitleText.slice(0, si);
+    si++;
+    setTimeout(typeSubtitle, 60);
+  }
+}
+// Запусти після boot screen (приблизно 0.50 секунди)
+setTimeout(typeSubtitle, 500);
+
     // === HISTORY API ===
     history.replaceState({ screen: 'main-menu' }, '', '');
 window.addEventListener('popstate', (event) => {
