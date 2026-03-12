@@ -134,14 +134,6 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .gallery-sidebar { width: 500px; display: flex; flex-direction: column; pointer-events: auto; flex-shrink: 0; }
 .projects-scroll-area { flex-grow: 0; height: 70vh; overflow-y: auto; padding-right: 25px; padding-top: 5px; padding-bottom: 5px; margin-top: -5px; }
 
-/* === SCREEN TRANSITION SCANLINE WIPE === */
-@keyframes screenWipeIn {
-  0%   { clip-path: inset(0 100% 0 0); opacity: 0; }
-  100% { clip-path: inset(0 0% 0 0); opacity: 1; }
-}
-.screen.active-screen {
-  animation: screenWipeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-}
 
 
 /* =========================================
