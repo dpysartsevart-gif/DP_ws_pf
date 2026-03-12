@@ -547,9 +547,33 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 @keyframes textBlink { 0% { opacity: 0.4; } 100% { opacity: 1; } }
 
 a, button, .menu-item, .project-slot, .back-hint, .shop-btn { cursor: none; }
-.cursor-dot, .cursor-circle { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; z-index: 100000 !important; transform: translate(-50%, -50%); }
+.cursor-dot, .cursor-circle { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; z-index: 100000 !important; transform: translate3d(-50%, -50%, 0); will-change: transform; }
 .cursor-dot { width: 8px; height: 8px; background: var(--accent-color); }
 .cursor-circle { width: 30px; height: 30px; border: 1px solid rgba(163, 203, 245, 0.5); transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s; }
+
+.cursor-circle::before,
+.cursor-circle::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+}
+.cursor-circle::before {
+    border-color: rgba(255, 30, 60, 0.55);
+    transform: translate(var(--ca-x, 0px), var(--ca-y, 0px));
+}
+.cursor-circle::after {
+    border-color: rgba(0, 220, 255, 0.55);
+    transform: translate(calc(var(--ca-x, 0px) * -1), calc(var(--ca-y, 0px) * -1));
+}
+.cursor-circle.moving::before,
+.cursor-circle.moving::after {
+    opacity: 1;
+}
 body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 203, 245, 0.1); border-color: var(--accent-color); }
 
 /* POPUP */
@@ -1456,12 +1480,13 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     padding-bottom: 15px !important;
 }
 /* === OPTIONS SCREEN PADDING FIX === */
-#options-screen .settings-container {
-    padding-top: 20px !important; 
+#options-screen .scroll-container.settings-container {
+    padding-top: 15px !important; 
 }
 
-#options-screen .settings-list .setting-category:first-child {
-    margin-top: 0 !important; /* Вбиваємо відступ над найпершим заголовком --- CORE SYSTEMS --- */
+#options-screen .settings-container .settings-list .setting-category:first-child {
+    margin-top: 0 !important; 
+    padding-top: 0 !important;
 }
 /* Якщо на мобільному треба ще щільніше: */
 @media (max-width: 1000px) {

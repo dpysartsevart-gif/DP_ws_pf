@@ -156,15 +156,13 @@ window.addEventListener('popstate', (event) => {
         });
     }
 
-    // === CURSOR & DUST ===
-    let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
+// === CURSOR & DUST ===
+    let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, circleX = 0, circleY = 0;
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX; mouseY = e.clientY;
-            if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
 
-const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close');
-            
+const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close');           
             // 1. Очищаємо ефект ТІЛЬКИ з тих кнопок, на яких немає курсору
             document.querySelectorAll('.menu-item, .dlc-btn, .buy-btn').forEach(btn => {
                 if (btn !== target) {
@@ -220,10 +218,33 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
             });
         });
 
-        function animateCursor() {
-            circleX += (mouseX - circleX) * 0.15; 
-            circleY += (mouseY - circleY) * 0.15;
-            if(circle) { circle.style.left = `${circleX}px`; circle.style.top = `${circleY}px`; }
+function animateCursor() {
+            dotX += (mouseX - dotX) * 0.5; 
+            dotY += (mouseY - dotY) * 0.5;
+const prevCircleX = circleX;
+const prevCircleY = circleY;
+circleX += (mouseX - circleX) * 0.25;
+circleY += (mouseY - circleY) * 0.25;
+
+const vx = circleX - prevCircleX;
+const vy = circleY - prevCircleY;
+const speed = Math.sqrt(vx * vx + vy * vy);
+
+if (circle) {
+    const caStrength = Math.min(speed * 0.6, 5);
+    circle.style.setProperty('--ca-x', `${(vx / (speed || 1)) * caStrength}px`);
+    circle.style.setProperty('--ca-y', `${(vy / (speed || 1)) * caStrength}px`);
+    if (speed > 0.3) {
+        circle.classList.add('moving');
+    } else {
+        circle.classList.remove('moving');
+    }
+}
+            
+            // Апаратне прискорення через translate3d
+            if(dot) { dot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) translate(-50%, -50%)`; }
+            if(circle) { circle.style.transform = `translate3d(${circleX}px, ${circleY}px, 0) translate(-50%, -50%)`; }
+            
             requestAnimationFrame(animateCursor);
         }
         animateCursor();
