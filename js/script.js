@@ -1069,8 +1069,42 @@ if(vpContent) {
             }
             if(e.key === 'Enter') { if(isDlcActive) dlcBtn.click(); else menuItems[currentMenuIndex].click(); }
         }
+// === KEYBOARD NAV В ГАЛЕРЕЇ / ЖУРНАЛІ ===
+if (inSubMenu) {
+    const activeScreen = document.querySelector('.screen.active-screen');
+    if (!activeScreen) return;
+    
+const slots = Array.from(activeScreen.querySelectorAll('.project-slot, .journal-slot'));
+    if (!slots.length) return;
+    
+    const currentSelected = activeScreen.querySelector('.project-slot.selected');
+    let idx = slots.indexOf(currentSelected);
+    
+if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    idx = idx <= 0 ? slots.length - 1 : idx - 1;
+    slots[idx].dispatchEvent(new MouseEvent('mouseenter', {bubbles: true}));
+    slots[idx].click();
+    slots[idx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    safePlay('snd-hover');
+}
+if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    idx = idx >= slots.length - 1 ? 0 : idx + 1;
+    slots[idx].dispatchEvent(new MouseEvent('mouseenter', {bubbles: true}));
+    slots[idx].click();
+    slots[idx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    safePlay('snd-hover');
+}
+    if (e.key === 'Enter' && currentSelected) {
+        const img = activeScreen.querySelector('#viewport-content img, #viewport-content video');
+        if (img) { img.click(); safePlay('snd-select'); }
+    }
+}
     });
     
+
+
     function updateVisuals() {
         menuItems.forEach(i => i.classList.remove('active'));
         if(dlcBtn) dlcBtn.classList.remove('active-dlc');
