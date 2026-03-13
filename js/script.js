@@ -449,6 +449,17 @@ if(loadPct === 100) {
         
         inSubMenu = (screenId !== 'main-menu');
         
+// HUD ховаємо на нестандартних роздільностях при відкритті меню
+const hudWidget = document.getElementById('hud-widget');
+if (hudWidget) {
+    const w = window.innerWidth;
+    const isStandard = (w >= 1800 && w <= 2100) || (w >= 3600);
+    if (!isStandard) {
+        hudWidget.style.display = screenId === 'main-menu' ? 'block' : 'none';
+    }
+}
+
+
 if((screenId === 'gallery-screen' || screenId === 'journal-screen') && isMobile()) {
             const currentSidebar = document.querySelector(`#${screenId} .gallery-sidebar`);
             const currentViewport = document.querySelector(`#${screenId} .gallery-viewport`);

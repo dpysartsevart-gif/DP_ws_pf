@@ -695,7 +695,7 @@ body:has(.project-slot:hover) .cursor-dot {
     font-family: 'Share Tech Mono', monospace;
     font-size: 10px;
     letter-spacing: 1px;
-    z-index: 50;
+    z-index: 1000;
     pointer-events: none; 
     opacity: 0.6;
     text-shadow: 0 0 5px rgba(247, 213, 62, 0.3);
@@ -1581,7 +1581,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     .gallery-sidebar  { width: clamp(500px, 22vw, 700px); }
     .gallery-layout   { gap: clamp(40px, 3vw, 80px); }
     .gallery-viewport { max-width: clamp(1400px, 60vw, 2000px); }
-    #hud-widget       { right: 15px; bottom: 38px; font-size: 10px; line-height: 1.6; }
+    #hud-widget       { right: auto; left: 20px; bottom: 38px; } 
 }
 
 /* 4K */
