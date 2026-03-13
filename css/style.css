@@ -276,7 +276,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .p-title { font-size: 16px; color: #fff; font-weight: bold; }
 .p-desc { font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-top: 2px; }
 
-.gallery-viewport { flex-grow: 1; max-width: 1200px; pointer-events: auto; display: flex; flex-direction: column; }
+.gallery-viewport { flex-grow: 1; max-width: clamp(1200px, 65vw, 2450px); pointer-events: auto; display: flex; flex-direction: column; }
 .gallery-viewport, .viewport-frame { min-width: 0 !important; }
 
 .gallery-header-flex { display: flex; justify-content: space-between; align-items: flex-end; }
@@ -695,7 +695,7 @@ body:has(.project-slot:hover) .cursor-dot {
     font-family: 'Share Tech Mono', monospace;
     font-size: 10px;
     letter-spacing: 1px;
-    z-index: 1000;
+    z-index: 50;
     pointer-events: none; 
     opacity: 0.6;
     text-shadow: 0 0 5px rgba(247, 213, 62, 0.3);
@@ -1096,7 +1096,7 @@ body::before {
 .mobile-desktop-hint { display: none; }
 .mobile-nav-btn { display: none; }
 
-@media (max-width: 1000px) {
+@media (max-width: 1000px) and (pointer: coarse) {
     html, body { 
         height: 100%; margin: 0; overflow: hidden; background: #000; 
     }
@@ -1405,7 +1405,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 }
 
 /* ГАРАНТОВАНО ВБИВАЄМО ЕФЕКТ НА МОБІЛЬНОМУ (Навіть якщо десь лишився старий код) */
-@media (max-width: 1000px) {
+@media (max-width: 1000px) and (pointer: coarse)
     .settings-container::after, .text-content.scrollable::after {
         display: none !important;
         content: none !important;
@@ -1482,7 +1482,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 }
 
 /* Окреме правило тільки для мобільного телефону, щоб там нічого не зжалося */
-@media (max-width: 1000px) {
+@media (max-width: 1000px) and (pointer: coarse)
     .journal-content-area {
         padding: 10px 0px 80px 0px !important; /* Компактні відступи для ТЕЛЕФОНУ */
     }
@@ -1515,7 +1515,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     padding-top: 0 !important;
 }
 /* Якщо на мобільному треба ще щільніше: */
-@media (max-width: 1000px) {
+@media (max-width: 1000px) and (pointer: coarse) {
     #options-screen .journal-content-area,
     .options-wrapper .journal-content-area {
         padding-top: 10px !important;
@@ -1565,4 +1565,27 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+/* === DESKTOP RESPONSIVE SCALING === */
+
+/* 1920px */
+@media (min-width: 681px) and (max-width: 2200px) and (pointer: fine) {
+    .gallery-sidebar  { width: clamp(460px, 26vw, 560px); }
+    .gallery-layout   { gap: clamp(40px, 3vw, 60px); }
+    .gallery-viewport { max-width: clamp(1200px, 68vw, 1800px); }
+}
+
+/* 2560px */
+@media (min-width: 2201px) and (max-width: 3200px) and (pointer: fine) {
+    .gallery-sidebar  { width: clamp(500px, 22vw, 700px); }
+    .gallery-layout   { gap: clamp(40px, 3vw, 80px); }
+    .gallery-viewport { max-width: clamp(1400px, 60vw, 2000px); }
+    #hud-widget       { right: 15px; bottom: 38px; font-size: 10px; line-height: 1.6; }
+}
+
+/* 4K */
+@media (min-width: 3201px) and (pointer: fine) {
+    .gallery-sidebar  { width: 500px; }
+    .gallery-viewport { max-width: none; flex-grow: 1; }
 }

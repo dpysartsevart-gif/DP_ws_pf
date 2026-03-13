@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+// === MOBILE DETECTION (touch + size) ===
+function isMobile() {
+    const hasTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    const isSmall = window.innerWidth <= 1000;
+    return hasTouch && isSmall;
+}
 // === BOOT SEQUENCE ===
 const bootScreen = document.getElementById('boot-screen');
 const bootLines = document.getElementById('boot-lines');
@@ -61,7 +66,7 @@ window.addEventListener('popstate', (event) => {
 
         // Універсальне закриття мобільного модуля (Галерея або Журнал)
         const activeViewport = document.querySelector('.gallery-viewport.active-screen');
-        if (window.innerWidth <= 1000 && activeViewport) {
+        if (isMobile() && activeViewport) {
             const parentScreen = activeViewport.closest('.screen');
             const currentSidebar = parentScreen.querySelector('.gallery-sidebar');
             
@@ -144,7 +149,7 @@ window.addEventListener('popstate', (event) => {
 
 // === SYSTEM BOOT ===
     // Стартовий екран завантаження вимкнено. Одразу показуємо мобільний банер, якщо треба.
-    if (window.innerWidth <= 1000 && banner) {
+    if (isMobile() && banner) {
         banner.classList.add('active');
     }
 
@@ -444,7 +449,7 @@ if(loadPct === 100) {
         
         inSubMenu = (screenId !== 'main-menu');
         
-if((screenId === 'gallery-screen' || screenId === 'journal-screen') && window.innerWidth <= 1000) {
+if((screenId === 'gallery-screen' || screenId === 'journal-screen') && isMobile()) {
             const currentSidebar = document.querySelector(`#${screenId} .gallery-sidebar`);
             const currentViewport = document.querySelector(`#${screenId} .gallery-viewport`);
             if(currentSidebar) currentSidebar.style.display = 'flex';
@@ -461,7 +466,7 @@ function goBack() {
         
         // Універсальне закриття відкритого модуля (і Галереї, і Журналу)
         const activeViewport = document.querySelector('.gallery-viewport.active-screen');
-        if(window.innerWidth <= 1000 && activeViewport) {
+        if(isMobile() && activeViewport) {
              const parentScreen = activeViewport.closest('.screen');
              const currentSidebar = parentScreen.querySelector('.gallery-sidebar');
              
@@ -588,7 +593,7 @@ const journalScreen = document.getElementById('journal-screen');
         
         // 1. ЛОГІКА ДЛЯ КОМП'ЮТЕРА (ПЕРЕМИКАННЯ ПРИ НАВЕДЕННІ)
         slot.addEventListener('mouseenter', () => {
-            if (window.innerWidth > 1000) {
+            if (!isMobile()) {
                 if (slot.classList.contains('selected')) return;
                 
                 journalSlots.forEach(s => s.classList.remove('selected'));
@@ -605,7 +610,7 @@ const journalScreen = document.getElementById('journal-screen');
         // 2. ЛОГІКА ДЛЯ ТЕЛЕФОНУ (ВІДКРИТТЯ ПРИ КЛІКУ)
         slot.addEventListener('click', () => {
             // На комп'ютері клік ігноруємо, бо все вже зробив ховер
-            if (window.innerWidth > 1000) return; 
+            if (!isMobile()) return; 
 
             journalSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
@@ -617,7 +622,7 @@ const journalScreen = document.getElementById('journal-screen');
             }
 
             // Мобільна логіка: Ховаємо ліве меню, показуємо текст
-            if(window.innerWidth <= 1000 && journalScreen) {
+            if(isMobile() && journalScreen) {
                 history.pushState({ screen: 'mobile-journal-view' }, '', '');
                 const jSidebar = journalScreen.querySelector('.gallery-sidebar');
                 const jViewport = journalScreen.querySelector('.gallery-viewport');
@@ -764,12 +769,12 @@ mediaEl.dataset.altSrc = altSrc;
 
         slot.addEventListener('click', () => {
 if (slot.classList.contains('journal-slot')) return; // <--- ДОДАЙ ЦЕЙ РЯДОК
-            if(window.innerWidth > 1000 && slot.classList.contains('selected')) return; 
+            if(!isMobile() && slot.classList.contains('selected')) return; 
             projectSlots.forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
             safePlay('snd-select');
             loadImages(slot.dataset.id);
-            if(window.innerWidth <= 1000) {
+            if(isMobile()) {
                 history.pushState({ screen: 'mobile-project-view' }, '', '');
                 if(sidebar) sidebar.style.display = 'none';
                 if(viewport) {
@@ -782,7 +787,7 @@ if (slot.classList.contains('journal-slot')) return; // <--- ДОДАЙ ЦЕЙ �
 
         // === 3D ЗАТРИМКА (DEBOUNCE) ===
         slot.addEventListener('mousemove', (e) => {
-            if (window.innerWidth <= 1000) return; 
+            if (isMobile()) return; 
             
             // Скидаємо таймер при кожному русі мишки.
             if (hoverTimer) clearTimeout(hoverTimer);
@@ -813,7 +818,7 @@ if (rotateY !== 0) {
         });
 
         slot.addEventListener('mouseleave', () => {
-            if (window.innerWidth <= 1000) return;
+            if (isMobile()) return;
             if (hoverTimer) clearTimeout(hoverTimer); // Вбиваємо таймер
             slot.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
             slot.style.transform = '';
@@ -822,7 +827,7 @@ slot.classList.remove('is-tilted');
 
         slot.addEventListener('mouseenter', () => {
 if (slot.classList.contains('journal-slot')) return; // <--- І ДОДАЙ СЮДИ ТАКОЖ
-            if(window.innerWidth > 1000) {
+            if(!isMobile()) {
                 if(slot.classList.contains('selected')) return; 
                 projectSlots.forEach(s => s.classList.remove('selected'));
                 slot.classList.add('selected');
@@ -908,7 +913,7 @@ item.addEventListener('mouseenter', () => {
             safePlay('snd-select');
             
             if(action === 'email') {
-                if (window.innerWidth <= 1000) {
+                if (isMobile()) {
                     safePlay('snd-gamestart'); 
                     showAchievement("ACHIEVEMENT UNLOCKED", "NEW JOURNEY (Started a new project)", "🚀");
                     setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; }, 2000);
