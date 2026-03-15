@@ -1117,7 +1117,7 @@ body::before {
         opacity: 0.6;
         width: 100%;
         position: fixed !important; /* Повертаємо фіксацію, щоб меню не стискалося */
-        bottom: 110px !important; /* Висить рівно над кнопкою DLC */
+        bottom: 120px !important; /* Висить рівно над кнопкою DLC */
         left: 0;
         z-index: 100;
     }
@@ -1375,7 +1375,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     .slot-thumb { width: 100px; height: 60px; }
     .p-title { font-size: 18px; }
     .settings-list { width: 100%; padding-left: 0; border: none; }
-    .dlc-btn { width: 100%; text-align: center; background: rgba(16, 16, 16, 0.95); border: 2px solid var(--primary-color); padding: 15px; font-size: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
+    .dlc-btn { width: 100%; text-align: center; background: rgba(16, 16, 16, 0.4); border: 2px solid var(--primary-color); padding: 15px; font-size: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
     #email-popup { display: none !important; }
     * { cursor: auto !important; }
 }
@@ -1629,6 +1629,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     0%, 100% { box-shadow: 0 0 4px #4caf50, 0 0 8px rgba(76, 175, 80, 0.3); transform: scale(1); }
     50% { box-shadow: 0 0 12px #4caf50, 0 0 24px rgba(76, 175, 80, 0.6); transform: scale(1.2); }
 }
+
 
 
 
