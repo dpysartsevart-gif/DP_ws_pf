@@ -54,6 +54,60 @@ function typeSubtitle() {
 // Запусти після boot screen (приблизно 0.50 секунди)
 setTimeout(typeSubtitle, 500);
 
+
+// === ANIMATED STATS COUNTER ===
+function runStatsAnimation() {
+    // Числові стати
+    document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+        el.textContent = '0';
+        const target = parseInt(el.dataset.target);
+        let current = 0;
+        const step = Math.ceil(target / 20);
+        const interval = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = current;
+            if (current >= target) clearInterval(interval);
+        }, 60);
+    });
+
+    // Pipeline cycling
+    const pipelineEl = document.getElementById('pipeline-stat');
+    if (!pipelineEl) return;
+
+    const stages = [
+        'REFERENCES',
+        'HI-POLY',
+        'LOW-POLY',
+        'UV MAPPING',
+        'BAKING',
+        'TEXTURING',
+        'LIGHTING',
+        'SHADING',
+        'RENDERING'
+    ];
+    let stageIndex = 0;
+
+    function cycleStage() {
+        pipelineEl.style.opacity = '0';
+        pipelineEl.style.transform = 'translateY(-6px)';
+        setTimeout(() => {
+            pipelineEl.textContent = stages[stageIndex];
+            pipelineEl.style.opacity = '1';
+            pipelineEl.style.transform = 'translateY(0)';
+            stageIndex = (stageIndex + 1) % stages.length;
+        }, 250);
+    }
+
+    pipelineEl.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    pipelineEl.textContent = stages[0];
+    stageIndex = 1;
+    
+    // Очищаємо старий інтервал якщо Credits відкривали вже раніше
+    if (window._pipelineInterval) clearInterval(window._pipelineInterval);
+    window._pipelineInterval = setInterval(cycleStage, 1200);
+}
+
+
     // === HISTORY API ===
     history.replaceState({ screen: 'main-menu' }, '', '');
 window.addEventListener('popstate', (event) => {
@@ -405,6 +459,9 @@ if(loadPct === 100) {
 
     function activateScreen(screenId) {
         screens.forEach(s => {
+if (screenId === 'credits-screen') {
+    setTimeout(runStatsAnimation, 400);
+}
             s.classList.remove('active-screen');
             if (s.id !== screenId && s.id !== 'email-popup') {
                 s.style.display = 'none';
