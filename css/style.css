@@ -588,12 +588,18 @@ body.hovered .cursor-circle { width: 35px; height: 35px; background: rgba(163, 2
 /* Коли наводимо на кнопки — курсор збільшується */
 body:has(.menu-item:hover) .cursor-circle,
 body:has(.project-slot:hover) .cursor-circle,
-body:has(.buy-btn:hover) .cursor-circle {
+body:has(.buy-btn:hover) .cursor-circle,
+body:has(.shop-btn:hover) .cursor-circle,
+body:has(.vp-link:hover) .cursor-circle,
+body:has(.contact-link:hover) .cursor-circle {
     transform: translate(-50%, -50%) scale(2.5);
     border-color: var(--primary-color);
 }
 body:has(.menu-item:hover) .cursor-dot,
-body:has(.project-slot:hover) .cursor-dot {
+body:has(.project-slot:hover) .cursor-dot,
+body:has(.shop-btn:hover) .cursor-dot,
+body:has(.vp-link:hover) .cursor-dot,
+body:has(.contact-link:hover) .cursor-dot {
     background-color: var(--primary-color);
     transform: translate(-50%, -50%) scale(0.5);
 }
@@ -1622,4 +1628,56 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 @keyframes statusPulse {
     0%, 100% { box-shadow: 0 0 4px #4caf50, 0 0 8px rgba(76, 175, 80, 0.3); transform: scale(1); }
     50% { box-shadow: 0 0 12px #4caf50, 0 0 24px rgba(76, 175, 80, 0.6); transform: scale(1.2); }
+}
+
+
+
+/* === SKILL BARS === */
+.setting-item {
+    display: grid !important;
+    grid-template-columns: 200px 160px 1fr !important;
+    align-items: center !important;
+    gap: 0 !important;
+}
+.skill-bar-wrap {
+    width: 160px;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.skill-bar-fill {
+    height: 100%;
+    width: var(--fill, 0%);
+    background: linear-gradient(to right, var(--accent-color), var(--primary-color));
+    border-radius: 2px;
+    box-shadow: 0 0 6px rgba(247, 213, 62, 0.4);
+    position: relative;
+}
+.skill-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: -2px;
+    width: 3px; height: 7px;
+    background: var(--primary-color);
+    border-radius: 1px;
+    box-shadow: 0 0 6px var(--primary-color);
+    animation: barTip 1.5s ease-in-out infinite alternate;
+}
+@keyframes barTip {
+    from { opacity: 0.5; }
+    to { opacity: 1; box-shadow: 0 0 12px var(--primary-color); }
+}
+.screen.active-screen .skill-bar-fill {
+    animation: barReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+}
+@keyframes barReveal {
+    from { width: 0%; }
+    to { width: var(--fill, 0%); }
+}
+/* Рядки БЕЗ бару (категорії, рядки без skill-bar-wrap) — повертаємо flex */
+.setting-item:not(:has(.skill-bar-wrap)) {
+    display: flex !important;
+    justify-content: space-between !important;
 }

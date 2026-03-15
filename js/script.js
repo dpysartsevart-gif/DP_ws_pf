@@ -219,7 +219,7 @@ window.addEventListener('popstate', (event) => {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX; mouseY = e.clientY;
 
-const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close');           
+const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close, .shop-btn, .contact-link');           
             // 1. Очищаємо ефект ТІЛЬКИ з тих кнопок, на яких немає курсору
             document.querySelectorAll('.menu-item, .dlc-btn, .buy-btn').forEach(btn => {
                 if (btn !== target) {
@@ -958,15 +958,20 @@ item.addEventListener('mouseenter', () => {
         if (!supporterUnlocked) { supporterUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "ARTIST SUPPORTER (Coffee bought)", "☕"); }
     });
 
-    shopBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const item = btn.closest('.shop-item');
-            if (item && !item.classList.contains('inactive')) {
-                safePlay('snd-select');
-                if(!munchkinUnlocked) { munchkinUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "MUNCHKIN (Bought a shop item)", "🛒"); }
-            }
-        });
+shopBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const item = btn.closest('.shop-item');
+        if (item && item.classList.contains('inactive')) {
+            // Закритий товар → MUNCHKIN
+            safePlay('snd-select');
+            if(!munchkinUnlocked) { munchkinUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "MUNCHKIN (Tried to buy a closed item)", "🛒"); }
+        } else if (item && !item.classList.contains('inactive')) {
+            // Комісія OPEN → просто відкриває email popup, без ачівки
+            safePlay('snd-select');
+            if(emailPopup) emailPopup.style.display = 'flex';
+        }
     });
+});
     
     // POPUP LOGIC
     function closeEmailPopup() { if(emailPopup) emailPopup.style.display = 'none'; }
@@ -1216,14 +1221,18 @@ function processCommand(cmd) {
         }
 
         switch(cmd) {
-            case 'help':
-                printToTerminal('AVAILABLE COMMANDS:', 'term-sys');
-                printToTerminal('- help   : Display this message');
-                printToTerminal('- hire   : Initialize recruitment protocol');
-                printToTerminal('- coffee : Dispense emergency caffeine');
-                printToTerminal('- clear  : Wipe terminal output');
-                printToTerminal('- *** : Do you remember any classic cheats? ;)');
-                break;
+case 'help':
+    printToTerminal('AVAILABLE COMMANDS:', 'term-sys');
+    printToTerminal('  whoami  — user profile');
+    printToTerminal('  ls      — list directories');
+    printToTerminal('  skills  — skill dump');
+    printToTerminal('  cv      — open resume PDF');
+    printToTerminal('  hire    — recruitment protocol');
+    printToTerminal('  status  — system status');
+    printToTerminal('  coffee  — emergency caffeine');
+    printToTerminal('  clear   — wipe terminal');
+    printToTerminal('  ***     — classic cheats ;)');
+    break;
             case 'hire':
                 printToTerminal('>>> EXECUTING RECRUITMENT PROTOCOL...', 'term-sys');
                 printToTerminal('Opening secure communication channels...');
@@ -1241,11 +1250,78 @@ function processCommand(cmd) {
             case 'clear':
                 termOutput.innerHTML = '<div>Type \'help\' for available commands.</div>';
                 break;
+case 'whoami':
+    printToTerminal('> LOADING USER PROFILE...', 'term-sys');
+    printToTerminal('NAME    : Dmytro Pysartsev');
+    printToTerminal('CLASS   : 3D Character Artist');
+    printToTerminal('LEVEL   : Mid | Senior');
+    printToTerminal('STATUS  : AVAILABLE FOR HIRE');
+    printToTerminal('LOCATED : France / Ukraine / Remote');
+    printToTerminal('CONTACT : DPysartsevArt@gmail.com');
+    break;
+case 'ls':
+case 'dir':
+    printToTerminal('> SCANNING PROJECT DIRECTORY...', 'term-sys');
+    printToTerminal('gallery/     journal/     shop/');
+    printToTerminal('options/     credits/     dlc/');
+    printToTerminal('[9 project files found]');
+    break;
+case 'skills':
+    printToTerminal('> CORE SKILLS DUMP:', 'term-sys');
+    printToTerminal('ZBrush [■■■■■] 100%  Maya [■■■■■] 90%');
+    printToTerminal('UE5    [■■■■□] 80%   Sub3D [■■■■■] 90%');
+    printToTerminal('Arnold [■■■■□] 85%   XGen [■■■□□] 75%');
+    break;
+case 'cv':
+case 'resume':
+    printToTerminal('> OPENING PERSONAL FILE...', 'term-sys');
+    setTimeout(() => { window.open('assets/cv.pdf', '_blank'); }, 800);
+    break;
+case 'status':
+    printToTerminal('> SYSTEM STATUS REPORT:', 'term-sys');
+    printToTerminal(`SYS_TIME  : ${new Date().toLocaleTimeString()}`);
+    printToTerminal(`CAFFEINE  : CRITICAL (12%)`);
+    printToTerminal(`PROJECTS  : 9 ACTIVE`);
+    printToTerminal(`MOOD      : READY TO BUILD`);
+    break;
             default:
                 printToTerminal(`Command not found: ${cmd}`, 'term-err');
                 break;
         }
     }
+
+// === KONAMI CODE ===
+const konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+let konamiIndex = 0;
+document.addEventListener('keydown', (e) => {
+    if (e.code === konamiSequence[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiSequence.length) {
+            konamiIndex = 0;
+            // Глітч-ефект на весь екран
+            document.body.classList.add('glitch-transition');
+            setTimeout(() => document.body.classList.remove('glitch-transition'), 400);
+            // Показуємо термінал з секретним повідомленням
+            if (terminal) {
+                terminal.classList.add('active');
+                if (termInput) termInput.focus();
+                setTimeout(() => {
+                    printToTerminal('>>> KONAMI CODE ACCEPTED <<<', 'term-err');
+                    printToTerminal('Unlocking secret mode...', 'term-sys');
+                    printToTerminal('Just kidding. But you are a true gamer. Respect.');
+                    printToTerminal('Type "hire" if you want to work with one too ;)');
+                }, 200);
+            }
+            if (!cheaterUnlocked) {
+                cheaterUnlocked = true;
+                showAchievement("ACHIEVEMENT UNLOCKED", "CHEATER (Used a classic cheat code)", "👾");
+            }
+            safePlay('snd-gamestart');
+        }
+    } else {
+        konamiIndex = e.code === konamiSequence[0] ? 1 : 0;
+    }
+});
 
     // === AUDIO TOGGLE LOGIC ===
     if (audioToggle) {
