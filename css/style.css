@@ -1374,14 +1374,20 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     * { cursor: auto !important; }
 }
 
-/* Глушимо глобальні стилі скла для мобілки, але залишаємо фон напівпрозорим */
-    #shop-screen, #options-screen, #credits-screen, #dlc-screen, .popup-overlay {
-        background: rgba(0, 0, 0, 0.4) !important;
-        backdrop-filter: blur(4px) !important;
-        -webkit-backdrop-filter: blur(4px) !important;
+/* === UNIFIED MOBILE BACKGROUND === */
+@media (max-width: 1000px) and (pointer: coarse) {
+    #main-menu,
+    #gallery-screen,
+    #journal-screen,
+    #shop-screen,
+    #options-screen,
+    #credits-screen,
+    #dlc-screen {
+        background: rgba(10, 10, 10, 0.5) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
     }
-
-
+}
 
 /* --- 2. ІДЕАЛЬНЕ РОЗСІЮВАННЯ ТЕКСТУ (ЧЕРЕЗ МАСКУ, БЕЗ ЧОРНИХ СМУГ) --- */
 @media (min-width: 1001px) {
@@ -1405,7 +1411,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 }
 
 /* ГАРАНТОВАНО ВБИВАЄМО ЕФЕКТ НА МОБІЛЬНОМУ (Навіть якщо десь лишився старий код) */
-@media (max-width: 1000px) and (pointer: coarse)
+@media (max-width: 1000px) and (pointer: coarse) {
     .settings-container::after, .text-content.scrollable::after {
         display: none !important;
         content: none !important;
@@ -1419,13 +1425,11 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 .popup-content, 
 .achievements-panel, 
 #dlc-screen .text-content.centered {
-    /* Примусово переводимо рендер у 3D-простір на відеокарту */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    /* Попереджаємо браузер заздалегідь, що тут буде важкий фільтр */
-    will-change: transform, backdrop-filter;
+    will-change: transform; /* backdrop-filter не є валідним will-change хінтом */
 }
 
 /* === 1. ГЛОБАЛЬНЕ ЗАТЕМНЕННЯ ФОНУ і БЛЮР (100% ОДНАКОВЕ ДЛЯ ВСІХ ЕКРАНІВ ТА ПОПАПІВ) === */         
@@ -1482,7 +1486,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 }
 
 /* Окреме правило тільки для мобільного телефону, щоб там нічого не зжалося */
-@media (max-width: 1000px) and (pointer: coarse)
+@media (max-width: 1000px) and (pointer: coarse) {
     .journal-content-area {
         padding: 10px 0px 80px 0px !important; /* Компактні відступи для ТЕЛЕФОНУ */
     }
