@@ -1593,3 +1593,33 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     .gallery-sidebar  { width: 500px; }
     .gallery-viewport { max-width: none; flex-grow: 1; }
 }
+
+
+/* === HIRE STATUS BADGE === */
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+    width: fit-content;
+}
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4caf50;
+    box-shadow: 0 0 8px #4caf50, 0 0 16px rgba(76, 175, 80, 0.4);
+    animation: statusPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+.status-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: #4caf50;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+@keyframes statusPulse {
+    0%, 100% { box-shadow: 0 0 4px #4caf50, 0 0 8px rgba(76, 175, 80, 0.3); transform: scale(1); }
+    50% { box-shadow: 0 0 12px #4caf50, 0 0 24px rgba(76, 175, 80, 0.6); transform: scale(1.2); }
+}
