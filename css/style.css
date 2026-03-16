@@ -1375,7 +1375,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     .slot-thumb { width: 100px; height: 60px; }
     .p-title { font-size: 18px; }
     .settings-list { width: 100%; padding-left: 0; border: none; }
-    .dlc-btn { width: 100%; text-align: center; background: rgba(16, 16, 16, 0.4); border: 2px solid var(--primary-color); padding: 15px; font-size: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
+    .dlc-btn { width: 100%; text-align: center; background: rgba(16, 16, 16, 0.4); border: 1px solid var(--primary-color); padding: 15px; font-size: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
     #email-popup { display: none !important; }
     * { cursor: auto !important; }
 }
