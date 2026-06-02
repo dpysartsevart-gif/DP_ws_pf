@@ -129,6 +129,31 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 }
 .menu-item.active::before { content: "▶"; color: var(--primary-color); font-size: 12px; margin-right: 15px; transform: translateY(-2px); }
 
+/* --- FEATURED MENU ITEM (Gallery = головна дія, видно ще до наведення) --- */
+.menu-item.featured { animation: featuredPulse 2.2s ease-in-out infinite; }
+.menu-item.featured::after {
+    content: "\25C4 VIEW WORK";
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 1px; color: var(--primary-color);
+    margin-left: 14px; align-self: center;
+    text-shadow: 0 0 6px rgba(247,213,62,0.55);
+    animation: featuredBlink 1.6s steps(1) infinite;
+}
+.menu-item.featured:hover, .menu-item.featured.active { color: #fff; }
+@keyframes featuredPulse {
+    0%,100% { filter: drop-shadow(0 0 3px rgba(127,223,255,0.45)); }
+    50%     { filter: drop-shadow(0 0 11px rgba(127,223,255,0.9)); }
+}
+@keyframes featuredBlink {
+    0%,60%   { opacity: 0.9; }
+    61%,100% { opacity: 0.3; }
+}
+
+/* --- SMOOTHNESS: GPU-підказки для анімованих елементів --- */
+.bg-layer, .dust-speck, .swarm-container .tri, .ticker {
+    will-change: transform;
+}
+
 /* --- GALLERY --- */
 .gallery-layout { display: flex !important; flex-direction: row !important; height: 100%; gap: 60px; align-items: flex-start; } 
 .gallery-sidebar { width: 500px; display: flex; flex-direction: column; pointer-events: auto; flex-shrink: 0; }
@@ -144,7 +169,7 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .project-slot {
     padding: 10px;
     
-    /* Базовий фон без змін тону */
+    /* 4 ШАРИ ФОНУ (Сітки + Мій блакитний спалах + Темний фон) */
     background-image: 
         linear-gradient(rgba(0,0,0,0) 50%, transparent 50%),
         linear-gradient(90deg, rgba(0,0,0,0) 50%, transparent 50%),
@@ -175,23 +200,18 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 /* 2. ХОВЕР-СТАН (ВМИКАЄТЬСЯ СІТКА) */
 .project-slot:hover, .project-slot.selected { 
     border-color: rgba(247, 213, 62, 0.5); 
-    border-top-color: rgba(225, 241, 255, 0.34);
     
     background-image: 
-        radial-gradient(ellipse 72% 170% at 68% -40%, rgba(163,203,245,0.11) 0%, rgba(163,203,245,0.05) 38%, rgba(163,203,245,0) 74%),
         linear-gradient(rgba(0, 0, 0, 0.15) 50%, transparent 50%),
         linear-gradient(90deg, rgba(0, 0, 0, 0.15) 50%, transparent 50%),
         linear-gradient(110deg, transparent 0%, transparent 45%, rgba(163,203,245,0.05) 48%, rgba(255,255,255,0.4) 50%, rgba(163,203,245,0.15) 52%, transparent 55%, transparent 100%),
         linear-gradient(135deg, rgba(247, 213, 62, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
     
-    background-size: 64% 24px, 100% 2px, 2px 100%, 200% 100%, 100% 100%;
-    background-position: 62% top, 0 0, 0 0, -100% 0, 0 0;
-    background-repeat: no-repeat, repeat, repeat, no-repeat, no-repeat;
+    background-position: 0 0, 0 0, -100% 0, 0 0;
     border-radius: 6px; 
     transform: translateX(10px); 
     
     box-shadow: 
-        inset 0 1px 0 rgba(255,255,255,0.24), /* скляний верхній борт */
         inset 1px 1px 1px rgba(255, 255, 255, 0.3),   
         inset -1px -1px 1px rgba(0, 0, 0, 0.2),       
         4px 8px 12px rgba(0, 0, 0, 0.15);
@@ -307,7 +327,6 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
     box-shadow: 0 0 20px rgba(0,0,0,0.55); 
     overflow: hidden; 
     margin-top: 0; 
-    position: relative;
 }
 .vp-header { display: none; }
 .vp-footer { background: transparent; color: #666; padding: 10px 20px; font-size: 10px; border-top: none; text-align: right; flex-shrink: 0; }
@@ -720,7 +739,9 @@ body:has(.contact-link:hover) .cursor-dot {
 #lightbox-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 30000;
     display: flex;
     align-items: center;
@@ -729,6 +750,7 @@ body:has(.contact-link:hover) .cursor-dot {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
+    overflow: hidden;
 }
 #lightbox-overlay.active {
     opacity: 1;
@@ -736,11 +758,16 @@ body:has(.contact-link:hover) .cursor-dot {
 }
 #lightbox-img {
     max-width: 95vw;
-    max-height: 85vh;
+    max-height: 95vh;
     object-fit: contain;
     border: 1px solid #444;
-    box-shadow: 0 0 40px rgba(0,0,0,0.8);
-    cursor: none;
+    border-radius: 8px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.85);
+    cursor: zoom-in;
+    transform: scale(1);
+    transform-origin: center center;
+    transition: transform 0.12s ease-out;
+    will-change: transform;
 }
 .lightbox-close {
     position: absolute;
@@ -1486,61 +1513,6 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
     border-radius: 8px !important;
-}
-
-/* Активні glass-картки: тільки борти + слабкий top glow + вузький центр-блік */
-.screen.active-screen .shop-container,
-.screen.active-screen .text-content,
-.screen.active-screen .scroll-container,
-.popup-overlay .popup-content,
-.screen.active-screen .achievements-panel,
-#dlc-screen.active-screen .text-content.centered,
-#gallery-screen.active-screen .viewport-frame,
-#journal-screen.active-screen .viewport-frame {
-    position: relative;
-    border-top: 1px solid rgba(225, 241, 255, 0.30) !important;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        inset 0 14px 14px -12px rgba(163, 203, 245, 0.16),
-        inset 1px 1px 2px rgba(255, 255, 255, 0.1),
-        inset -1px -1px 2px rgba(0, 0, 0, 0.5),
-        0 15px 30px rgba(0, 0, 0, 0.7) !important;
-}
-
-.screen.active-screen .shop-container::before,
-.screen.active-screen .text-content::before,
-.screen.active-screen .scroll-container::before,
-.popup-overlay .popup-content::before,
-.screen.active-screen .achievements-panel::before,
-#dlc-screen.active-screen .text-content.centered::before,
-#gallery-screen.active-screen .viewport-frame::before,
-#journal-screen.active-screen .viewport-frame::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 62%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 20px;
-    background: radial-gradient(ellipse 78% 165% at 70% 0%, rgba(163,203,245,0.12) 0%, rgba(163,203,245,0.05) 40%, rgba(163,203,245,0) 78%);
-    filter: blur(1.2px);
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 10%, rgba(0,0,0,0.18) 34%, #000 58%, #000 90%, transparent 100%);
-    mask-image: linear-gradient(90deg, transparent 0%, transparent 10%, rgba(0,0,0,0.18) 34%, #000 58%, #000 90%, transparent 100%);
-    pointer-events: none;
-}
-
-/* Акцентний вузький блік: тільки праві Viewport-картки (Gallery + Journal) */
-#gallery-screen.active-screen .viewport-frame::after,
-#journal-screen.active-screen .viewport-frame::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 62%;
-    transform: translateX(-50%);
-    width: 15%;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.18), rgba(255,255,255,0));
-    pointer-events: none;
 }
 
 

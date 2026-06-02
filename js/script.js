@@ -60,12 +60,14 @@ function runStatsAnimation() {
     // Числові стати
     document.querySelectorAll('.stat-num[data-target]').forEach(el => {
         el.textContent = '0';
-        const target = parseInt(el.dataset.target);
+        const raw = String(el.dataset.target);
+        const target = parseInt(raw) || 0;
+        const suffix = raw.replace(/[0-9]/g, '');   // напр. "+"
         let current = 0;
-        const step = Math.ceil(target / 20);
+        const step = Math.max(1, Math.ceil(target / 20));
         const interval = setInterval(() => {
             current = Math.min(current + step, target);
-            el.textContent = current;
+            el.textContent = current + (current >= target ? suffix : '');
             if (current >= target) clearInterval(interval);
         }, 60);
     });
@@ -269,6 +271,7 @@ window.addEventListener('popstate', (event) => {
 
 // === CURSOR & DUST ===
     let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, circleX = 0, circleY = 0;
+    let dustScheduled = false;
     if (window.matchMedia("(min-width: 1000px)").matches) {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX; mouseY = e.clientY;
@@ -308,25 +311,33 @@ const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn
                 bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             }
 
-            // === РОЗУМНИЙ ПИЛ (М'ЯКИЙ РОЗЛІТ) ===
-            document.querySelectorAll('.dust-speck').forEach(speck => {
-                const rect = speck.getBoundingClientRect();
-                const speckX = rect.left + rect.width / 2;
-                const speckY = rect.top + rect.height / 2;
-                const dist = Math.hypot(mouseX - speckX, mouseY - speckY);
-                
-                if (dist < 90) {
-                    const angle = Math.atan2(speckY - mouseY, speckX - mouseX);
-                    const force = (90 - dist) * 0.25;
-                    speck.style.marginLeft = `${Math.cos(angle) * force}px`;
-                    speck.style.marginTop = `${Math.sin(angle) * force}px`;
-                    speck.style.transition = 'margin 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
-                } else {
-                    speck.style.marginLeft = '0px';
-                    speck.style.marginTop = '0px';
-                    speck.style.transition = 'margin 1.5s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
-                }
-            });
+            // === РОЗУМНИЙ ПИЛ (М'ЯКИЙ РОЗЛІТ) — throttle 1/кадр, читання→запис ===
+            if (!dustScheduled) {
+                dustScheduled = true;
+                requestAnimationFrame(() => {
+                    dustScheduled = false;
+                    const specks = document.querySelectorAll('.dust-speck');
+                    const pos = [];
+                    specks.forEach(speck => {           // спершу всі читання
+                        const rect = speck.getBoundingClientRect();
+                        pos.push([rect.left + rect.width / 2, rect.top + rect.height / 2]);
+                    });
+                    specks.forEach((speck, i) => {      // потім всі записи
+                        const dist = Math.hypot(mouseX - pos[i][0], mouseY - pos[i][1]);
+                        if (dist < 90) {
+                            const angle = Math.atan2(pos[i][1] - mouseY, pos[i][0] - mouseX);
+                            const force = (90 - dist) * 0.25;
+                            speck.style.marginLeft = `${Math.cos(angle) * force}px`;
+                            speck.style.marginTop = `${Math.sin(angle) * force}px`;
+                            speck.style.transition = 'margin 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
+                        } else {
+                            speck.style.marginLeft = '0px';
+                            speck.style.marginTop = '0px';
+                            speck.style.transition = 'margin 1.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
+                        }
+                    });
+                });
+            }
         });
 
 function animateCursor() {
@@ -1040,10 +1051,16 @@ shopBtns.forEach(btn => {
     if(btnJournalClose) btnJournalClose.addEventListener('click', () => { safePlay('snd-select'); if(journalPopup) journalPopup.style.display = 'none'; });
 
     // === LIGHTBOX LOGIC ===
+let lbScale = 1, lbPanX = 0, lbPanY = 0, lbDragging = false, lbWasDrag = false;
+function applyLbTransform() {
+    if (lightboxImg) lightboxImg.style.transform = `translate(${lbPanX}px, ${lbPanY}px) scale(${lbScale})`;
+}
+function resetLbZoom() { lbScale = 1; lbPanX = 0; lbPanY = 0; lbDragging = false; applyLbTransform(); }
 function closeLightbox() {
         if(lightbox && lightbox.classList.contains('active')) {
             lightbox.classList.remove('active');
             safePlay('snd-select');
+            resetLbZoom();
             setTimeout(() => { lightboxImg.src = ''; }, 300);
             // ДОДАНО: Якщо ми закрили хрестиком, стираємо "крок" з історії
             if(history.state && history.state.screen === 'lightbox') { history.back(); }
@@ -1051,7 +1068,59 @@ function closeLightbox() {
     }
 
     if(lightbox) {
-        lightbox.addEventListener('click', closeLightbox);
+        // Клік по фону — закрити; по зображенню/після тягання — НЕ закривати
+        lightbox.addEventListener('click', (e) => {
+            if (lbWasDrag) { lbWasDrag = false; return; }
+            if (e.target !== lightboxImg) closeLightbox();
+        });
+        // Зум колесом миші (1x–5x), у точку під курсором
+        lightbox.addEventListener('wheel', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            e.preventDefault();
+            const oldScale = lbScale;
+            // вже на 1x і крутимо на зменшення → закрити (як ESC)
+            if (e.deltaY > 0 && oldScale <= 1) { closeLightbox(); return; }
+            let newScale = Math.min(5, Math.max(1, oldScale + (e.deltaY < 0 ? 0.2 : -0.2)));
+            if (newScale === oldScale) return;
+            // тримаємо точку під курсором на місці
+            if (lightboxImg) {
+                const rect = lightboxImg.getBoundingClientRect();
+                const dx = e.clientX - (rect.left + rect.width / 2);
+                const dy = e.clientY - (rect.top + rect.height / 2);
+                const ratio = newScale / oldScale;
+                lbPanX += dx * (1 - ratio);
+                lbPanY += dy * (1 - ratio);
+            }
+            lbScale = newScale;
+            if (lbScale <= 1) { lbPanX = 0; lbPanY = 0; }   // на 1x — у центр
+            applyLbTransform();
+            if (lightboxImg) lightboxImg.style.cursor = lbScale > 1 ? 'grab' : 'zoom-in';
+        }, { passive: false });
+        // DRAG-PAN: тягати збільшене зображення
+        if (lightboxImg) {
+            lightboxImg.addEventListener('mousedown', (e) => {
+                if (lbScale <= 1) return;
+                lbDragging = true;
+                e.preventDefault();
+                lightboxImg.style.cursor = 'grabbing';
+                lightboxImg.style.transition = 'none';
+            });
+        }
+        window.addEventListener('mousemove', (e) => {
+            if (!lbDragging) return;
+            lbPanX += e.movementX;
+            lbPanY += e.movementY;
+            applyLbTransform();
+        });
+        window.addEventListener('mouseup', () => {
+            if (!lbDragging) return;
+            lbDragging = false;
+            lbWasDrag = true;   // щоб клік одразу після тягання не закрив
+            if (lightboxImg) {
+                lightboxImg.style.cursor = lbScale > 1 ? 'grab' : 'zoom-in';
+                lightboxImg.style.transition = 'transform 0.12s ease-out';
+            }
+        });
         if(lightboxClose) {
             lightboxClose.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
             lightboxClose.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
@@ -1060,48 +1129,14 @@ function closeLightbox() {
 
 if(vpContent) {
         vpContent.addEventListener('click', (e) => {
-            if(e.target.tagName === 'IMG') {
-                if (lightbox && lightboxImg) {
-                    lightboxImg.src = e.target.src; 
-                    lightbox.classList.add('active'); 
-                    safePlay('snd-select');
-                    history.pushState({ screen: 'lightbox' }, '', '');
-
-                    // ДИНАМІЧНИЙ ТРИКУТНИК ДЛЯ LIGHTBOX
-                    let lbAltBtn = document.getElementById('lb-alt-btn');
-                    if (!lbAltBtn) {
-                        lbAltBtn = document.createElement('div');
-                        lbAltBtn.id = 'lb-alt-btn';
-                        lbAltBtn.className = 'alt-toggle-btn';
-                        lbAltBtn.style.cssText = 'position: absolute; top: 30px; left: 40px; z-index: 30005; width: 36px !important; height: 36px !important;';
-                        lightbox.appendChild(lbAltBtn);
-                    }
-
-                    if (e.target.dataset.baseSrc && e.target.dataset.altSrc) {
-                        lbAltBtn.style.display = 'flex';
-                        let showingAlt = (e.target.src.includes('_alt.jpg')); 
-                        const iconMesh = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 20 2 20"></polygon><line x1="12" y1="2" x2="12" y2="20"></line><line x1="22" y1="20" x2="12" y2="12"></line><line x1="2" y1="20" x2="12" y2="12"></line></svg>`;
-                        const iconRender = `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 20 2 20"></polygon></svg>`;
-                        
-                        lbAltBtn.innerHTML = showingAlt ? iconRender : iconMesh;
-
-                        lbAltBtn.onclick = (event) => {
-                            event.stopPropagation();
-                            showingAlt = !showingAlt;
-                            lightboxImg.src = showingAlt ? e.target.dataset.altSrc : e.target.dataset.baseSrc;
-                            lbAltBtn.innerHTML = showingAlt ? iconRender : iconMesh;
-                            
-                            // Синхронізуємо картинку в галереї під лайтбоксом
-                            e.target.src = lightboxImg.src;
-                            const originalBtn = e.target.parentElement.querySelector('.alt-toggle-btn');
-                            if (originalBtn) originalBtn.innerHTML = lbAltBtn.innerHTML;
-                            
-                            safePlay('snd-hover');
-                        };
-                    } else {
-                        lbAltBtn.style.display = 'none';
-                    }
-                }
+            // Клік по зображенню → лайтбокс: по центру, на повну висоту, з блюр-фоном.
+            // Далі зум колесом миші. (Alt-перемикач лишається на мініатюрі у Viewport.)
+            if (e.target.tagName === 'IMG' && lightbox && lightboxImg) {
+                resetLbZoom();
+                lightboxImg.src = e.target.src;
+                lightbox.classList.add('active');
+                safePlay('snd-select');
+                history.pushState({ screen: 'lightbox' }, '', '');
             }
         });
     }
