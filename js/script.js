@@ -226,19 +226,23 @@ window.addEventListener('popstate', (event) => {
     let isDlcActive = false;
 
     // === DYNAMIC FAVICON LOGIC ===
-    const faviconDefault = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f7d53e" rx="20"/><text y="70" x="15" fill="black" font-family="monospace" font-size="60" font-weight="bold">DP</text></svg>';
+    // Повертаємось на справжній файл, а не на data:-URI — чіткіше у вкладці
+    const faviconDefault = 'assets/favicon-192.png';
     const faviconTerminal = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23ff3d00" rx="20"/><text y="65" x="15" fill="white" font-family="monospace" font-size="55">>_</text></svg>';
 
     function setFavicon(url) {
-        let link = document.querySelector("link[rel~='icon']");
-        if (!link) {
-            link = document.createElement('link');
-            link.rel = 'icon';
-            document.head.appendChild(link);
-        }
+        // Іконок у <head> тепер кілька (ico/svg/png різних розмірів), тому
+        // міняти href лише в першій недостатньо — браузер може лишити іншу.
+        // Прибираємо всі й ставимо одну. rel="apple-touch-icon" не чіпаємо.
+        document.querySelectorAll("link[rel~='icon']").forEach(l => l.remove());
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.id = 'dynamic-favicon';
         link.href = url;
+        document.head.appendChild(link);
     }
-    setFavicon(faviconDefault);
+    // На старті НЕ перезаписуємо іконку: статичні теги з <head> дають ту саму
+    // картинку, але у справжніх файлах — чіткіше і видимо для пошукових систем.
 
 // === SYSTEM BOOT ===
     // Стартовий екран завантаження вимкнено. Одразу показуємо мобільний банер, якщо треба.
