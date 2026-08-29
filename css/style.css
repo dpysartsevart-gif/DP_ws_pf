@@ -97,7 +97,7 @@ opacity: 0.9;
 
 h1.glitch {
     font-family: 'Teko', sans-serif;
-    font-size: clamp(52px, 4vw, 70px); line-height: 0.9; letter-spacing: 2px; color: #ffffff; 
+    font-size: clamp(60px, 5vw, 88px); line-height: 0.9; letter-spacing: 2px; color: #ffffff;
     margin-bottom: 5px; text-transform: uppercase; position: relative; cursor: default; pointer-events: auto; transition: all 0.3s ease;
     text-shadow: 0 0 15px rgba(0,0,0,0.5); 
 }
@@ -113,6 +113,18 @@ h1.glitch:hover { color: var(--primary-color); text-shadow: 0 0 20px rgba(247, 2
 @keyframes polyFloat { 0% { opacity: 0.5; } 100% { opacity: 1; transform: translate3d(10px, -5px, 10px) rotate(360deg); } }
 
 .role-subtitle { font-size: 16px; color: var(--primary-color); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; text-shadow: 0 0 5px rgba(247, 213, 62, 0.4); }
+
+/* Другий рядок підзаголовка — друга професія, блакитним (другорядний шар) */
+.role-subtitle.sub-1 { margin-bottom: 6px; }
+.role-subtitle.sub-2 {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    color: var(--accent-color);
+    text-shadow: 0 0 5px rgba(163, 203, 245, 0.35);
+    margin-bottom: 30px;
+}
+.role-subtitle.sub-2 .cursor-blink { color: var(--accent-color); visibility: hidden; }
+.role-subtitle.sub-2.typing .cursor-blink { visibility: visible; }
 
 h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border-bottom: 2px solid var(--primary-color); display: block; width: 100%; padding-bottom: 5px; margin-bottom: 25px; text-transform: uppercase; line-height: 1; }
 
@@ -488,13 +500,73 @@ h2 { font-size: 32px; color: var(--primary-color); margin: 0; padding: 0; border
 .contact-link { color: #89b4fa; text-decoration: none; font-weight: bold; letter-spacing: 1px; border-bottom: 1px dashed #89b4fa; transition: 0.2s; }
 .contact-link:hover { color: #b4befe; border-bottom: 1px solid #b4befe; text-shadow: 0 0 8px rgba(137, 180, 250, 0.6); }
 
-.shop-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 15px; margin-bottom: 15px; border-radius: 8px; transition: 0.2s; }
+/* === SHOP: КАРТКА ТОВАРУ (ЛІВИЙ СПИСОК) === */
+.shop-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(163, 203, 245, 0.15);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    transition: border-color 0.25s ease, transform 0.25s ease, border-radius 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    cursor: none;
+    pointer-events: auto;
+}
+.shop-item:hover, .shop-item.selected {
+    border-color: rgba(247, 213, 62, 0.5);
+    background: linear-gradient(135deg, rgba(247, 213, 62, 0.10) 0%, rgba(0,0,0,0.75) 100%);
+    border-radius: 6px;
+    transform: translateX(10px);
+    box-shadow: inset 1px 1px 1px rgba(255,255,255,0.15), 4px 8px 12px rgba(0,0,0,0.35);
+}
 .shop-item.inactive { opacity: 0.6; filter: grayscale(0.8); }
-.shop-icon { width: 50px; height: 50px; background: #333; border-radius: 4px; margin-right: 20px; }
-.shop-info { display: flex; flex-direction: column; flex-grow: 1; }
-.shop-title { color: var(--primary-color); font-weight: bold; font-size: 18px; }
-.shop-desc { color: #aaa; font-size: 12px; }
-.shop-btn { padding: 10px 20px; border: 1px solid #555; color: #555; font-size: 12px; letter-spacing: 1px; font-weight: bold; cursor: not-allowed; }
+.shop-item.commission { border-color: rgba(76, 175, 80, 0.4); }
+.shop-item.commission .shop-title { color: #4caf50; }
+.shop-item.commission:hover, .shop-item.commission.selected { border-color: rgba(76, 175, 80, 0.8); }
+
+.shop-icon {
+    width: 54px; height: 54px; flex-shrink: 0;
+    background: #111;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px; font-weight: bold; letter-spacing: 1px;
+    color: var(--accent-color);
+    background-size: cover; background-position: center;
+    transition: 0.2s;
+}
+.shop-item:hover .shop-icon, .shop-item.selected .shop-icon { border-color: #fff; }
+.shop-icon.icon-doladu {
+    border-color: var(--primary-color); color: var(--primary-color);
+    background-image: url('../assets/doladu_256.png');
+    background-size: contain; background-repeat: no-repeat;
+}
+.shop-icon.icon-commission { border-color: #4caf50; color: #4caf50; }
+.shop-icon.icon-brush, .shop-icon.icon-mesh { border-color: #555; color: #777; }
+
+.shop-info { display: flex; flex-direction: column; flex-grow: 1; min-width: 0; }
+.shop-title { color: var(--primary-color); font-weight: bold; font-size: 18px; line-height: 1.1; }
+.shop-desc { color: #aaa; font-size: 12px; margin-top: 5px; line-height: 1.4; }
+.shop-btn {
+    flex-shrink: 0;
+    width: 150px;
+    text-align: center;
+    padding: 10px 12px;
+    border: 1px solid #555;
+    color: #555;
+    font-size: 11px; letter-spacing: 1px; font-weight: bold;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.shop-btn.buy-link { border-color: var(--primary-color); color: var(--primary-color); }
+.shop-btn.buy-link:hover { background: var(--primary-color); color: #000; box-shadow: 0 0 12px rgba(247, 213, 62, 0.5); }
+.shop-btn.open-slot { border-color: #4caf50; color: #4caf50; }
+.shop-btn.open-slot:hover { background: #4caf50; color: #000; box-shadow: 0 0 12px rgba(76, 175, 80, 0.5); }
 
 .settings-list { 
     list-style: none;
@@ -1365,14 +1437,37 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 
     /* Мобільний першоджерельний блок */
     .header-top-row { flex-direction: column; align-items: flex-start; gap: 5px; }
-    h1.glitch { font-size: 52px !important; letter-spacing: 1px; margin-bottom: 5px; }
+    /* Адаптивний: на вузьких телефонах стискається, щоб хвіст прізвища
+       не заходив під кнопку звуку в правому верхньому куті */
+    h1.glitch { font-size: clamp(38px, 12vw, 52px) !important; letter-spacing: 1px; margin-bottom: 5px; }
 
 /* Лагодимо підзаголовок (в 1 рядок, адаптивний шрифт, без скролу) */
-    .role-subtitle { 
+    .role-subtitle {
         font-size: clamp(9px, 2.8vw, 12px) !important; /* Магія: шрифт сам стиснеться на вузьких телефонах */
-        margin-bottom: 25px !important; 
+        margin-bottom: 25px !important;
         white-space: nowrap !important; /* Жорстко в 1 рядок */
         padding-right: 0 !important;
+    }
+    /* На телефоні бейдж лишається як був: у потоці під підзаголовками,
+       без "STATUS:" — там права частина екрана зайнята заголовком */
+    .status-badge {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        gap: 8px !important;
+        margin-bottom: 25px !important;
+        width: fit-content !important;
+    }
+    .status-label { display: none !important; }
+    .status-dot { width: 8px !important; height: 8px !important; }
+    .status-text { font-size: 13px !important; letter-spacing: 2px !important; }
+
+    /* Другий рядок довший — дрібніший шрифт, щоб теж влазив в один рядок */
+    .role-subtitle.sub-1 { margin-bottom: 3px !important; }
+    .role-subtitle.sub-2 {
+        font-size: clamp(7px, 2.1vw, 10px) !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 20px !important;
     }
     .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
     .dlc-wrapper { position: fixed !important; bottom: 50px !important; left: 50% !important; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0; top: auto; }
@@ -1634,28 +1729,42 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
 }
 
 
-/* === HIRE STATUS BADGE === */
+/* === HIRE STATUS BADGE ===
+   Читається як показник телеметрії (сусід #audio-toggle / #hud-widget),
+   а не як оголошення поряд з іменем. Правий верхній кут, під [AUDIO].
+   На телефоні повертається у звичайний потік під підзаголовки — там
+   права частина екрана зайнята заголовком. */
 .status-badge {
+    position: absolute;
+    top: 52px;
+    right: 20px;
+    z-index: 1000;
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 30px;
-    width: fit-content;
+    gap: 7px;
+    width: auto;
+    pointer-events: none;
 }
 .status-dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: #4caf50;
     box-shadow: 0 0 8px #4caf50, 0 0 16px rgba(76, 175, 80, 0.4);
     animation: statusPulse 2s ease-in-out infinite;
     flex-shrink: 0;
 }
+.status-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
 .status-text {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 13px;
+    font-size: 10px;
     color: #4caf50;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
 }
 @keyframes statusPulse {
@@ -1714,4 +1823,176 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
+}
+
+/* =========================================================
+   SHOP: ДВОКОЛОНКОВИЙ ЛЕЙАУТ + PREVIEW PRODUCT
+   (дзеркалить структуру Gallery / Journal)
+   ========================================================= */
+
+/* Список товарів ширший за галерейний сайдбар — щоб кнопка BUY стояла справа від тексту */
+#shop-screen .gallery-sidebar { width: clamp(620px, 44vw, 900px); }
+#shop-screen .shop-scroll-area { padding-right: 25px; }
+.shop-list { perspective: 1000px; }
+
+/* Вікно PREVIEW PRODUCT */
+#shop-preview {
+    display: block !important;
+    scroll-snap-type: none !important;
+    padding: 30px 40px 60px 40px !important;
+    text-align: left;
+}
+#shop-preview .vp-placeholder { margin-top: 200px; text-align: center; }
+
+.sp-head {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+.sp-badge {
+    width: 58px; height: 58px; flex-shrink: 0;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    background: #111;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 17px; font-weight: bold; letter-spacing: 1px;
+    color: var(--primary-color);
+}
+.sp-badge.green { border-color: #4caf50; color: #4caf50; }
+.sp-badge.dim { border-color: #555; color: #777; }
+.sp-badge img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.sp-titles { flex-grow: 1; min-width: 0; }
+.sp-title { font-size: 26px; color: #fff; font-weight: bold; line-height: 1.1; text-transform: uppercase; }
+.sp-sub { font-size: 13px; color: var(--primary-color); letter-spacing: 2px; margin-top: 4px; text-transform: uppercase; }
+
+.sp-status {
+    flex-shrink: 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 1px;
+    padding: 6px 12px;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+.sp-status.ok { color: #4caf50; }
+.sp-status.warn { color: var(--primary-color); }
+.sp-status.off { color: #ff3d00; }
+
+.sp-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.sp-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 1px;
+    color: var(--accent-color);
+    border: 1px solid rgba(163, 203, 245, 0.35);
+    border-radius: 3px;
+    padding: 4px 9px;
+}
+
+/* Галерея зображень товару */
+.sp-gallery { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-bottom: 25px; }
+.sp-gallery img {
+    display: block;
+    max-width: 100%;
+    max-height: 55vh;
+    width: auto;
+    height: auto;
+    border: 1px solid #333;
+    border-radius: 6px;
+    cursor: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.sp-gallery img:hover { border-color: var(--primary-color); box-shadow: 0 0 18px rgba(247, 213, 62, 0.25); }
+.sp-noimg {
+    border: 1px dashed #3a3a3a;
+    border-radius: 6px;
+    padding: 45px 20px;
+    text-align: center;
+    color: #444;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+}
+
+/* Опис товару */
+.sp-desc { color: #ccc; font-size: 16px; line-height: 1.6; }
+.sp-desc p { margin-bottom: 14px; }
+.sp-lead {
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.5;
+    border-left: 3px solid var(--primary-color);
+    padding-left: 15px;
+    margin-bottom: 20px !important;
+}
+.sp-desc strong { color: #fff; }
+.sp-desc ul { list-style: none; margin: 10px 0 18px 0; }
+.sp-desc li { color: #ccc; font-size: 15px; line-height: 1.5; margin-bottom: 7px; padding-left: 18px; position: relative; }
+.sp-desc li::before { content: "▸"; color: var(--primary-color); position: absolute; left: 0; }
+
+.sp-section { color: var(--primary-color); font-weight: bold; letter-spacing: 1px; margin: 25px 0 10px 0; border-bottom: 1px dashed #444; padding-bottom: 5px; }
+
+/* Таблиця характеристик */
+.sp-specs { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+.sp-specs td { padding: 7px 0; border-bottom: 1px solid #222; font-size: 14px; color: #aaa; }
+.sp-specs td:last-child { text-align: right; color: #fff; font-family: 'Share Tech Mono', monospace; }
+
+/* Нижня кнопка купівлі */
+.sp-actions { margin-top: 30px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.sp-buy {
+    display: inline-block;
+    padding: 14px 28px;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.sp-buy:hover { background: var(--primary-color); color: #000; box-shadow: 0 0 20px rgba(247, 213, 62, 0.5); }
+.sp-buy.green { border-color: #4caf50; color: #4caf50; }
+.sp-buy.green:hover { background: #4caf50; color: #000; box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
+.sp-buy.dead { border-color: #444; color: #555; }
+.sp-buy.dead:hover { background: transparent; color: #555; box-shadow: none; }
+.sp-price { color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 14px; letter-spacing: 1px; }
+.sp-price span { color: var(--text-dim); }
+
+/* Курсор: підсвітка на елементах магазину (як на .project-slot / .shop-btn) */
+body:has(.shop-item:hover) .cursor-circle,
+body:has(.sp-buy:hover) .cursor-circle,
+body:has(.sp-gallery img:hover) .cursor-circle {
+    transform: translate(-50%, -50%) scale(2.5);
+    border-color: var(--primary-color);
+}
+body:has(.shop-item:hover) .cursor-dot,
+body:has(.sp-buy:hover) .cursor-dot,
+body:has(.sp-gallery img:hover) .cursor-dot {
+    background-color: var(--primary-color);
+    transform: translate(-50%, -50%) scale(0.5);
+}
+
+/* --- SHOP: МОБІЛЬНА ВЕРСІЯ --- */
+@media (max-width: 1000px) and (pointer: coarse) {
+    #shop-screen .gallery-sidebar { width: 100% !important; }
+    #shop-screen .shop-scroll-area { padding-right: 5px !important; }
+    /* На телефоні кнопка не влазить справа — переносимо її вниз на всю ширину */
+    .shop-item { margin-bottom: 12px; flex-wrap: wrap; align-items: flex-start; row-gap: 12px; }
+    /* flex-basis:0 — щоб текст стискався поруч з іконкою, а не зістрибував на новий рядок */
+    .shop-item .shop-info { flex: 1 1 0; }
+    .shop-item .shop-btn { flex: 1 1 100%; width: auto; padding: 14px 12px; font-size: 12px; }
+    .shop-item:hover, .shop-item.selected { transform: none; }
+    .shop-title { font-size: 16px !important; }
+    #shop-preview { padding: 10px 0 80px 0 !important; }
+    .sp-head { flex-wrap: wrap; gap: 12px; }
+    .sp-title { font-size: 22px; }
+    .sp-status { font-size: 10px; }
+    .sp-buy { width: 100%; text-align: center; }
 }

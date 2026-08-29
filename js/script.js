@@ -41,16 +41,44 @@ for (let i = 0; i < 12; i++) {
 }
 
 // === TYPING SUBTITLE ===
+// Рядок 1 — 3D-профіль. Рядок 2 — друга професія (продукт / процеси / AI).
+// Друкуються по черзі: курсор "переїжджає" з першого рядка на другий.
 const subtitleEl = document.getElementById('typed-subtitle');
 const subtitleText = '3D CHARACTER ARTIST \\ GAMEDEV \\ LOOKDEV';
+const subtitleEl2 = document.getElementById('typed-subtitle-2');
+const subtitleText2 = 'PRODUCT DESIGN \\ PROCESS ANALYSIS & UPGRADE \\ AI-ASSISTED DEV';
+
 let si = 0;
 function typeSubtitle() {
   if (si <= subtitleText.length) {
     subtitleEl.textContent = subtitleText.slice(0, si);
     si++;
     setTimeout(typeSubtitle, 60);
+  } else {
+    startSubtitle2();
   }
 }
+
+let si2 = 0;
+function typeSubtitle2() {
+  if (!subtitleEl2) return;
+  if (si2 <= subtitleText2.length) {
+    subtitleEl2.textContent = subtitleText2.slice(0, si2);
+    si2++;
+    setTimeout(typeSubtitle2, 40);
+  }
+}
+
+function startSubtitle2() {
+  if (!subtitleEl2) return;
+  // Гасимо курсор на першому рядку і вмикаємо на другому
+  const cursor1 = document.querySelector('.role-subtitle.sub-1 .cursor-blink');
+  if (cursor1) cursor1.style.visibility = 'hidden';
+  const row2 = document.querySelector('.role-subtitle.sub-2');
+  if (row2) row2.classList.add('typing');
+  setTimeout(typeSubtitle2, 300);
+}
+
 // Запусти після boot screen (приблизно 0.50 секунди)
 setTimeout(typeSubtitle, 500);
 
@@ -134,7 +162,7 @@ window.addEventListener('popstate', (event) => {
             return;
         }
 
-        if (event.state && event.state.screen && event.state.screen !== 'mobile-project-view' && event.state.screen !== 'mobile-journal-view') {
+        if (event.state && event.state.screen && event.state.screen !== 'mobile-project-view' && event.state.screen !== 'mobile-journal-view' && event.state.screen !== 'mobile-shop-view') {
             showScreen(event.state.screen); 
         } else {
             showScreen('main-menu');
@@ -148,7 +176,17 @@ window.addEventListener('popstate', (event) => {
     const loaderText = document.querySelector('.loader-text'); 
     const audioToggle = document.getElementById('audio-toggle');
     
-    let isMuted = localStorage.getItem('dp_audio_muted') === 'true';
+    // Деякі браузери (Safari у приватному режимі, налаштування «блокувати дані сайтів»)
+    // кидають SecurityError на БУДЬ-ЯКИЙ дотик до localStorage. Без цієї обгортки
+    // виняток тут зупиняв увесь скрипт нижче — меню переставало реагувати взагалі.
+    function safeStorageGet(key) {
+        try { return localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function safeStorageSet(key, value) {
+        try { localStorage.setItem(key, value); } catch (e) { /* без збереження — просто не запам'ятовуємо */ }
+    }
+
+    let isMuted = safeStorageGet('dp_audio_muted') === 'true';
 
     if (audioToggle && isMuted) {
         audioToggle.innerText = "[ AUDIO : OFF ]";
@@ -180,8 +218,7 @@ window.addEventListener('popstate', (event) => {
     const btnEmailCancel = document.getElementById('btn-email-cancel');
     const donateBtn = document.getElementById('donate-btn');
     const backHints = document.querySelectorAll('.back-hint');
-    const shopBtns = document.querySelectorAll('.shop-btn');
-    const journalPopup = document.getElementById('journal-popup'); 
+    const journalPopup = document.getElementById('journal-popup');
     const btnJournalClose = document.getElementById('btn-journal-close'); 
 
     let currentMenuIndex = 0;
@@ -241,22 +278,30 @@ window.addEventListener('popstate', (event) => {
 // === СИСТЕМА: ЄДИНИЙ РЕАЛЬНИЙ ЛІЧИЛЬНИК (COUNTERAPI + SCRAMBLE) ===
     const visitorsEl = document.getElementById('sys-visitors');
     if (visitorsEl) {
-        // Використовуємо CounterAPI, який у тебе працював
-        fetch('https://api.counterapi.dev/v1/dpysartsev-portfolio/visits/up')
-            .then(response => response.json())
-            .then(data => {
-                // Додаємо базове число 4713 до реальних візитів для солідності
-                const totalVisits = data.count + 4713;
-                visitorsEl.textContent = totalVisits.toString().padStart(4, '0');
-                
-                // Запускаємо ефект Scramble (декодування)
-                if (typeof scrambleText === "function") {
-                    scrambleText(visitorsEl, 1500);
-                }
+        // Лічильник: Abacus (безкоштовний, без акаунта і без токена).
+        // Старий api.counterapi.dev/v1 вимкнули — він віддає 410 Gone.
+        // /hit/<простір>/<ключ> одночасно рахує і повертає {"value": N}.
+        const VISITS_BASE = 4713;  // база зі старого лічильника, щоб цифра не відкотилась
+        const VISITS_URL  = 'https://abacus.jasoncameron.dev/hit/dpysartsev-art/visits';
+
+        function showVisits(n) {
+            visitorsEl.textContent = String(n).padStart(4, '0');
+            if (typeof scrambleText === "function") scrambleText(visitorsEl, 1500);
+        }
+
+        fetch(VISITS_URL)
+            .then(response => {
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return response.json();
             })
-            .catch(error => {
+            .then(data => {
+                const count = Number(data.value);
+                if (!Number.isFinite(count)) throw new Error('bad payload');
+                showVisits(count + VISITS_BASE);
+            })
+            .catch(() => {
                 console.warn('SYS_WARN: Telemetry offline.');
-                visitorsEl.textContent = '4713'; // Fallback цифра
+                showVisits(VISITS_BASE); // Fallback цифра
             });
     }
 
@@ -276,7 +321,7 @@ window.addEventListener('popstate', (event) => {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX; mouseY = e.clientY;
 
-const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close, .shop-btn, .contact-link');           
+const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close, .shop-item, .shop-btn, .sp-buy, .contact-link');
             // 1. Очищаємо ефект ТІЛЬКИ з тих кнопок, на яких немає курсору
             document.querySelectorAll('.menu-item, .dlc-btn, .buy-btn').forEach(btn => {
                 if (btn !== target) {
@@ -469,10 +514,18 @@ if(loadPct === 100) {
     let queenScrambleInterval = null;
 
     function activateScreen(screenId) {
+        // Раніше цей виклик стояв УСЕРЕДИНІ forEach — тобто спрацьовував 7 разів
+        // (по разу на кожен .screen) і плодив 6 зайвих вічних інтервалів на кожен
+        // захід у Credits. Тепер — рівно один раз.
+        if (screenId === 'credits-screen') {
+            setTimeout(runStatsAnimation, 400);
+        } else if (window._pipelineInterval) {
+            // Пішли з Credits — глушимо цикл стадій пайплайну
+            clearInterval(window._pipelineInterval);
+            window._pipelineInterval = null;
+        }
+
         screens.forEach(s => {
-if (screenId === 'credits-screen') {
-    setTimeout(runStatsAnimation, 400);
-}
             s.classList.remove('active-screen');
             if (s.id !== screenId && s.id !== 'email-popup') {
                 s.style.display = 'none';
@@ -528,7 +581,7 @@ if (hudWidget) {
 }
 
 
-if((screenId === 'gallery-screen' || screenId === 'journal-screen') && isMobile()) {
+if((screenId === 'gallery-screen' || screenId === 'journal-screen' || screenId === 'shop-screen') && isMobile()) {
             const currentSidebar = document.querySelector(`#${screenId} .gallery-sidebar`);
             const currentViewport = document.querySelector(`#${screenId} .gallery-viewport`);
             if(currentSidebar) currentSidebar.style.display = 'flex';
@@ -641,7 +694,7 @@ function goBack() {
 
                 <h4 class="journal-h4">5. Sport, Races, Fightings</h4>
                 <ul class="cv-list">
-                    <li>2XKO</li><li>Burnout Paradise</li><li>Carmageddon</li><li>Colin McRae Rally 2.0</li><li>CTR</li><li>Cars3</li><li>Destruction Derby</li><li>FlatOut (1, 2)</li><li>Forza Horizon 5</li><li>Hot Wheels Unleashed 1,2</li><li>Gran Turismo 7</li><li>Injustice</li><li>Killer Instinct</li><li>Mortal Kombat (I, II, 3, 9, X, 1)</li><li>Need for Speed (III, Underground 1,2, Most Wanted)</li><li>Onrush</li><li>Rocket League</li><li>Street Fighter II</li><li>Tekken (3,7)</li><li>Test Drive Unlimited</li><li>Tony Hawk's</li><li>TrackMania</li><li>Twisted Metal (3, 4)</li><li>Wave Race 64</li><li>Wipeout</li>
+                    <li>2XKO</li><li>Burnout Paradise</li><li>Carmageddon</li><li>Colin McRae Rally 2.0</li><li>CTR</li><li>Cars3</li><li>Destruction Derby</li><li>FlatOut (1, 2)</li><li>Forza Horizon 5</li><li>Hot Wheels Unleashed 1,2</li><li>Gran Turismo 3,7</li><li>Injustice</li><li>Killer Instinct</li><li>Mortal Kombat (I, II, 3, 9, X, 1)</li><li>Need for Speed (III, Underground 1,2, Most Wanted)</li><li>Onrush</li><li>Rocket League</li><li>Street Fighter II</li><li>Tekken (3,7)</li><li>Test Drive Unlimited</li><li>Tony Hawk's</li><li>TrackMania</li><li>Twisted Metal (3, 4)</li><li>Wave Race 64</li><li>Wipeout</li>
                 </ul>
 
                 <h4 class="journal-h4">6. Adventure, Horror, etc</h4>
@@ -732,10 +785,316 @@ const journalScreen = document.getElementById('journal-screen');
         });
     }
 
+/* ============================================================
+   === SHOP DATA (PREVIEW PRODUCT) ===
+   ------------------------------------------------------------
+   Кожен ключ ('doladu', 'psscript'...) має збігатись з data-id
+   картки товару в index.html (<div class="shop-item" data-id="...">).
+
+   ЩО МОЖНА РЕДАГУВАТИ:
+   badge   — квадратик зліва вгорі. Або 2-3 літери ('PS', 'ART', 'ZB'),
+             або картинка: '<img src="assets/твій_логотип.png" alt="NAME">'.
+   badgeTone — 'green' / 'dim' міняє колір рамки квадратика (не обов'язково).
+   title   — назва товару великими літерами.
+   sub     — підзаголовок під назвою.
+   status  — плашка справа: {text: 'AVAILABLE', tone: 'ok'|'warn'|'off'}
+   tags    — маленькі теги (масив рядків). Можна лишити [].
+   images  — МАСИВ КАРТИНОК. Клади файли в assets/images/shop/
+             і пиши сюди назви: ['doladu_01.jpg', 'doladu_02.jpg'].
+             Якщо масив порожній — покажеться рамка "NO PREVIEW IMAGES".
+             Клік по картинці відкриває її на весь екран (лайтбокс).
+   desc    — опис товару (звичайний HTML: <p>, <ul><li>, <strong>).
+   specs   — таблиця характеристик: [['НАЗВА', 'ЗНАЧЕННЯ'], ...] або [].
+   price   — рядок під кнопкою. Можна ''.
+   link    — посилання на купівлю. Якщо '' — кнопка буде неактивна.
+   btn     — текст кнопки.
+   tone    — 'gold' (звичайний), 'green' (комісія), 'dead' (закрито).
+   ============================================================ */
+    const IMG_SHOP_PATH = 'assets/images/shop/';
+
+    const shopData = {
+        'doladu': {
+            badge: '<img src="assets/doladu_256.png" alt="DOLADU">',
+            title: 'DOLADU',
+            sub: 'Software for 3D Pipeline and QA',
+            status: { text: 'AVAILABLE', tone: 'ok' },
+            tags: ['DESKTOP APP', 'WINDOWS', 'WORKS OFFLINE', 'NO TELEMETRY'],
+            images: [],
+            desc: `
+                <p class="sp-lead">It saves you hours on every project — and your hours are your money.</p>
+                <p>A single control center for a 3D project. <strong>DOLADU</strong> ("to put things in order") scans an entire project in one pass, tells you what is broken, and gives you a button to fix it — instead of opening files one by one and hoping.</p>
+                <p>Every mistake caught before delivery is a revision you don't do for free, a re-export you don't run at midnight, and a client email you never have to write.</p>
+                <p class="sp-section">/// ONE PROJECT AUDIT</p>
+                <p>One scan → <strong>10 checks</strong> → a <strong>0–100 delivery score</strong> with a verdict: READY / MINOR ISSUES / NEEDS WORK / BLOCKED. Every finding in the report has its own repair button for that exact file. The scan is cached, so every other tool runs off it instantly.</p>
+                <p class="sp-section">/// WHAT'S INSIDE</p>
+                <ul>
+                    <li><strong>Inspector</strong> — poly count vs. budget, n-gons, open edges, winding consistency, pivot &amp; axis checks, units and bounds, OBJ/FBX metadata, plus one-click fixes (Set Pivot, Fix Axis, Flip Green Channel).</li>
+                    <li><strong>3D Viewer</strong> — real-time viewer with SOLID / X-RAY / HIDDEN modes, texel density heatmap, 2D UV layout with UDIM grid and overlap audit, skeletal animation and morph targets.</li>
+                    <li><strong>Texture &amp; Mesh analysis</strong> — broken values, gamma, clipped blacks and whites; auto-adaptation of models between engines (orientation, scale, cm/m).</li>
+                    <li><strong>Project Tools</strong> — batch renaming to Unreal naming conventions (prefixes, texture suffixes), duplicate and heavy-file finder.</li>
+                    <li><strong>LookDev &amp; VFX</strong> — color and EXR analysis, HDRI hotspot finder, motion blur and depth-of-field calculators, color space / LUT checker, sequence gap finder, Copy-as-Python snippets.</li>
+                    <li><strong>Moodboard &amp; Project Health</strong> — reference board with automatic palette extraction, plus a visual metrics board for the whole project.</li>
+                    <li><strong>Dashboard</strong> — tasks, deadlines, progress and time tracking across <strong>16 DCC apps</strong>, with day / week / month statistics.</li>
+                    <li><strong>Team contract</strong> — one <strong>pipeline.json</strong> defines prefixes, poly budgets, required maps and texel density targets. The GUI and the headless CLI validate against the same file, so lead's rules survive all the way into CI.</li>
+                    <li><strong>Safety</strong> — every tool that writes to disk is journaled, and the Undo Center explains in plain words what a rollback will restore.</li>
+                </ul>
+                <p>Runs fully offline. No account, no cloud, no telemetry.</p>
+            `,
+            specs: [
+                ['TOOL ACTIONS', '161'],
+                ['WORK TABS', '9 (+ FAVORITES)'],
+                ['SUPPORTED FORMATS', '32'],
+                ['TEXTURE SUFFIX RULES', '162'],
+                ['DCC APPS MONITORED', '16'],
+                ['CACHED TOOL RUNTIME', '2.86 s → 0.06 s'],
+                ['WHAT IT BUYS YOU', 'HOURS BACK, EVERY PROJECT'],
+                ['ROLE', 'PRODUCT OWNER / ARCHITECT / QA']
+            ],
+            price: 'PRICING <span>— SEE STORE PAGE</span>',
+            link: 'https://doladu.lemonsqueezy.com/',
+            btn: '[ OPEN STORE ↗ ]',
+            tone: 'gold'
+        },
+
+        'psscript': {
+            badge: 'PS',
+            title: 'ULTRA POST-PROCESS PS SCRIPT',
+            sub: 'Photoshop automation for render post-production',
+            status: { text: 'AVAILABLE', tone: 'ok' },
+            tags: ['PHOTOSHOP', 'SCRIPT', 'RENDER POST'],
+            images: [],
+            desc: `
+                <p>My own post-production pipeline, formalized and turned into a script. It takes a raw render to a <strong>cinematic look in about 5 minutes</strong> instead of an hour of repeating the same manual passes.</p>
+                <p>Built the same way I build everything: I did the work by hand long enough to know exactly which steps repeat, then removed the repetition.</p>
+                <p class="sp-section">/// WHAT IT DOES</p>
+                <ul>
+                    <li>Sets up the full post-processing stack in one run — no rebuilding layers from scratch on every shot.</li>
+                    <li>Keeps the result editable: adjustment layers, not baked pixels.</li>
+                    <li>Consistent look across a whole series of renders — the same treatment every time.</li>
+                    <li>Works as a starting point you can push further, not a one-button filter.</li>
+                </ul>
+            `,
+            specs: [
+                ['SOFTWARE', 'ADOBE PHOTOSHOP'],
+                ['TIME PER RENDER', '~5 MIN'],
+                ['DELIVERY', 'BUY ME A COFFEE']
+            ],
+            price: 'SUPPORT PRICE <span>— SEE BMC PAGE</span>',
+            link: 'https://buymeacoffee.com/fr0kuc14dn/e/553396',
+            btn: '[ BUY ON BMC ↗ ]',
+            tone: 'gold'
+        },
+
+        'commission': {
+            badge: 'ART',
+            badgeTone: 'green',
+            title: 'COMMISSION: CHARACTER ART',
+            sub: 'Full pipeline, concept to final render',
+            status: { text: 'SLOTS OPEN', tone: 'ok' },
+            tags: ['CHARACTERS', 'CREATURES', 'GAME-READY', 'CINEMATIC'],
+            images: [],
+            desc: `
+                <p>Characters and creatures, realistic or stylized, taken through the whole pipeline: <strong>concept → high poly → retopology → UV → baking → texturing → lookdev → render or engine integration</strong>.</p>
+                <p class="sp-section">/// WHAT YOU GET</p>
+                <ul>
+                    <li>Clean, hand-made retopology and UV/UDIM layout — built to your poly budget, not to whatever the decimator produced.</li>
+                    <li>PBR texturing in Substance Painter, hand-painted when the style calls for it.</li>
+                    <li>Cloth and garments in Marvelous Designer — backed by 11 years of real textile production, so the fabric behaves like fabric.</li>
+                    <li>Grooming in XGen, lookdev in Arnold or Marmoset, or a ready-to-drop asset for Unreal Engine 5.</li>
+                    <li>Turntables, breakdowns and presentation edits if you need them for a pitch.</li>
+                    <li>3D print preparation for physical production.</li>
+                </ul>
+                <p>Clear communication, deadlines respected, and a warning about a risk <strong>before</strong> it becomes your problem — not after.</p>
+            `,
+            specs: [
+                ['SPECIALIZATION', 'CHARACTERS / CREATURES'],
+                ['STACK', 'ZBRUSH · MAYA · SUBSTANCE · MD'],
+                ['DELIVERY', 'GAME-READY OR CINEMATIC'],
+                ['STATUS', 'AVAILABLE FOR HIRE']
+            ],
+            price: 'QUOTE <span>— AFTER A SHORT BRIEF</span>',
+            link: '',
+            btn: '[ SEND A BRIEF ]',
+            tone: 'green'
+        },
+
+        'brushes': {
+            badge: 'ZB',
+            badgeTone: 'dim',
+            title: 'ZBRUSH SKIN BRUSHES KIT',
+            sub: 'Custom brushes for realistic skin detailing',
+            status: { text: 'TEMPORARY CLOSED', tone: 'off' },
+            tags: ['ZBRUSH', 'ALPHAS', 'VDM'],
+            images: [],
+            desc: `
+                <p>The set of brushes and alphas I use for skin pores, wrinkles and micro-detail on my own characters — collected over years of sculpting and still being cleaned up for release.</p>
+                <p class="sp-note" style="color:#888;">This module is offline. The kit is being assembled and documented before it goes on sale.</p>
+            `,
+            specs: [
+                ['SOFTWARE', 'ZBRUSH'],
+                ['STATUS', 'IN PREPARATION']
+            ],
+            price: '',
+            link: '',
+            btn: '[ TEMPORARY CLOSED ]',
+            tone: 'dead'
+        },
+
+        'basemesh': {
+            badge: 'BM',
+            badgeTone: 'dim',
+            title: 'ANATOMY BASEMESH (M/F)',
+            sub: 'Optimized topology for production characters',
+            status: { text: 'TEMPORARY CLOSED', tone: 'off' },
+            tags: ['BASEMESH', 'ANATOMY', 'RETOPO'],
+            images: [],
+            desc: `
+                <p>Male and female base meshes with production-ready topology — correct edge flow for deformation, clean UVs, and a scale that survives the trip between ZBrush, Maya and Unreal.</p>
+                <p class="sp-note" style="color:#888;">This module is offline. The meshes are being finalized and tested before release.</p>
+            `,
+            specs: [
+                ['FORMATS', 'PLANNED: OBJ / FBX / ZTL'],
+                ['STATUS', 'IN PREPARATION']
+            ],
+            price: '',
+            link: '',
+            btn: '[ TEMPORARY CLOSED ]',
+            tone: 'dead'
+        }
+    };
+
+    // === SHOP: РЕНДЕР ВІКНА PREVIEW PRODUCT ===
+    function renderShopPreview(id) {
+        const item = shopData[id];
+        if (!item) return '<div class="vp-placeholder">NO DATA</div>';
+
+        const badgeCls = item.badgeTone ? ` ${item.badgeTone}` : '';
+        const statusTone = (item.status && item.status.tone) ? item.status.tone : 'warn';
+        const statusHtml = item.status ? `<div class="sp-status ${statusTone}">${item.status.text}</div>` : '';
+
+        const tagsHtml = (item.tags && item.tags.length)
+            ? `<div class="sp-tags">${item.tags.map(t => `<span class="sp-tag">${t}</span>`).join('')}</div>`
+            : '';
+
+        const imgsHtml = (item.images && item.images.length)
+            ? `<div class="sp-gallery">${item.images.map(f => `<img src="${IMG_SHOP_PATH}${f}" alt="${item.title}" loading="lazy">`).join('')}</div>`
+            : `<div class="sp-noimg">// NO PREVIEW IMAGES ATTACHED //</div>`;
+
+        const specsHtml = (item.specs && item.specs.length)
+            ? `<p class="sp-section">/// SPECS</p><table class="sp-specs">${item.specs.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table>`
+            : '';
+
+        const toneCls = item.tone === 'green' ? ' green' : (item.tone === 'dead' ? ' dead' : '');
+        const btnHtml = item.link
+            ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="sp-buy${toneCls}" data-shop-id="${id}">${item.btn}</a>`
+            : `<div class="sp-buy${toneCls}" data-shop-id="${id}">${item.btn}</div>`;
+        const priceHtml = item.price ? `<div class="sp-price">${item.price}</div>` : '';
+
+        return `
+            <div class="shop-preview-wrap">
+                <div class="sp-head">
+                    <div class="sp-badge${badgeCls}">${item.badge}</div>
+                    <div class="sp-titles">
+                        <div class="sp-title">${item.title}</div>
+                        <div class="sp-sub">${item.sub}</div>
+                    </div>
+                    ${statusHtml}
+                </div>
+                ${tagsHtml}
+                ${imgsHtml}
+                <div class="sp-desc">${item.desc}</div>
+                ${specsHtml}
+                <div class="sp-actions">${btnHtml}${priceHtml}</div>
+            </div>
+        `;
+    }
+
+    const shopScreen = document.getElementById('shop-screen');
+    const shopItems = document.querySelectorAll('.shop-item');
+    const shopPreview = document.getElementById('shop-preview');
+    const btnShopBack = document.getElementById('btn-shop-back');
+
+    function loadShopItem(slot) {
+        if (!shopPreview) return;
+        shopItems.forEach(s => s.classList.remove('selected'));
+        slot.classList.add('selected');
+        shopPreview.innerHTML = renderShopPreview(slot.dataset.id);
+        shopPreview.scrollTop = 0;
+    }
+
+    shopItems.forEach(slot => {
+        // ДЕСКТОП: наведення миші перемикає прев'ю (як у Журналі)
+        slot.addEventListener('mouseenter', () => {
+            if (isMobile()) return;
+            if (slot.classList.contains('selected')) return;
+            safePlay('snd-hover');
+            loadShopItem(slot);
+        });
+
+        // МОБІЛЬНИЙ: клік відкриває прев'ю на весь екран
+        slot.addEventListener('click', (e) => {
+            // Клік саме по кнопці купівлі не має відкривати прев'ю
+            if (e.target.closest('.shop-btn')) return;
+            // На десктопі все вже зробив ховер
+            if (!isMobile() && slot.classList.contains('selected')) return;
+
+            safePlay('snd-select');
+            loadShopItem(slot);
+
+            if (isMobile() && shopScreen) {
+                history.pushState({ screen: 'mobile-shop-view' }, '', '');
+                const sSidebar = shopScreen.querySelector('.gallery-sidebar');
+                const sViewport = shopScreen.querySelector('.gallery-viewport');
+                if (sSidebar) sSidebar.style.display = 'none';
+                if (sViewport) {
+                    sViewport.style.display = 'flex';
+                    sViewport.classList.add('active-screen');
+                }
+            }
+        });
+    });
+
+    // Стартовий товар у вікні прев'ю
+    if (shopPreview && shopData['doladu']) {
+        shopPreview.innerHTML = renderShopPreview('doladu');
+    }
+
+    // Кнопка НАЗАД для мобільної версії Магазину
+    if (btnShopBack) {
+        btnShopBack.addEventListener('click', () => {
+            history.back();
+            const sSidebar = shopScreen.querySelector('.gallery-sidebar');
+            const sViewport = shopScreen.querySelector('.gallery-viewport');
+            if (sViewport) { sViewport.classList.remove('active-screen'); sViewport.style.display = 'none'; }
+            if (sSidebar) sSidebar.style.display = 'flex';
+            safePlay('snd-select');
+        });
+    }
+
+    // Клік по зображенню товару → лайтбокс
+    if (shopPreview) {
+        shopPreview.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG' && lightbox && lightboxImg) {
+                resetLbZoom();
+                lightboxImg.src = e.target.src;
+                lightbox.classList.add('active');
+                safePlay('snd-select');
+                history.pushState({ screen: 'lightbox' }, '', '');
+            }
+        });
+    }
+
 
     function loadImages(id) {
         checkExplorer(id);
         if(!vpContent) return;
+
+        // Назва проєкту для alt-тексту (data-original — бо заголовок Queen
+        // періодично «розсипається» анімацією scrambleText)
+        const titleEl = document.querySelector(`.project-slot[data-id="${id}"] .p-title`);
+        const projectName = titleEl
+            ? (titleEl.getAttribute('data-original') || titleEl.textContent).trim()
+            : id;
 
         vpContent.style.scrollBehavior = 'auto'; 
         vpContent.scrollTop = 0;                 
@@ -771,6 +1130,7 @@ const journalScreen = document.getElementById('journal-screen');
                         mediaEl = document.createElement('video');
                         mediaEl.src = `assets/images/${fileName}`;
                         mediaEl.controls = true; mediaEl.loop = true; mediaEl.muted = true;
+                        mediaEl.setAttribute('aria-label', `${projectName} — turntable, 3D art by Dima Pysartsev`);
                         wrapper.appendChild(mediaEl);
                     } else {
                         wrapper.classList.add('skeleton-loader'); 
@@ -788,6 +1148,7 @@ mediaEl = document.createElement('img');
                         };
                         mediaEl.onerror = function() { this.style.display = 'none'; wrapper.style.display = 'none'; };
                         
+                        mediaEl.alt = `${projectName} — 3D character art by Dima Pysartsev`;
                         mediaEl.src = `assets/images/${fileName}`;
                         wrapper.appendChild(mediaEl);
                     }
@@ -922,7 +1283,49 @@ if (slot.classList.contains('journal-slot')) return; // <--- І ДОДАЙ СЮ�
     let munchkinUnlocked = false;
     let supporterUnlocked = false;
     let cheaterUnlocked = false; 
-    let talentUnlocked = false; // НОВА ЗМІННА
+    let talentUnlocked = false;
+    let journeyUnlocked = false;
+    let hackerUnlocked = false;
+
+    // === ЗБЕРЕЖЕННЯ ПРОГРЕСУ МІЖ СЕСІЯМИ ===
+    // Ачівки і переглянуті проєкти лежать у localStorage, тож оновлення
+    // сторінки більше не обнуляє зібране. Якщо браузер блокує дані сайтів —
+    // safeStorage* просто нічого не збереже, і все працює як раніше.
+    const ACH_KEY = 'dp_progress';
+    const ACH_SLOTS = {
+        explorer: 'ach-explorer', journey: 'ach-journey', supporter: 'ach-supporter',
+        munchkin: 'ach-munchkin', cheater: 'ach-cheater', hacker: 'ach-hacker',
+        talent: 'ach-talent'
+    };
+
+    function saveProgress() {
+        safeStorageSet(ACH_KEY, JSON.stringify({
+            explorer: explorerUnlocked, journey: journeyUnlocked, supporter: supporterUnlocked,
+            munchkin: munchkinUnlocked, cheater: cheaterUnlocked, hacker: hackerUnlocked,
+            talent: talentUnlocked, viewed: Array.from(viewedProjects)
+        }));
+    }
+
+    function restoreProgress() {
+        let saved;
+        try { saved = JSON.parse(safeStorageGet(ACH_KEY)); } catch (e) { saved = null; }
+        if (!saved || typeof saved !== 'object') return;
+
+        explorerUnlocked  = !!saved.explorer;
+        journeyUnlocked   = !!saved.journey;
+        supporterUnlocked = !!saved.supporter;
+        munchkinUnlocked  = !!saved.munchkin;
+        cheaterUnlocked   = !!saved.cheater;
+        hackerUnlocked    = !!saved.hacker;
+        talentUnlocked    = !!saved.talent;
+        if (Array.isArray(saved.viewed)) viewedProjects = new Set(saved.viewed);
+
+        // Підсвічуємо іконки в панелі Options — тихо, без попапів
+        Object.keys(ACH_SLOTS).forEach(key => {
+            if (saved[key]) document.getElementById(ACH_SLOTS[key])?.classList.remove('locked');
+        });
+    }
+    restoreProgress();
 
     // Відслідковуємо кліки по всіх посиланнях у розділі Credits (CV, ArtStation, LinkedIn)
     const creditLinks = document.querySelectorAll('#credits-screen a');
@@ -958,14 +1361,18 @@ function showAchievement(title, desc, icon) {
         if (desc.includes("HACKER MAN")) document.getElementById('ach-hacker')?.classList.remove('locked');
         // ДОДАНО:
         if (desc.includes("FOUND A TALENT")) document.getElementById('ach-talent')?.classList.remove('locked');
+
+        saveProgress();
     }
     
     function checkExplorer(id) {
         if(id && !viewedProjects.has(id)) {
             viewedProjects.add(id);
-            if(viewedProjects.size === 9 && !explorerUnlocked) {
+            if(viewedProjects.size >= 9 && !explorerUnlocked) {
                 explorerUnlocked = true;
                 showAchievement("ACHIEVEMENT UNLOCKED", "EXPLORER (Viewed all projects)", "🏆");
+            } else {
+                saveProgress(); // запам'ятовуємо частковий прогрес
             }
         }
     }
@@ -994,7 +1401,7 @@ item.addEventListener('mouseenter', () => {
             if(action === 'email') {
                 if (isMobile()) {
                     safePlay('snd-gamestart'); 
-                    showAchievement("ACHIEVEMENT UNLOCKED", "NEW JOURNEY (Started a new project)", "🚀");
+                    if (!journeyUnlocked) { journeyUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "NEW JOURNEY (Started a new project)", "🚀"); }
                     setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; }, 2000);
                 } else if(emailPopup) emailPopup.style.display = 'flex';
             } else if (action === 'journal') { 
@@ -1026,25 +1433,43 @@ item.addEventListener('mouseenter', () => {
         if (!supporterUnlocked) { supporterUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "ARTIST SUPPORTER (Coffee bought)", "☕"); }
     });
 
-shopBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const item = btn.closest('.shop-item');
-        if (item && item.classList.contains('inactive')) {
-            // Закритий товар → MUNCHKIN
-            safePlay('snd-select');
-            if(!munchkinUnlocked) { munchkinUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "MUNCHKIN (Tried to buy a closed item)", "🛒"); }
-        } else if (item && !item.classList.contains('inactive')) {
-            // Комісія OPEN → просто відкриває email popup, без ачівки
-            safePlay('snd-select');
-            if(emailPopup) emailPopup.style.display = 'flex';
+// Кнопки магазину: і в списку зліва (.shop-btn), і у вікні PREVIEW (.sp-buy).
+// Делегування, бо кнопки в прев'ю створюються скриптом на льоту.
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.shop-btn, .sp-buy');
+    if (!btn) return;
+
+    // Визначаємо товар: або по картці зліва, або по data-shop-id у прев'ю
+    const card = btn.closest('.shop-item');
+    const id = card ? card.dataset.id : btn.dataset.shopId;
+    const isClosed = card ? card.classList.contains('inactive') : (shopData[id] && shopData[id].tone === 'dead');
+    const isCommission = (id === 'commission');
+
+    safePlay('snd-select');
+
+    if (isClosed) {
+        // Закритий товар → MUNCHKIN
+        if(!munchkinUnlocked) { munchkinUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "MUNCHKIN (Tried to buy a closed item)", "🛒"); }
+    } else if (isCommission) {
+        // Комісія OPEN → пошта. На телефоні попап примусово схований у CSS
+        // (#email-popup { display:none !important }), тому там кнопка була мертва —
+        // відкриваємо поштовий клієнт напряму, як це робить "New Game".
+        if (isMobile()) {
+            window.location.href = "mailto:DPysartsevArt@gmail.com";
+        } else if (emailPopup) {
+            emailPopup.style.display = 'flex';
         }
-    });
+    } else {
+        // Реальний товар із посиланням → MUNCHKIN
+        if(!munchkinUnlocked) { munchkinUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "MUNCHKIN (Visited the item store)", "🛒"); }
+    }
 });
     
     // POPUP LOGIC
     function closeEmailPopup() { if(emailPopup) emailPopup.style.display = 'none'; }
     if(btnEmailConfirm) btnEmailConfirm.addEventListener('click', () => {
-        safePlay('snd-gamestart'); showAchievement("ACHIEVEMENT UNLOCKED", "NEW JOURNEY (Started a new project)", "🚀");
+        safePlay('snd-gamestart');
+        if (!journeyUnlocked) { journeyUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "NEW JOURNEY (Started a new project)", "🚀"); }
         setTimeout(() => { window.location.href = "mailto:DPysartsevArt@gmail.com"; closeEmailPopup(); }, 2000);
     });
     if(btnEmailCancel) btnEmailCancel.addEventListener('click', () => { safePlay('snd-select'); closeEmailPopup(); });
@@ -1171,10 +1596,10 @@ if (inSubMenu) {
     const activeScreen = document.querySelector('.screen.active-screen');
     if (!activeScreen) return;
     
-const slots = Array.from(activeScreen.querySelectorAll('.project-slot, .journal-slot'));
+const slots = Array.from(activeScreen.querySelectorAll('.project-slot, .journal-slot, .shop-item'));
     if (!slots.length) return;
-    
-    const currentSelected = activeScreen.querySelector('.project-slot.selected');
+
+    const currentSelected = activeScreen.querySelector('.project-slot.selected, .shop-item.selected');
     let idx = slots.indexOf(currentSelected);
     
 if (e.key === 'ArrowUp') {
@@ -1320,6 +1745,7 @@ case 'help':
     printToTerminal('  skills  — skill dump');
     printToTerminal('  cv      — open resume PDF');
     printToTerminal('  hire    — recruitment protocol');
+    printToTerminal('  doladu  — own QA software specs');
     printToTerminal('  status  — system status');
     printToTerminal('  coffee  — emergency caffeine');
     printToTerminal('  clear   — wipe terminal');
@@ -1330,13 +1756,18 @@ case 'help':
                 printToTerminal('Opening secure communication channels...');
                 setTimeout(() => {
                     terminal.classList.remove('active');
-                    if(emailPopup) emailPopup.style.display = 'flex';
+                    // На телефоні #email-popup схований через CSS — там одразу пошта
+                    if (isMobile()) {
+                        window.location.href = "mailto:DPysartsevArt@gmail.com";
+                    } else if (emailPopup) {
+                        emailPopup.style.display = 'flex';
+                    }
                 }, 1500);
                 break;
             case 'coffee':
                 printToTerminal('WARNING: CAFFEINE OVERLOAD DETECTED.', 'term-err');
                 printToTerminal('System performance +50%. Applying Buff...');
-                showAchievement("ACHIEVEMENT UNLOCKED", "HACKER MAN (Found the Terminal)", "💻");
+                if (!hackerUnlocked) { hackerUnlocked = true; showAchievement("ACHIEVEMENT UNLOCKED", "HACKER MAN (Found the Terminal)", "💻"); }
                 safePlay('snd-gamestart');
                 break;
             case 'clear':
@@ -1344,7 +1775,7 @@ case 'help':
                 break;
 case 'whoami':
     printToTerminal('> LOADING USER PROFILE...', 'term-sys');
-    printToTerminal('NAME    : Dmytro Pysartsev');
+    printToTerminal('NAME    : Dima Pysartsev');
     printToTerminal('CLASS   : 3D Character Artist');
     printToTerminal('LEVEL   : Mid | Senior');
     printToTerminal('STATUS  : AVAILABLE FOR HIRE');
@@ -1368,6 +1799,18 @@ case 'cv':
 case 'resume':
     printToTerminal('> OPENING PERSONAL FILE...', 'term-sys');
     setTimeout(() => { window.open('assets/cv.pdf', '_blank'); }, 800);
+    break;
+case 'doladu':
+    printToTerminal('> MOUNTING DOLADU SPEC SHEET...', 'term-sys');
+    printToTerminal('PRODUCT   : DOLADU — QA & pipeline app for 3D artists');
+    printToTerminal('TOOLS     : 161 actions / 9 tabs / 32 formats');
+    printToTerminal('CODEBASE  : ~76,600 lines (Python + Qt + Babylon.js)');
+    printToTerminal('CORE      : one cached scan → 10 checks → 0-100 score');
+    printToTerminal('SPEED     : 2.86s → 0.06s per tool after cache');
+    printToTerminal('PAYOFF    : saves hours on every project.', 'term-sys');
+    printToTerminal('            your hours are your money.', 'term-sys');
+    printToTerminal('ROLE      : product owner / architect / QA');
+    printToTerminal('STORE     : doladu.lemonsqueezy.com');
     break;
 case 'status':
     printToTerminal('> SYSTEM STATUS REPORT:', 'term-sys');
@@ -1419,7 +1862,7 @@ document.addEventListener('keydown', (e) => {
     if (audioToggle) {
         audioToggle.addEventListener('click', () => {
             isMuted = !isMuted; 
-            localStorage.setItem('dp_audio_muted', isMuted);
+            safeStorageSet('dp_audio_muted', isMuted);
             
             if (isMuted) {
                 audioToggle.innerText = "[ AUDIO : OFF ]";

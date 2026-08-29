@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="description" content="Dmytro Pysartsev — Senior 3D Character Artist. AAA-quality assets, UE5, ZBrush, LookDev.">
-<meta property="og:title" content="Dmytro Pysartsev — 3D Artist Portfolio">
-<meta property="og:description" content="Senior 3D Character Artist. GameDev, LookDev, ZBrush.">
-<meta property="og:image" content="assets/og-preview.jpg">
+<meta name="description" content="Dima (Dmytro) Pysartsev - 3D Character Artist: ZBrush, Maya, Substance, UE5, full pipeline from sculpt to game-ready asset. Also product design, workflow analysis and AI-assisted tooling - creator of DOLADU, a QA app for 3D pipelines.">
+<meta property="og:title" content="Dima Pysartsev - 3D Character Artist &amp; Product Designer">
+<meta property="og:description" content="3D characters and creatures, full pipeline. Product design, workflow analysis, AI-assisted tooling. Available for hire.">
+<meta property="og:image" content="https://dpysartsev.art/assets/og-preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://dpysartsev.art/">
+<meta name="twitter:image" content="https://dpysartsev.art/assets/og-preview.jpg">
+<meta property="og:image:alt" content="Dima Pysartsev - 3D Character Artist, available for hire">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-    <title>Dmytro Pysartsev — 3D Artist</title>
+    <title>Dima Pysartsev — 3D Character Artist</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;500;700&family=Teko:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="css/style.css?v=2">
+   <link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 <!-- Boot sequence overlay -->
@@ -97,18 +102,20 @@
         <div id="main-menu" class="screen active-screen">
             <div class="header">
                 <div class="header-top-row">
-                    <h1 class="glitch wireframe-trigger" data-text="DMYTRO PYSARTSEV">DMYTRO PYSARTSEV</h1>
+                    <h1 class="glitch wireframe-trigger" data-text="DIMA PYSARTSEV">DIMA PYSARTSEV</h1>
                     <div class="scene-3d-mini">
                         <div class="swarm-container">
                             <div class="tri t1"></div><div class="tri t2"></div><div class="tri t3"></div><div class="tri t4"></div><div class="tri t5"></div>
                         </div>
                     </div>
                 </div>
-<p class="role-subtitle"><span id="typed-subtitle"></span><span class="cursor-blink">|</span></p>
+<p class="role-subtitle sub-1"><span id="typed-subtitle"></span><span class="cursor-blink">|</span></p>
+<p class="role-subtitle sub-2"><span id="typed-subtitle-2"></span><span class="cursor-blink">|</span></p>
             </div>
 
 <div class="status-badge">
     <span class="status-dot"></span>
+    <span class="status-label">STATUS:</span>
     <span class="status-text">AVAILABLE FOR HIRE</span>
 </div>
 
@@ -228,35 +235,79 @@
             </div>
         </div>
 
-        <div id="shop-screen" class="screen hidden">
-            <h2>ITEM SHOP (INVENTORY)</h2>
-            <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
-            <div class="shop-container scroll-container">
-                <div class="shop-item inactive">
-                    <div class="shop-icon icon-brush"></div>
-                    <div class="shop-info"><span class="shop-title">ZBRUSH SKIN BRUSHES KIT</span><span class="shop-desc">Custom brushes for realistic skin detailing.</span></div>
-                    <div class="shop-btn">TEMPORARY CLOSED</div>
+        <div id="shop-screen" class="screen hidden gallery-layout">
+            <div class="gallery-sidebar">
+                <div class="sidebar-header-container">
+                    <h2>ITEM SHOP (INVENTORY)</h2>
                 </div>
-                <div class="shop-item inactive">
-                    <div class="shop-icon icon-mesh"></div>
-                    <div class="shop-info"><span class="shop-title">ANATOMY BASEMESH (M/F)</span><span class="shop-desc">Optimized topology for production ready characters.</span></div>
-                    <div class="shop-btn">TEMPORARY CLOSED</div>
+                <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
+                <div class="projects-scroll-area shop-scroll-area">
+                    <div class="shop-list">
+
+                        <div class="shop-item selected" data-id="doladu">
+                            <div class="shop-icon icon-doladu"></div>
+                            <div class="shop-info">
+                                <span class="shop-title">DOLADU</span>
+                                <span class="shop-desc">Software for 3D Pipeline and QA. Saves hours on every project — and hours are money.</span>
+                            </div>
+                            <a href="https://doladu.lemonsqueezy.com/" target="_blank" rel="noopener noreferrer" class="shop-btn buy-link">[ OPEN STORE ↗ ]</a>
+                        </div>
+
+                        <div class="shop-item" data-id="psscript">
+                            <div class="shop-icon icon-print">PS</div>
+                            <div class="shop-info">
+                                <span class="shop-title">ULTRA POST-PROCESS PS SCRIPT</span>
+                                <span class="shop-desc">Custom post-processing workflow script to speed up work in Photoshop.</span>
+                            </div>
+                            <a href="https://buymeacoffee.com/fr0kuc14dn/e/553396" target="_blank" rel="noopener noreferrer" class="shop-btn buy-link">[ BUY ON BMC ↗ ]</a>
+                        </div>
+
+                        <div class="shop-item commission" data-id="commission">
+                            <div class="shop-icon icon-commission">ART</div>
+                            <div class="shop-info">
+                                <span class="shop-title">COMMISSION: CHARACTER ART</span>
+                                <span class="shop-desc">Full pipeline, concept to final render. Organic/hard-surface, PBR, game-ready.</span>
+                            </div>
+                            <div class="shop-btn open-slot">[ OPEN ]</div>
+                        </div>
+
+                        <div class="shop-item inactive" data-id="brushes">
+                            <div class="shop-icon icon-brush">ZB</div>
+                            <div class="shop-info">
+                                <span class="shop-title">ZBRUSH SKIN BRUSHES KIT</span>
+                                <span class="shop-desc">Custom brushes for realistic skin detailing.</span>
+                            </div>
+                            <div class="shop-btn">TEMPORARY CLOSED</div>
+                        </div>
+
+                        <div class="shop-item inactive" data-id="basemesh">
+                            <div class="shop-icon icon-mesh">BM</div>
+                            <div class="shop-info">
+                                <span class="shop-title">ANATOMY BASEMESH (M/F)</span>
+                                <span class="shop-desc">Optimized topology for production ready characters.</span>
+                            </div>
+                            <div class="shop-btn">TEMPORARY CLOSED</div>
+                        </div>
+
+                    </div>
                 </div>
-<div class="shop-item" style="border-color: rgba(76,175,80,0.4);">
-    <div class="shop-icon icon-brush" style="color: #4caf50;"></div>
-    <div class="shop-info">
-        <span class="shop-title" style="color:#4caf50;">COMMISSION: CHARACTER ART</span>
-        <span class="shop-desc">Full pipeline, concept to final render. Organic/hard-surface, PBR, game-ready.</span>
-    </div>
-<div class="shop-btn" style="border-color:#4caf50; color:#4caf50; cursor:none;">[  OPEN  ]</div>
-</div>
-                <div class="shop-item inactive">
-                    <div class="shop-icon icon-print"></div>
-                    <div class="shop-info"><span class="shop-title">ULTRA POST-PROCESS PS SCRIPT</span><span class="shop-desc">Custom Post-Processing Workflow Script For SpeedUp Work In PHOTOSHOP.</span></div>
-                    <div class="shop-btn">TEMPORARY CLOSED</div>
+                <div class="back-hint">[ESC] BACK</div>
+            </div>
+
+            <div class="gallery-viewport">
+                <div class="sidebar-header-container gallery-header-flex">
+                    <h2 style="border: none; padding-bottom: 0; margin-bottom: 0; width: auto;">PREVIEW PRODUCT</h2>
+                </div>
+
+                <div class="mobile-nav-btn" id="btn-shop-back">◀ BACK TO LIST</div>
+
+                <div class="viewport-frame">
+                    <div id="shop-preview" class="vp-content journal-content-area">
+                        <div class="vp-placeholder">SELECT AN ITEM...</div>
+                    </div>
+                    <div class="vp-footer">/// END OF FILE ///</div>
                 </div>
             </div>
-            <div class="back-hint">[ESC] BACK</div>
         </div>
 
 <div id="options-screen" class="screen hidden">
@@ -272,7 +323,10 @@
                     <li class="setting-item"><span class="set-name">SCULPTING</span> <span class="set-val on">ACTIVE</span></li>
                     <li class="setting-item"><span class="set-name">HARD-SURFACE</span> <span class="set-val on">INTEGRATED</span></li>
                     <li class="setting-item"><span class="set-name">CLOTH SIMULATION</span> <span class="set-val">MARVELOUS</span></li>
-                    
+<li class="setting-item"><span class="set-name">RIGGING / SKINNING</span> <span class="set-val on">SUPPORTED</span></li>
+<li class="setting-item"><span class="set-name">3DCOAT</span> <span class="set-val">INSTALLED</span></li>
+<li class="setting-item"><span class="set-name">3D PRINT PREP</span> <span class="set-val on">SUPPORTED</span></li>
+
                     <li class="setting-category">--- OPTIMIZATION ---</li>
                     <li class="setting-item"><span class="set-name">RETOPOLOGY</span> <span class="set-val on">CLEAN</span></li>
                     <li class="setting-item"><span class="set-name">UV MAPPING (UDIM)</span> <span class="set-val on">ENABLED</span></li>
@@ -295,7 +349,35 @@
 <li class="setting-item"><span class="set-name">UE5 MASTER MATERIALS</span> <span class="set-val on">ACTIVE</span></li>
 <li class="setting-item"><span class="set-name">MARMOSET TOOLBAG</span> <span class="set-val on">ACTIVE</span></li>
 <li class="setting-item"><span class="set-name">DAVINCI RESOLVE</span> <span class="set-val">POST-PROD</span></li>
-                    
+
+                    <li class="setting-category">--- PIPELINE & AUTOMATION ---</li>
+                    <li class="setting-item"><span class="set-name">PIPELINE QA (DOLADU)</span> <span class="set-val max">SHIPPED</span></li>
+                    <li class="setting-item"><span class="set-name">AI-ASSISTED DEV</span> <span class="set-val on">PRODUCT OWNER</span></li>
+                    <li class="setting-item"><span class="set-name">UE NAMING CONVENTIONS</span> <span class="set-val on">AUTOMATED</span></li>
+                    <li class="setting-item"><span class="set-name">ASSET VALIDATION</span> <span class="set-val on">10 CHECKS</span></li>
+                    <li class="setting-item"><span class="set-name">BATCH FILE PROCESSING</span> <span class="set-val on">ENABLED</span></li>
+                    <li class="setting-item"><span class="set-name">PHOTOSHOP SCRIPTING</span> <span class="set-val on">AUTOMATED</span></li>
+                    <li class="setting-item"><span class="set-name">HEADLESS CLI / CI GATES</span> <span class="set-val">SUPPORTED</span></li>
+                    <li class="setting-item"><span class="set-name">QA &amp; BUG HUNTING</span> <span class="set-val max">SYSTEMATIC</span></li>
+
+                    <li class="setting-category">--- PRODUCT &amp; PROCESS ---</li>
+                    <li class="setting-item"><span class="set-name">PRODUCT DESIGN (FULL CYCLE)</span> <span class="set-val max">11 YEARS</span></li>
+                    <li class="setting-item"><span class="set-name">UX / INTERFACE DESIGN</span> <span class="set-val on">ACTIVE</span></li>
+                    <li class="setting-item"><span class="set-name">WORKFLOW ANALYSIS</span> <span class="set-val on">CORE SKILL</span></li>
+                    <li class="setting-item"><span class="set-name">SPACE PLANNING</span> <span class="set-val on">ACTIVE</span></li>
+                    <li class="setting-item"><span class="set-name">INDUSTRIAL DESIGN</span> <span class="set-val on">ACTIVE</span></li>
+                    <li class="setting-item"><span class="set-name">BRANDING &amp; PACKAGING</span> <span class="set-val">SUPPORTED</span></li>
+                    <li class="setting-item"><span class="set-name">TECHNICAL DOCUMENTATION</span> <span class="set-val on">ACTIVE</span></li>
+
+                    <li class="setting-category">--- CREW MANAGEMENT ---</li>
+                    <li class="setting-item"><span class="set-name">TEAM COORDINATION</span> <span class="set-val on">~15 CREW</span></li>
+                    <li class="setting-item"><span class="set-name">PRODUCTION CONTROL</span> <span class="set-val on">FULL CYCLE</span></li>
+                    <li class="setting-item"><span class="set-name">ART DIRECTION</span> <span class="set-val on">ACTIVE</span></li>
+                    <li class="setting-item"><span class="set-name">SUPPLIER NEGOTIATION</span> <span class="set-val">ACTIVE</span></li>
+                    <li class="setting-item"><span class="set-name">TASK SPEC &amp; PRIORITIZATION</span> <span class="set-val on">ACTIVE</span></li>
+                    <li class="setting-item"><span class="set-name">CLIENT COMMUNICATION</span> <span class="set-val on">DIRECT</span></li>
+                    <li class="setting-item"><span class="set-name">DEADLINE CONTROL</span> <span class="set-val max">RESPECTED</span></li>
+
                     <li class="setting-category">--- KNOWLEDGE BASE ---</li>
                     <li class="setting-item"><span class="set-name">HUMAN ANATOMY</span> <span class="set-val on">DEEP KNOWLEDGE</span></li>
                     <li class="setting-item"><span class="set-name">SILHOUETTE & FORM</span> <span class="set-val on">OPTIMIZED</span></li>
@@ -303,11 +385,24 @@
 <li class="setting-item"><span class="set-name">CREATURE DESIGN</span> <span class="set-val on">ACTIVE</span></li>
 <li class="setting-item"><span class="set-name">DIGITAL DOUBLES</span> <span class="set-val on">SUPPORTED</span></li>
 <li class="setting-item"><span class="set-name">ENGINE INTEGRATION</span> <span class="set-val on">SKELETAL/MATERIALS</span></li>
-                    
+<li class="setting-item"><span class="set-name">REAL-WORLD MATERIALS</span> <span class="set-val max">11 YRS PRODUCTION</span></li>
+<li class="setting-item"><span class="set-name">TEXTILE &amp; FABRICS</span> <span class="set-val max">EXPERT</span></li>
+<li class="setting-item"><span class="set-name">SPATIAL / TECH DRAWING</span> <span class="set-val on">ENGINEERING BASE</span></li>
+
                     <li class="setting-category">--- ATTRIBUTES ---</li>
                     <li class="setting-item"><span class="set-name">CREATIVITY</span> <span class="set-val max">ULTRA</span></li>
+                    <li class="setting-item"><span class="set-name">SYSTEM THINKING</span> <span class="set-val max">CORE TRAIT</span></li>
+                    <li class="setting-item"><span class="set-name">PROBLEM FINDING</span> <span class="set-val on">ALWAYS ON</span></li>
+                    <li class="setting-item"><span class="set-name">SELF-LEARNING</span> <span class="set-val max">MAX</span></li>
+                    <li class="setting-item"><span class="set-name">ADAPTATION SPEED</span> <span class="set-val on">HIGH</span></li>
                     <li class="setting-item"><span class="set-name">TEAM CO-OP</span> <span class="set-val on">ENABLED</span></li>
-                    <li class="setting-item"><span class="set-name">COFFEE</span> <span class="set-val max">ADDICTED</span></li>            
+                    <li class="setting-item"><span class="set-name">COFFEE</span> <span class="set-val max">ADDICTED</span></li>
+
+                    <li class="setting-category">--- COMPATIBILITY NOTES ---</li>
+                    <li class="setting-item"><span class="set-name">BLENDER</span> <span class="set-val">BASIC / ADAPTS TO STUDIO</span></li>
+                    <li class="setting-item"><span class="set-name">CODE — ARCHITECTED &amp; DIRECTED</span> <span class="set-val on">76,600 LINES SHIPPED</span></li>
+                    <li class="setting-item"><span class="set-name">CODE — HAND-WRITTEN</span> <span class="set-val disabled">NOT SUPPORTED</span></li>
+
                     <li class="setting-category">--- LANGUAGES ---</li>
                     <li class="setting-item"><span class="set-name">ENGLISH</span> <span class="set-val on">ADVANCED (C1)</span></li>
                     <li class="setting-item"><span class="set-name">FRENCH</span> <span class="set-val">INTERMEDIATE (B1)</span></li>
@@ -337,7 +432,7 @@
             <h2>CREDITS</h2>
             <div class="mobile-nav-btn menu-back-btn">◀ MAIN MENU</div>
             <div class="text-content scrollable">
-                <p class="role-title">DMYTRO PYSARTSEV</p>
+                <p class="role-title">DIMA PYSARTSEV</p>
                 <p class="role-sub">CLASS: 3D CHARACTER ARTIST | LEVEL: MID|SENIOR</p>
 <div class="main-stats" style="margin-top: 20px; margin-bottom: 10px; justify-content: flex-start;">
     <div class="stat-item">
@@ -361,20 +456,38 @@
 </div>
 </div>
                 <br>
-<p class="bio-intro">3D Character Artist with 5+ years creating realistic and stylized characters and creatures — full pipeline from sculpt to game-ready asset or cinematic render. Core stack: ZBrush, Maya, Marvelous Designer, Substance Painter, XGen, Arnold / Marmoset and UE5. Backed by 12 years leading product design, so every asset ships with real production discipline, material accuracy, and obsessive attention to detail. Clear communication, deadlines respected, ready to drop into your pipeline.</p>
+<p class="bio-intro">3D Character Artist with 5+ years creating realistic and stylized characters and creatures — full pipeline from sculpt to game-ready asset or cinematic render. Core stack: ZBrush, Maya, Marvelous Designer, Substance Painter, XGen, Arnold / Marmoset and UE5. Backed by 11 years leading product design in custom manufacturing, so every asset ships with real production discipline, material accuracy, and obsessive attention to detail. I also build the tools I wish existed — including DOLADU, a 161-tool desktop QA application for 3D pipelines. Clear communication, deadlines respected, ready to drop into your pipeline.</p>
 
                 <div class="bio-section">
                     <p class="section-header">/// CONTACT LINKS</p>
                     <ul class="cv-list">
                         <li><a href="https://www.artstation.com/dpysartsev" target="_blank" rel="noopener noreferrer" class="contact-link">ARTSTATION PROFILE</a></li>
                         <li><a href="https://www.linkedin.com/in/dpysartsev/" target="_blank" rel="noopener noreferrer" class="contact-link">LINKEDIN PROFILE</a></li>
-                        <li><a href="assets/cv.pdf" target="_blank" rel="noopener noreferrer" class="contact-link">PERSONAL FILE [OPEN CV] ▼</a></li>
+                        <li><a href="assets/cv.pdf" target="_blank" rel="noopener noreferrer" class="contact-link">3D ARTIST FILE [OPEN CV] ▼</a></li>
+                        <li><a href="assets/cv_full.pdf" target="_blank" rel="noopener noreferrer" class="contact-link">FULL PERSONAL FILE [OPEN] ▼</a></li>
+                    </ul>
+                </div>
+
+                <div class="bio-section">
+                    <p class="section-header">/// BASE OF OPERATIONS</p>
+                    <ul class="cv-list">
+                        <li style="display: flex; justify-content: space-between; max-width: 520px;"><span>HOME BASE</span> <span style="color:#fff;">BORDEAUX, FRANCE</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 520px;"><span>WORK AUTHORIZATION</span> <span style="color:#4caf50; font-weight: bold;">FULL — NO PERMIT NEEDED</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 520px;"><span>DEPLOYMENT MODE</span> <span style="color:#fff;">ON-SITE / HYBRID / REMOTE</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 520px;"><span>CONTRACT TYPES</span> <span style="color:#fff;">CDI / CDD / FREELANCE MISSION</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 520px;"><span>FREELANCE STATUS</span> <span style="color:#4caf50; font-weight: bold;">SIRET ACTIVE — CAN INVOICE</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 520px;"><span>LANGUAGES</span> <span style="color:#fff;">EN (C1) / FR (B1) / UA (NATIVE)</span></li>
                     </ul>
                 </div>
 
                 <div class="bio-section">
                     <p class="section-header">/// MISSION HISTORY</p>
                     <ul class="cv-list">
+<li>
+    <strong>PRODUCT OWNER / ARCHITECT / QA — DOLADU</strong> <span style="color:#666;">| OWN PRODUCT | 2026 – Present</span><br>
+    <span style="color:#ccc;">Designed and shipped a desktop QA and pipeline application for 3D artists: 161 tool actions across asset inspection, Unreal export validation, look-dev and VFX, on a ~76,600-line Python/Qt codebase with a real-time 3D viewer. Core feature is a single cached project audit — ten checks, a 0–100 delivery score, and a one-click repair on every finding. Rebuilt the scan layer around a shared cache and measured the result: per-tool runtime went from 2.86 s to 0.1 s. It saves hours on every project — which is what it is actually for. Product owner, architect and QA — implementation AI-assisted.</span>
+    <span style="color:#f7d53e"> (Zero-to-One +50, QA Methodology +30, Pipeline Insight +20)</span>
+</li>
 <li>
     <strong>3D CHARACTER ARTIST</strong> <span style="color:#666;">| INDEPENDENT | 2021 – Present</span><br>
     <span style="color:#ccc;">Full pipeline character creation from concept to final render. Strict retopology & UV optimization for game-ready assets. PBR workflows both stylized and realistic. Game-mechanics creator & Story influencer. PBR texturing, 3D printing prep & physical production.</span>
@@ -386,19 +499,82 @@
     <span style="color:#ccc;">Translated novel-based character concepts into stylized 3D models. Prepared high-poly sculpts for 3D printing and physical board game production.</span>
     <span style="color:#f7d53e"> (Concept Translation +15, Craft Precision +10)</span>
 </li>
-<li><strong>LEAD PRODUCT DESIGNER: Textile</strong> <span style="color:#666;">| SWAN STUDIO| 2011 – 2022</span><br> Production Lead & Design. Led custom interior design production, mastering real-world material properties, spatial design, and team coordination. Managed full production cycles. <span style="color:#f7d53e">(Design +50, Color Management +10)</span>
+<li><strong>LEAD PRODUCT DESIGNER: Textile</strong> <span style="color:#666;">| SWAN STUDIO | 2011 – 2022</span><br>
+    <span style="color:#ccc;">Production Lead &amp; Design across an 11-year full cycle: client → concept → costing → supplier negotiation and purchasing → technical documentation for the workshop → production control → installer briefing → handover. Around 10–15 custom projects a month, coordinating a team of about 15. Designed the standardized field measurement journal used on every client visit — pre-printed schematics, checkboxes instead of writing, a line-by-line cost breakdown and a perforated client copy — which cut order processing time by roughly half. Also designed the 18 m² showroom itself, including the vertical cornice display that let the full range fit on the wall.</span>
+    <span style="color:#f7d53e"> (Design +50, Color Management +10, Ops Command +30)</span>
 </li>
 
-                        <li><strong>LEAD PRODUCT DESIGNER: Wood</strong> <span style="color:#666;">| 3.14WOOD| 2014 – 2017</span><br> Production Lead & Design. Deep understanding of texture, material behavior, and physical craftsmanship. <span style="color:#f7d53e">(Tactile Bonus +10)</span>
+                        <li><strong>LEAD PRODUCT DESIGNER: Wood</strong> <span style="color:#666;">| 3.14WOOD | 2014 – 2017</span><br>
+    <span style="color:#ccc;">Own brand of exotic-hardwood lamps, boards and utensils: sourcing rare dense timber, own workshop, full production. Lamps carved from a single block, with the internal bores calculated to avoid any cut — form like a stone or a crystal.</span>
+    <span style="color:#f7d53e"> (Tactile Bonus +10, Supply Chain +10)</span>
 </li>
-
+                    </ul>
                 </div>
-                
-                <div class="bio-section">
-                    <p class="section-header">/// ORIGIN STORY & BUFFS</p>
-                    <ul class="cv-list">
-                        <li><strong>GEODESY & CARTOGRAPHY:</strong> Master's Degree providing structural accuracy and spatial thinking. <span style="color:#f7d53e">(Technical/Engineering Bonus +10)</span>.</li>
 
+                <div class="bio-section">
+                    <p class="section-header">/// SIDE QUESTS</p>
+                    <ul class="cv-list">
+                        <li><strong>"YOURS" — COFFEE BRAND</strong> <span style="color:#666;">| FOUNDER | 2015</span><br>
+                        <span style="color:#ccc;">Launched a fresh-roast coffee brand from zero: suppliers, roast-to-order, craft packaging with my own label design, storage and social selling. Closed deliberately after reading the unit economics — profitable, but too thin against café margins.</span>
+                        <span style="color:#f7d53e"> (Brand Launch +15, Hard Lesson: check the model before the launch)</span></li>
+
+                        <li><strong>NOVEL UNIVERSE — BOARD GAME</strong> <span style="color:#666;">| CHARACTER DESIGN | 2020 – 2022</span><br>
+                        <span style="color:#ccc;">Designed characters from written descriptions only — approved by the author on the first pass. Went past the brief: proposed changes to the book's characters and to the game mechanics, including a comeback mechanic that made the final rules. Production stopped by the war, not by the work.</span>
+                        <span style="color:#f7d53e"> (Initiative +20, Game Design +10)</span></li>
+
+                        <li><strong>THIS WEBSITE</strong> <span style="color:#666;">| DESIGN &amp; BUILD | 2024 – 2025</span><br>
+                        <span style="color:#ccc;">Game-menu portfolio with a hidden console, cheat codes and achievements — concept, design and AI-assisted build in a few weeks. You are standing in it.</span>
+                        <span style="color:#f7d53e"> (Meta +5)</span></li>
+                    </ul>
+                </div>
+
+                <div class="bio-section">
+                    <p class="section-header">/// SPECIAL ABILITIES</p>
+                    <ul class="cv-list">
+                        <li><strong>SEES THE PROBLEM NOBODY FLAGS.</strong> <span style="color:#ccc;">A slow process is not a given — it is a question nobody asked yet. Everyone wrote measurements on blank paper for years; the fix took one question.</span></li>
+                        <li><strong>BUILDS SYSTEMS, NOT ONE-OFFS.</strong> <span style="color:#ccc;">The measurement journal, the Photoshop script, the QA software — one pattern, three decades of technology. I don't want to solve the same task twice.</span></li>
+                        <li><strong>SELF-TAUGHT UNDER LOAD.</strong> <span style="color:#ccc;">The entire 3D stack learned at night, in parallel with a full-time job and a family. Software development the same way.</span></li>
+                        <li><strong>CONNECTS UNRELATED FIELDS.</strong> <span style="color:#ccc;">Marvelous Designer plus eleven years of real textile. Geodesy plus showroom planning. Manufacturing plus 3D pipelines. The best ideas show up at the seams.</span></li>
+                        <li><strong>DIRECTS EXECUTORS.</strong> <span style="color:#ccc;">Seamstresses and installers, furniture makers and a logo designer, a novelist, and now AI. Four completely different executors, one method.</span></li>
+                    </ul>
+                </div>
+
+                <div class="bio-section">
+                    <p class="section-header">/// CORE PROTOCOL</p>
+                    <ul class="cv-list">
+                        <li><span style="color:#a3cbf5;">01.</span> Find the actual goal — not the task as it was passed down.</li>
+                        <li><span style="color:#a3cbf5;">02.</span> Study the existing process exactly as it is.</li>
+                        <li><span style="color:#a3cbf5;">03.</span> Locate the real constraint — the first request is usually a symptom.</li>
+                        <li><span style="color:#a3cbf5;">04.</span> Put several options on the table.</li>
+                        <li><span style="color:#a3cbf5;">05.</span> Pick the one with the best long-term payoff, not the fastest one.</li>
+                        <li><span style="color:#a3cbf5;">06.</span> Measure the result.</li>
+                        <li><span style="color:#a3cbf5;">07.</span> Run the loop again if the number says so.</li>
+                    </ul>
+                </div>
+
+                <div class="bio-section">
+                    <p class="section-header">/// RECORDS</p>
+                    <ul class="cv-list">
+                        <li style="display: flex; justify-content: space-between; max-width: 560px;"><span>TOOL ACTIONS SHIPPED IN OWN SOFTWARE</span> <span style="color:#f7d53e; font-weight: bold;">161</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 560px;"><span>CODEBASE BUILT IN ~5 MONTHS</span> <span style="color:#f7d53e; font-weight: bold;">~76,600 LINES</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 560px;"><span>PER-TOOL RUNTIME AFTER SHARED CACHE</span> <span style="color:#f7d53e; font-weight: bold;">2.86 s → 0.1 s</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 560px;"><span>ORDER PROCESSING TIME SAVED BY FIELD JOURNAL</span> <span style="color:#f7d53e; font-weight: bold;">~50%</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 560px;"><span>PROJECTS PER MONTH AT PEAK LOAD</span> <span style="color:#f7d53e; font-weight: bold;">10–15</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 560px;"><span>TEAM COORDINATED, FULL CYCLE</span> <span style="color:#f7d53e; font-weight: bold;">~15 PEOPLE</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 560px;"><span>FULL-CYCLE CHARACTERS DELIVERED TO CLIENTS</span> <span style="color:#f7d53e; font-weight: bold;">10+</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 560px;"><span>RENDER POST-PRODUCTION, SCRIPTED</span> <span style="color:#f7d53e; font-weight: bold;">~5 MIN</span></li>
+                        <li style="display: flex; justify-content: space-between; max-width: 560px;"><span>BRANDS LAUNCHED FROM ZERO</span> <span style="color:#f7d53e; font-weight: bold;">2</span></li>
+                    </ul>
+                </div>
+
+                <div class="bio-section">
+                    <p class="section-header">/// ORIGIN STORY &amp; BUFFS</p>
+                    <ul class="cv-list">
+                        <li><strong>GEODESY &amp; CARTOGRAPHY:</strong> Master's Degree (BAC+5), Odesa State Academy of Civil Engineering and Architecture — <span style="color:#a3cbf5;">officially recognized in France (ENIC-NARIC)</span>. Measurement, technical drawing, spatial thinking, structured data. <span style="color:#f7d53e">(Technical/Engineering Bonus +10)</span></li>
+                        <li><strong>ELEVEN YEARS IN REAL PRODUCTION:</strong> Before a single polygon — fabric, wood, machines, deadlines and clients who pay. That is where materials stopped being textures. <span style="color:#f7d53e">(Material Truth +20)</span></li>
+                        <li><strong>TWO OWN BRANDS, BOTH CLOSED ON PURPOSE:</strong> Launched, ran, read the numbers, and shut them down with the reasons written out rather than walking away. <span style="color:#f7d53e">(Risk Literacy +15)</span></li>
+                        <li><strong>RESTART, MARCH 2022:</strong> Left Ukraine with no equipment and no professional network, and rebuilt the career from a laptop. <span style="color:#f7d53e">(Resilience +30)</span></li>
+                        <li><strong>THE AI TURN, 2024:</strong> Stopped being only a user of tools and started building them. <span style="color:#f7d53e">(New Class Unlocked)</span></li>
                     </ul>
                 </div>
 
@@ -420,8 +596,11 @@
                 <div class="bio-section">
                     <p class="section-header">/// DEVELOPMENT TEAM</p>
                     <ul class="cv-list">
-                         <li><strong>AD / PM / PRODUCER / VISUAL DEV :</strong> <span style="color:#a3cbf5;"> DMYTRO PYSARTSEV</span></li>
+                         <li><strong>AD / PM / PRODUCER / VISUAL DEV :</strong> <span style="color:#a3cbf5;"> DIMA PYSARTSEV</span></li>
                     </ul>
+                    <p style="margin-top: 15px; color: #888; font-size: 15px; line-height: 1.6; border-left: 2px solid var(--primary-color); padding-left: 15px; max-width: 700px;">
+                        "I've never been a solo executor. I've always been the one who specifies the work, finds who can do it at the level required, and drives it to the result. For eleven years that meant technical documentation for machinists and installers. Now it's AI. <span style="color:#fff;">The executor changed; the method didn't.</span>"
+                    </p>
                 </div>
 
                 <p style="margin-top: 30px; font-size: 14px; color: #666;">© 2026 DMYTRO PYSARTSEV. ALL RIGHTS RESERVED.</p>
@@ -443,7 +622,7 @@
                 <h3 style="color:#f7d53e; font-size: 24px; margin-bottom: 20px;">SUPPORT THE CREATOR PACK</h3>
                 <p style="font-size: 18px; line-height: 1.6;">Purchasing this DLC boosts the artist's morale, productivity, and restores faith in humanity.<br><br><span style="color: #888; font-size: 14px;">(It's not easy to survive as an artist in a world of procedural generation, but coffee helps.)</span></p>
                 <br>
-                <a href="https://buymeacoffee.com/fr0kuc14dn" target="_blank" class="buy-btn" id="donate-btn">BUY COFFEE ($5 or more)</a>
+                <a href="https://buymeacoffee.com/fr0kuc14dn" target="_blank" rel="noopener noreferrer" class="buy-btn" id="donate-btn">BUY COFFEE ($5 or more)</a>
             </div>
             <div class="back-hint" style="text-align: center;">[ESC] BACK</div>
         </div>
@@ -480,6 +659,6 @@
             <input type="text" id="term-input" autocomplete="off" spellcheck="false">
         </div>
     </div>
-<script src="js/script.js?v=2"></script>
+<script src="js/script.js?v=11"></script>
 </body>
 </html>
