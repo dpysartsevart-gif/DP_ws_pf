@@ -1719,7 +1719,10 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     .gallery-sidebar  { width: clamp(500px, 22vw, 700px); }
     .gallery-layout   { gap: clamp(40px, 3vw, 80px); }
     .gallery-viewport { max-width: clamp(1400px, 60vw, 2000px); }
-    #hud-widget       { right: auto; left: 20px; bottom: 38px; } 
+    /* Було: left: 20px — і табло наїжджало на [ BUY DLC ], який теж
+       стоїть унизу зліва. Лишаємо праворуч, як на решті роздільностей,
+       і піднімаємо над копірайтом. */
+    #hud-widget       { right: 20px; left: auto; bottom: 70px; }
 }
 
 /* 4K */
@@ -1995,4 +1998,81 @@ body:has(.sp-gallery img:hover) .cursor-dot {
     .sp-title { font-size: 22px; }
     .sp-status { font-size: 10px; }
     .sp-buy { width: 100%; text-align: center; }
+}
+
+
+/* =========================================================
+   ПОРТАЛ НА DOLADU — кнопка вгорі по центру головного екрана.
+   Свідомо чужа сайту: індиго-скло з дизайн-системи продукту,
+   а не жовтий термінал портфоліо. Це вхід в інший продукт,
+   і він має читатись саме так.
+   ========================================================= */
+.portal-doladu{
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 900;
+
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 7px 16px 7px 10px;
+    text-decoration: none;
+
+    /* primary indigo з DOLADU_DESIGN_SYSTEM §4 — рівень через прозорість */
+    background: rgba(105, 88, 204, 0.10);
+    border: 1px solid rgba(105, 88, 204, 0.34);
+    border-radius: 8px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 22px rgba(0,0,0,0.22);
+    cursor: none;
+    transition: background .22s ease, border-color .22s ease, transform .22s ease, box-shadow .22s ease;
+}
+.portal-doladu img{
+    width: 26px; height: 26px; display: block; flex-shrink: 0;
+    filter: drop-shadow(0 0 6px rgba(247, 213, 62, 0.28));
+}
+.portal-txt{ display: flex; flex-direction: column; line-height: 1.15; }
+.portal-name{
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px; font-weight: bold; letter-spacing: 2px;
+    color: rgba(255,255,255,0.72);
+    transition: color .22s ease;
+}
+.portal-sub{
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px; letter-spacing: 1.5px;
+    color: rgba(163, 203, 245, 0.55);
+    transition: color .22s ease;
+}
+.portal-doladu:hover{
+    background: rgba(105, 88, 204, 0.20);
+    border-color: rgba(105, 88, 204, 0.55);
+    transform: translateX(-50%) translateY(1px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 26px rgba(0,0,0,0.30);
+}
+.portal-doladu:hover .portal-name{ color: #fff; }
+.portal-doladu:hover .portal-sub{ color: var(--accent-color); }
+
+/* Курсор сайту реагує так само, як на решті кнопок */
+body:has(.portal-doladu:hover) .cursor-circle{
+    transform: translate(-50%, -50%) scale(2.5);
+    border-color: #8b7ae0;
+}
+body:has(.portal-doladu:hover) .cursor-dot{
+    background-color: #8b7ae0;
+    transform: translate(-50%, -50%) scale(0.5);
+}
+
+/* На телефоні: по центру, компактніше, і не лізе під кнопку звуку */
+@media (max-width: 1000px) and (pointer: coarse){
+    .portal-doladu{
+        top: auto; bottom: 96px; left: 50%;
+        padding: 8px 16px;
+        background: rgba(105, 88, 204, 0.16);
+        border-color: rgba(105, 88, 204, 0.45);
+    }
+    .portal-doladu:hover{ transform: translateX(-50%); }
 }

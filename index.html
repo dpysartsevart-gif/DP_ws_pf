@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;500;700&family=Teko:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="css/style.css?v=12">
+   <link rel="stylesheet" href="css/style.css?v=14">
 </head>
 <body>
 <!-- Boot sequence overlay -->
@@ -120,6 +120,17 @@
 <p class="role-subtitle sub-1"><span id="typed-subtitle"></span><span class="cursor-blink">|</span></p>
 <p class="role-subtitle sub-2"><span id="typed-subtitle-2"></span><span class="cursor-blink">|</span></p>
             </div>
+
+<!-- Портал на сторінку продукту. Це звичайне посилання на реальну
+     адресу /doladu/ — не підміна дизайну на JS: сторінку індексує пошук,
+     її можна кинути в Discord, і на неї посилається сам застосунок. -->
+<a class="portal-doladu" href="doladu/index.html" aria-label="DoLadu — QA software for 3D pipelines">
+    <img src="assets/doladu_256.png" alt="">
+    <span class="portal-txt">
+        <span class="portal-name">DOLADU</span>
+        <span class="portal-sub">QA SOFTWARE ↗</span>
+    </span>
+</a>
 
 <div class="status-badge">
     <span class="status-dot"></span>
@@ -667,6 +678,6 @@
             <input type="text" id="term-input" autocomplete="off" spellcheck="false">
         </div>
     </div>
-<script src="js/script.js?v=12"></script>
+<script src="js/script.js?v=14"></script>
 </body>
 </html>

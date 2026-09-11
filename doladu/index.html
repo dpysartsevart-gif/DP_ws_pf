@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DoLadu — find what breaks the handoff, before the handoff</title>
+<meta name="description" content="Offline Windows QA and cleanup for 3D projects. One scan scores naming, normals, UVs, texel density, textures, pivots and scale — then fixes what it found. Nothing leaves your machine.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://dpysartsev.art/doladu/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dpysartsev.art/doladu/">
+<meta property="og:title" content="DoLadu — find what breaks the handoff, before the handoff">
+<meta property="og:description" content="Offline Windows QA and cleanup for 3D projects. One scan, one score, then the fixes. Nothing leaves your machine.">
+<meta property="og:image" content="https://dpysartsev.art/doladu/assets/og-doladu.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DoLadu — offline QA for 3D projects">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://dpysartsev.art/doladu/assets/og-doladu.jpg">
+
+<link rel="icon" href="assets/doladu_mark.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/doladu_256.png">
+<link rel="apple-touch-icon" href="assets/doladu_256.png">
+
+<link rel="stylesheet" href="css/portal.css?v=7">
+<script>document.documentElement.className+=" js-reveal";</script>
+</head>
+<body>
+
+<!-- Фон-сцена застосунку. neuralCanvas — жива сітка з хроматичним зсувом. -->
+<div class="scene" aria-hidden="true">
+    <div class="scene__base"></div>
+    <div class="blob blob--purple"></div>
+    <div class="blob blob--cyan"></div>
+    <canvas id="neuralCanvas"></canvas>
+    <div class="scene__dim"></div>
+    <div class="scene__noise"></div>
+    <div class="scene__vig"></div>
+</div>
+
+<header class="topbar" id="topbar">
+    <div class="container topbar__in">
+        <a class="brand" href="./" aria-label="DoLadu">
+            <img src="assets/doladu_lockup.svg" alt="DoLadu">
+        </a>
+        <div class="topbar__right">
+            <a class="back-link" href="https://dpysartsev.art/">◀ Portfolio</a>
+            <a class="btn btn--primary" href="https://doladu.lemonsqueezy.com/" target="_blank" rel="noopener noreferrer">Get DoLadu ↗</a>
+        </div>
+    </div>
+</header>
+
+<div class="wrap">
+
+    <!-- ============ 1 · ГЕРОЙ ============ -->
+    <section class="hero" id="top">
+        <div class="container">
+            <p class="kicker kicker--pink reveal">Offline QA for 3D projects · Windows</p>
+            <h1 class="h-display reveal" data-delay="1">
+                Your FBX has<br>
+                <span class="c-gold">flipped normals.</span><br>
+                <span class="thin">Your DCC says it's fine.</span>
+            </h1>
+            <p class="hero__sub reveal" data-delay="2">
+                Unreal disagrees. Usually the night before handoff.
+            </p>
+            <p class="lead reveal" data-delay="2">
+                DoLadu scans the whole project in one pass and scores it out of 100 —
+                then fixes what it found. It runs on your machine, with the network cable out.
+            </p>
+            <div class="hero__cta reveal" data-delay="3">
+                <a class="btn btn--primary" href="https://doladu.lemonsqueezy.com/" target="_blank" rel="noopener noreferrer">Get DoLadu ↗</a>
+                <a class="btn btn--ghost" href="#checks">See what it checks ↓</a>
+            </div>
+            <div class="hero__meta reveal" data-delay="4">
+                <span><i class="dot"></i> No account, no cloud, no telemetry</span>
+                <span><i class="dot dot--info"></i> Windows · one file</span>
+                <span><i class="dot dot--pink"></i> Licence, not a subscription to a cloud</span>
+            </div>
+        </div>
+        <div class="scroll-hint"><i></i> SCROLL</div>
+    </section>
+
+
+    <!-- ============ 2 · ПРОБЛЕМА (без згадки продукту — свідомо) ============ -->
+    <section class="narrow">
+        <div class="container">
+            <p class="kicker reveal">The expensive part</p>
+            <h2 class="h-big reveal" data-delay="1" style="margin-bottom:28px">The problem was never<br>the <span class="c-gold">modelling</span>.</h2>
+            <p class="body-txt body-txt--wide reveal" data-delay="2">
+                It's the fifty small things between “done” and “delivered”. A normal map in the
+                wrong colour space. Two textures at 4K that should be 1K. A pivot that isn't at
+                the origin. Naming that passes your eye and fails the importer.
+            </p>
+            <p class="body-txt body-txt--wide reveal" data-delay="2">
+                None of them are hard to fix. All of them are hard to <strong>find</strong> —
+                and you find them at the worst possible moment, in someone else's engine,
+                with your name on the file.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- ============ 3 · ОДИН ПРОХІД, ОДНА ОЦІНКА ============ -->
+    <section>
+        <div class="container">
+            <div class="split split--reverse">
+                <div class="split__media reveal reveal--right">
+                    <!-- Відтворений інтерфейс, не скріншот (дизайн-система §6) -->
+                    <div class="sec">
+                        <div class="sec-title" style="--sec-accent:#6958CC">Project Audit · Hero_Character</div>
+                        <div class="score">
+                            <span class="score__num" data-count="87">0</span>
+                            <span class="score__max">/ 100</span>
+                            <span class="score__verdict">Minor issues</span>
+                        </div>
+                        <div class="bar"><i style="width:87%"></i></div>
+                        <div class="sep"></div>
+                        <div class="row"><span class="k">Naming convention</span><span class="v ok">Matches UE profile</span></div>
+                        <div class="row"><span class="k">Normals</span><span class="v ok">Winding uniform</span></div>
+                        <div class="row"><span class="k">UVs · texel density</span><span class="v ok">Within target</span></div>
+                        <div class="row"><span class="k">Pivot at origin</span><span class="v warn">Offset 4.2 cm</span></div>
+                        <div class="row"><span class="k">Texture sizes</span><span class="v warn">2 at 4K, should be 1K</span></div>
+                        <div class="row"><span class="k">Colour space</span><span class="v err">T_Skin_N · sRGB, expected Linear</span></div>
+                        <div class="row"><span class="k">Duplicates · scale</span><span class="v info">Clean · centimetres</span></div>
+                        <div class="sec__foot">
+                            <div class="row" style="padding-left:0;padding-right:0">
+                                <span class="k">Every finding names the file and offers the fix</span>
+                                <span class="v info">as a button</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="split__text reveal" data-delay="1">
+                    <p class="kicker kicker--ok">One pass</p>
+                    <h2 class="h-big">One scan.<br>One number.<br>Then the <span class="c-blue">list</span>.</h2>
+                    <p class="body-txt">
+                        Point it at a project folder. It reads every mesh and every texture once,
+                        then scores the project out of 100 across naming, normals, UVs, texel density,
+                        texture sizes and colour space, duplicates, pivots, scale, collision meshes
+                        and lightmap UVs.
+                    </p>
+                    <p class="body-txt">
+                        The score is the headline. The list under it is the work — every finding
+                        names the file, says what's wrong, and offers the fix as a button.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ 4 · ВИПРАВЛЯЄ, А НЕ ЛИШЕ СКАРЖИТЬСЯ ============ -->
+    <section>
+        <div class="container">
+            <div class="split">
+                <figure class="shot split__media reveal reveal--left">
+                    <img src="assets/shots/audit.jpg" loading="lazy" decoding="async"
+                         alt="DoLadu findings: mesh over budget with pivot off origin, and the fix buttons beside them">
+                    <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/audit.jpg</span></div>
+                    <figcaption><b>Findings</b> — each one names the file, and the fix sits next to it.</figcaption>
+                </figure>
+
+                <div class="split__text reveal" data-delay="1">
+                    <p class="kicker kicker--pink">The difference</p>
+                    <h2 class="h-big">It <span class="c-pink">fixes</span> what it found.</h2>
+                    <p class="body-txt">
+                        Repack ORM. Convert rough ↔ gloss. Resize to power-of-two. Rename to the
+                        UE convention. Move pivots to origin. Flip a normal map's green channel.
+                        Batch-convert formats.
+                    </p>
+                    <p class="body-txt">
+                        Every destructive step is journalled. One command puts it all back —
+                        including the batch you ran twenty minutes ago.
+                    </p>
+                    <p class="note note--ok">
+                        Safe mode is on by default: results go to copies, your originals are never
+                        touched until you say so.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ 5 · ШВИДКІСТЬ ============ -->
+    <section>
+        <div class="container">
+            <div class="split split--reverse">
+                <div class="split__media reveal reveal--left">
+                    <div class="sec">
+                        <div class="sec-title" style="--sec-accent:#40DED3">Measured · 2 meshes / 19 textures</div>
+                        <div class="perf">
+                            <div class="perf__row">
+                                <span class="perf__label">First scan</span>
+                                <span class="perf__track"><i class="perf__fill perf__fill--slow" data-w="100"></i></span>
+                                <span class="perf__val">2.86 s</span>
+                            </div>
+                            <div class="perf__row">
+                                <span class="perf__label">Every tool after</span>
+                                <span class="perf__track"><i class="perf__fill perf__fill--fast" data-w="4"></i></span>
+                                <span class="perf__val">0.06 s</span>
+                            </div>
+                            <div class="perf__row">
+                                <span class="perf__label">Re-read</span>
+                                <span class="perf__track"><i class="perf__fill perf__fill--fast" data-w="1"></i></span>
+                                <span class="perf__val">0.001 s</span>
+                            </div>
+                        </div>
+                        <p class="perf__note">
+                            Measured on a real character, not estimated.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="split__text reveal" data-delay="1">
+                    <p class="kicker kicker--ue5">Speed</p>
+                    <h2 class="h-big">Fast because<br>it reads once.</h2>
+                    <p class="body-txt">
+                        The first scan is cached. Every other tool reads from that cache instead of
+                        touching the disk again.
+                    </p>
+                    <p class="body-txt">
+                        That's the difference between a tool that stalls the app every time you click
+                        something, and one that answers instantly.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ 6 · ВКЛАДКИ — ЗОБРАЖЕННЯ ПО ОДНОМУ ============
+         Текст прокручується, картинка стоїть на місці й змінюється:
+         попередня гасне, наступна напливає. -->
+    <section class="ws" id="workspaces">
+        <div class="container">
+            <p class="kicker reveal">The workspace</p>
+            <h2 class="h-big reveal" data-delay="1" style="margin-bottom:18px">Built like a workspace,<br>not a wizard.</h2>
+            <p class="lead reveal" data-delay="2" style="margin-bottom:10px">
+                Nine workspaces, one project. Each one opens on what it's for and remembers
+                where you left it.
+            </p>
+
+            <div class="ws__grid">
+                <div class="ws__steps">
+                    <article class="ws__step" data-i="0">
+                        <p class="ws__tab" style="--tab:#A3CBF5">Inspector</p>
+                        <h3 class="h-mid">The things a viewport<br>won't show you.</h3>
+                        <p class="body-txt">
+                            Load a mesh and get wireframe, UV and normal overlays, hard edges and open
+                            shells — next to the numbers that decide whether it ships: poly count against
+                            your budget, pivot at origin, winding consistency, units and bounds.
+                        </p>
+                        <p class="ws__solves"><span>Solves</span> “it looked fine in Maya”.</p>
+                    </article>
+
+                    <article class="ws__step" data-i="1">
+                        <p class="ws__tab" style="--tab:#6958CC">Project Tools</p>
+                        <h3 class="h-mid">The batch floor.</h3>
+                        <p class="body-txt">
+                            Duplicates, texture sets, renaming, resizing, format conversion, snapshots —
+                            run across the whole project at once, with a polycount budget check that
+                            shows you every mesh against the limit in one list.
+                        </p>
+                        <p class="ws__solves"><span>Solves</span> the hour you spend renaming files by hand.</p>
+                    </article>
+
+                    <article class="ws__step" data-i="2">
+                        <p class="ws__tab" style="--tab:#19D4A0">UE Tools</p>
+                        <h3 class="h-mid">Checked before<br>the importer sees it.</h3>
+                        <p class="body-txt">
+                            Nanite and Lumen eligibility, lightmap UVs, collision meshes, texture VRAM
+                            against a budget, UE naming with one-click auto-rename, and a DirectX/OpenGL
+                            normal converter that shows before and after rather than asking you to trust it.
+                        </p>
+                        <p class="ws__solves"><span>Solves</span> the import that silently does nothing.</p>
+                    </article>
+
+                    <article class="ws__step" data-i="3">
+                        <p class="ws__tab" style="--tab:#D6B92E">LookDev Tools</p>
+                        <h3 class="h-mid">Stop guessing<br>light values.</h3>
+                        <p class="body-txt">
+                            Exposure, FOV, depth of field, Fresnel curves, F0/IOR, albedo range — the
+                            numbers you paste into the engine. Plus real EV and Lux figures for clear sky,
+                            direct sun, softbox and moonlight, and an HDRI analyzer that finds the
+                            brightest point and gives you sun position and colour temperature.
+                        </p>
+                        <p class="ws__solves"><span>Solves</span> the afternoon spent matching a plate by eye.</p>
+                    </article>
+                </div>
+
+                <div class="ws__media">
+                    <div class="ws__sticky">
+                        <figure class="shot ws__shot is-active" data-i="0">
+                            <img src="assets/shots/inspector.jpg" loading="lazy" decoding="async" alt="DoLadu Inspector tab">
+                            <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/inspector.jpg</span></div>
+                            <figcaption><b>Inspector</b> — budget, topology and metadata on one screen.</figcaption>
+                        </figure>
+                        <figure class="shot ws__shot" data-i="1">
+                            <img src="assets/shots/project-tools.jpg" loading="lazy" decoding="async" alt="DoLadu Project Tools tab">
+                            <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/project-tools.jpg</span></div>
+                            <figcaption><b>Project Tools</b> — the whole project checked at once.</figcaption>
+                        </figure>
+                        <figure class="shot ws__shot" data-i="2">
+                            <img src="assets/shots/ue-tools.jpg" loading="lazy" decoding="async" alt="DoLadu UE Tools tab">
+                            <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/ue-tools.jpg</span></div>
+                            <figcaption><b>UE Tools</b> — naming, LODs and normal maps, validated before import.</figcaption>
+                        </figure>
+                        <figure class="shot ws__shot" data-i="3">
+                            <img src="assets/shots/lookdev.jpg" loading="lazy" decoding="async" alt="DoLadu LookDev Tools tab">
+                            <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/lookdev.jpg</span></div>
+                            <figcaption><b>LookDev</b> — EV/Lux reference and HDRI analysis, in the same window.</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ 7 · ЩО САМЕ ПЕРЕВІРЯЄ — ШТОРКИ З ХЕШТЕГАМИ ============ -->
+    <section id="checks">
+        <div class="container">
+            <p class="kicker reveal">What one scan covers</p>
+            <h2 class="h-big reveal" data-delay="1" style="margin-bottom:46px">Ten checks,<br>one pass over the folder.</h2>
+
+            <div class="acc reveal" data-delay="1">
+                <div class="acc__item is-open">
+                    <button class="acc__head" type="button" aria-expanded="true">
+                        <span class="acc__title"><i>#</i>naming <i>#</i>duplicates</span>
+                        <span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        Files checked against a naming profile — prefixes, texture suffixes, packed maps —
+                        with auto-rename for everything that doesn't conform. Duplicate assets and
+                        oversized files surfaced in the same pass, so you find the copy of a copy before
+                        it ships with the rest.
+                    </div></div>
+                </div>
+
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title"><i>#</i>normals <i>#</i>colourspace</span>
+                        <span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        Winding consistency, so flipped faces are named rather than discovered in
+                        engine. Green channel direction for DirectX against OpenGL, with a before/after
+                        preview. Colour space per map — a normal map sitting in sRGB is caught here,
+                        not in a lighting review.
+                    </div></div>
+                </div>
+
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title"><i>#</i>uvs <i>#</i>texeldensity</span>
+                        <span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        UV channel validation with the UDIM grid, overlap detection, and a texel density
+                        heatmap across the mesh measured against your target rather than against a guess.
+                        Lightmap UVs checked separately, because the engine treats them separately.
+                    </div></div>
+                </div>
+
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title"><i>#</i>pivots <i>#</i>scale <i>#</i>collision</span>
+                        <span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        Pivot position against origin, units and bounding box in centimetres, up-axis read
+                        from the geometry rather than assumed, and collision meshes checked for the naming
+                        and shape the engine expects. A units and axis reference for twelve programs sits
+                        beside it, because that mismatch is where most broken exports begin.
+                    </div></div>
+                </div>
+
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title"><i>#</i>textures <i>#</i>vram</span>
+                        <span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        Texture sizes against what the asset actually needs, power-of-two compliance,
+                        clipped blacks and whites, and total VRAM for the set measured against a budget
+                        you set. Full-depth EXR and 16-bit textures go through OpenImageIO, so a 16-bit
+                        normal map stays 16-bit.
+                    </div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ 8 · ATLAS ============ -->
+    <section class="narrow">
+        <div class="container">
+            <p class="kicker kicker--pink reveal">Moodboard</p>
+            <h2 class="h-big reveal" data-delay="1" style="margin-bottom:28px">Reference boards<br>that do something.</h2>
+            <p class="body-txt body-txt--wide reveal" data-delay="2">
+                Four boards per project. Drop images, notes, colour tags and strokes on an
+                infinite canvas.
+            </p>
+            <p class="body-txt body-txt--wide reveal" data-delay="2">
+                Every board extracts its own palette and exports <span class="num">.ase</span> —
+                the swatches open straight in Photoshop and Substance. The colour tags carry the
+                hex, and you can select the code and copy it.
+            </p>
+            <p class="body-txt body-txt--wide reveal" data-delay="3">
+                It's the reference wall you already keep, except it lives with the project and
+                feeds the rest of the app.
+            </p>
+            <p class="note note--info reveal" data-delay="3">
+                Separately, <b class="c-blue">Atlas</b> is the manual that ships inside the app —
+                what every tool does and when to reach for it, without leaving the window.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- ============ 9 · ОФЛАЙН ============ -->
+    <section class="narrow">
+        <div class="container">
+            <p class="kicker kicker--ok reveal">Privacy</p>
+            <h2 class="h-big reveal" data-delay="1" style="margin-bottom:28px"><span class="c-blue">Nothing</span> leaves<br>your machine.</h2>
+            <p class="body-txt body-txt--wide reveal" data-delay="2">
+                No account. No cloud. No telemetry. It works with the network cable out.
+            </p>
+            <p class="body-txt body-txt--wide reveal" data-delay="2">
+                The only time DoLadu talks to the internet is to check your licence — and if the
+                server is unreachable, it keeps working for two weeks while it retries. An outage
+                on our side is not your problem.
+            </p>
+            <p class="body-txt body-txt--wide reveal" data-delay="3">
+                Your project never uploads anywhere, because there is nowhere for it to go.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- ============ 10 · ФОРМАТИ ============ -->
+    <section class="narrow">
+        <div class="container">
+            <p class="kicker kicker--info reveal">Formats</p>
+            <h2 class="h-big reveal" data-delay="1" style="margin-bottom:34px">Reads what<br>you already have.</h2>
+            <div class="fmt reveal" data-delay="2">
+                <div class="fmt__row"><span class="fmt__k">Meshes</span><span class="fmt__v">FBX · OBJ · GLB/glTF · USD · Alembic · PLY · STL</span></div>
+                <div class="fmt__row"><span class="fmt__k">Textures</span><span class="fmt__v">PNG · TGA · TIFF · PSD · EXR · HDR</span></div>
+                <div class="fmt__row"><span class="fmt__k">Caches</span><span class="fmt__v">VDB · Alembic</span></div>
+            </div>
+            <p class="body-txt body-txt--wide reveal" data-delay="3" style="margin-top:26px">
+                Full-depth EXR and 16-bit textures go through OpenImageIO, so a 16-bit normal map
+                stays 16-bit.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- ============ 11 · ЦІНА ============ -->
+    <section id="pricing">
+        <div class="container">
+            <p class="kicker reveal">Pricing</p>
+            <h2 class="h-big reveal" data-delay="1" style="margin-bottom:44px">The year costs<br><span class="c-pink">six months</span>.</h2>
+
+            <div class="plans">
+                <div class="card plan reveal" data-delay="1">
+                    <p class="plan__name">Monthly</p>
+                    <p class="plan__price">€29.99<span>/ month</span></p>
+                    <p class="plan__note">For one project. Cancel any time.</p>
+                </div>
+                <div class="card plan plan--best reveal" data-delay="2">
+                    <span class="plan__badge">Best value</span>
+                    <p class="plan__name">Yearly</p>
+                    <p class="plan__price">€179.99<span>/ year</span></p>
+                    <p class="plan__note">The year costs six months — save €179.89.</p>
+                </div>
+                <div class="card plan reveal" data-delay="3">
+                    <p class="plan__name">Indie</p>
+                    <p class="plan__price">€599.99<span>/ year</span></p>
+                    <p class="plan__note">5 seats — €120 per artist, per year.</p>
+                </div>
+            </div>
+            <p class="plans__foot reveal" data-delay="3">
+                Sold through Lemon Squeezy, which handles VAT and invoicing as merchant of record.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- ============ 12 · FAQ ============ -->
+    <section class="narrow">
+        <div class="container">
+            <p class="kicker reveal">Before you ask</p>
+            <h2 class="h-mid reveal" data-delay="1" style="margin-bottom:40px">The six questions I get most.</h2>
+
+            <div class="acc acc--faq reveal" data-delay="1">
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title">Does it need the internet?</span><span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        Only to check your licence. If the server is down, DoLadu keeps working for
+                        two weeks while it retries.
+                    </div></div>
+                </div>
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title">Will it touch my files?</span><span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        Not unless you tell it to. Safe mode writes to copies. Everything destructive
+                        is journalled and reversible with one command.
+                    </div></div>
+                </div>
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title">What if I have a 16-bit normal map?</span><span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        It stays 16-bit. Depth-sensitive operations go through OpenImageIO.
+                    </div></div>
+                </div>
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title">Does it work with my DCC?</span><span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        It reads files, not scenes — so it doesn't care whether they came from Blender,
+                        Maya, 3ds Max, Marvelous or Substance.
+                    </div></div>
+                </div>
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title">Mac or Linux?</span><span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">Windows only for now.</div></div>
+                </div>
+                <div class="acc__item">
+                    <button class="acc__head" type="button" aria-expanded="false">
+                        <span class="acc__title">Can I move it to another computer?</span><span class="acc__sign" aria-hidden="true"></span>
+                    </button>
+                    <div class="acc__panel"><div class="acc__inner">
+                        Yes. Sign out on the old machine, activate on the new one.
+                    </div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ 13 · ФІНАЛЬНИЙ ЗАКЛИК ============ -->
+    <section id="get">
+        <div class="container">
+            <div class="card buy reveal">
+                <div class="buy__top">
+                    <div class="buy__text">
+                        <p class="kicker">Get it</p>
+                        <h2 class="h-mid" style="margin-bottom:22px">Find it <span class="c-gold">now</span>,<br>not the night before.</h2>
+                        <ul class="plan-list">
+                            <li>Runs on your machine — no account, no cloud, no telemetry.</li>
+                            <li>A licence you own, not a subscription to someone else's server.</li>
+                            <li>Sold through Lemon Squeezy, which handles VAT and invoicing as merchant of record.</li>
+                        </ul>
+                    </div>
+                    <div class="buy__logo">
+                        <img src="assets/doladu_lockup.svg" alt="DoLadu">
+                        <span class="buy__logo-sub">Windows · one file · works offline</span>
+                    </div>
+                </div>
+
+                <div class="buy__actions">
+                    <a class="btn btn--primary btn--big" href="https://doladu.lemonsqueezy.com/" target="_blank" rel="noopener noreferrer">Get DoLadu ↗</a>
+                    <a class="btn btn--ghost btn--big" href="eula.html">Read the licence</a>
+                    <p class="buy__note">
+                        Questions before you buy —
+                        <a href="mailto:supportdoladu@gmail.com">supportdoladu@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <div class="foot">
+        <span class="foot__links">
+            <a href="eula.html">Licence</a>
+            <a href="https://doladu.lemonsqueezy.com/" target="_blank" rel="noopener noreferrer">Store</a>
+            <a href="https://dpysartsev.art/">Portfolio</a>
+            <a href="mailto:supportdoladu@gmail.com">Support</a>
+        </span>
+        <span class="foot__copy">© 2026 Dmytro Pysartsev — DoLadu</span>
+    </div>
+</footer>
+
+<script src="js/grid.js?v=3"></script>
+<script src="js/portal.js?v=6"></script>
+</body>
+</html>

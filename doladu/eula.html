@@ -44,10 +44,17 @@
     h2{color:#111;} p,li{color:#222;} li::before{background:#666;}
     a{color:#111;text-decoration:underline;}
   }
+  .backbar{margin:0 0 26px;}
+  .backbar a{font-family:var(--mono);font-size:11px;letter-spacing:1.4px;text-transform:uppercase;
+             color:var(--dim);text-decoration:none;border:1px solid var(--rule);border-radius:8px;
+             padding:7px 12px;display:inline-block;transition:.2s;}
+  .backbar a:hover{color:var(--ink);border-color:var(--accent);}
+  @media print{.backbar{display:none;}}
 </style>
 </head>
 <body>
 <div class="wrap">
+<p class="backbar"><a href="./">◀ Back to DoLadu</a></p>
 <header>
   <p class="kicker">DoLadu</p>
   <h1>End User Licence Agreement</h1>
