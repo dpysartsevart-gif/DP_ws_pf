@@ -2002,59 +2002,106 @@ body:has(.sp-gallery img:hover) .cursor-dot {
 
 
 /* =========================================================
-   ПОРТАЛ НА DOLADU — кнопка вгорі по центру головного екрана.
-   Свідомо чужа сайту: індиго-скло з дизайн-системи продукту,
-   а не жовтий термінал портфоліо. Це вхід в інший продукт,
-   і він має читатись саме так.
+   ПОРТАЛ НА DOLADU — ярличок, що звисає з верхнього краю.
+   Спокій: тільки марка й назва, приглушено, щоб не сперечатись
+   із заголовком зліва й кнопками справа.
+   Наведення: з'їжджає вниз, значно більшає, стає чітким і
+   пояснює, що це взагалі за продукт.
+   Кольори індиго — з дизайн-системи DoLadu, свідомо не жовті:
+   це вхід в інший продукт, і він має читатись саме так.
    ========================================================= */
 .portal-doladu{
     position: absolute;
-    top: 18px;
+    top: 0;
     left: 50%;
-    transform: translateX(-50%);
     z-index: 900;
+    width: 186px;
+    padding: 7px 16px 9px;
 
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 11px;
-    padding: 7px 16px 7px 10px;
+    gap: 0;
     text-decoration: none;
+    overflow: hidden;
+    cursor: none;
 
-    /* primary indigo з DOLADU_DESIGN_SYSTEM §4 — рівень через прозорість */
-    background: rgba(105, 88, 204, 0.10);
-    border: 1px solid rgba(105, 88, 204, 0.34);
-    border-radius: 8px;
+    /* Ярличок: зрізаний верх, заокруглений низ */
+    border: 1px solid rgba(105, 88, 204, 0.30);
+    border-top: 0;
+    border-radius: 0 0 10px 10px;
+    background: rgba(105, 88, 204, 0.09);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 22px rgba(0,0,0,0.22);
-    cursor: none;
-    transition: background .22s ease, border-color .22s ease, transform .22s ease, box-shadow .22s ease;
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.07), 0 6px 18px rgba(0,0,0,0.28);
+
+    opacity: 0.68;                     /* у спокої приглушений */
+    transform: translateX(-50%) translateY(0);
+    transition:
+        width      .42s cubic-bezier(.22,.85,.3,1),
+        padding    .42s cubic-bezier(.22,.85,.3,1),
+        transform  .42s cubic-bezier(.22,.85,.3,1),
+        opacity    .34s ease,
+        background .34s ease,
+        border-color .34s ease,
+        box-shadow .34s ease;
 }
+
+.portal-head{ display: flex; align-items: center; gap: 10px; }
 .portal-doladu img{
-    width: 26px; height: 26px; display: block; flex-shrink: 0;
-    filter: drop-shadow(0 0 6px rgba(247, 213, 62, 0.28));
+    width: 20px; height: 20px; display: block; flex-shrink: 0;
+    transition: width .42s cubic-bezier(.22,.85,.3,1), height .42s cubic-bezier(.22,.85,.3,1);
 }
-.portal-txt{ display: flex; flex-direction: column; line-height: 1.15; }
 .portal-name{
     font-family: 'Share Tech Mono', monospace;
-    font-size: 13px; font-weight: bold; letter-spacing: 2px;
-    color: rgba(255,255,255,0.72);
-    transition: color .22s ease;
+    font-size: 12px; font-weight: bold; letter-spacing: 2px;
+    color: rgba(255,255,255,0.66);
+    white-space: nowrap;
+    transition: color .34s ease, font-size .42s cubic-bezier(.22,.85,.3,1);
 }
-.portal-sub{
+
+/* Пояснення — з'являється тільки при наведенні */
+.portal-more{
+    display: block;
+    max-height: 0;
+    opacity: 0;
+    text-align: center;
+    transition: max-height .42s cubic-bezier(.22,.85,.3,1), opacity .3s ease, margin-top .42s ease;
+    margin-top: 0;
+}
+.portal-desc{
+    display: block;
+    font-family: 'Oxanium', monospace;
+    font-size: 12px; line-height: 1.5;
+    color: rgba(255,255,255,0.62);
+    margin-bottom: 10px;
+}
+.portal-go{
+    display: block;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 8px; letter-spacing: 1.5px;
-    color: rgba(163, 203, 245, 0.55);
-    transition: color .22s ease;
+    font-size: 10px; letter-spacing: 2px;
+    color: var(--accent-color);
 }
-.portal-doladu:hover{
-    background: rgba(105, 88, 204, 0.20);
+
+/* --- РОЗГОРНУТИЙ СТАН --- */
+.portal-doladu:hover,
+.portal-doladu:focus-visible{
+    width: 390px;
+    padding: 16px 24px 18px;
+    transform: translateX(-50%) translateY(14px);
+    opacity: 1;
+    background: rgba(105, 88, 204, 0.17);
     border-color: rgba(105, 88, 204, 0.55);
-    transform: translateX(-50%) translateY(1px);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 26px rgba(0,0,0,0.30);
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.12), 0 16px 40px rgba(0,0,0,0.45);
 }
-.portal-doladu:hover .portal-name{ color: #fff; }
-.portal-doladu:hover .portal-sub{ color: var(--accent-color); }
+.portal-doladu:hover img,
+.portal-doladu:focus-visible img{ width: 34px; height: 34px; }
+
+.portal-doladu:hover .portal-name,
+.portal-doladu:focus-visible .portal-name{ font-size: 19px; color: #fff; }
+
+.portal-doladu:hover .portal-more,
+.portal-doladu:focus-visible .portal-more{ max-height: 120px; opacity: 1; margin-top: 14px; }
 
 /* Курсор сайту реагує так само, як на решті кнопок */
 body:has(.portal-doladu:hover) .cursor-circle{
@@ -2066,13 +2113,24 @@ body:has(.portal-doladu:hover) .cursor-dot{
     transform: translate(-50%, -50%) scale(0.5);
 }
 
-/* На телефоні: по центру, компактніше, і не лізе під кнопку звуку */
+/* На телефоні наведення немає — показуємо компактний ярлик унизу,
+   уже розкритий настільки, щоб було зрозуміло, куди він веде. */
 @media (max-width: 1000px) and (pointer: coarse){
     .portal-doladu{
-        top: auto; bottom: 96px; left: 50%;
-        padding: 8px 16px;
-        background: rgba(105, 88, 204, 0.16);
+        top: auto; bottom: 96px;
+        width: auto; max-width: 84%;
+        padding: 10px 18px;
+        border-top: 1px solid rgba(105, 88, 204, 0.45);
+        border-radius: 10px;
+        opacity: 1;
+        background: rgba(105, 88, 204, 0.18);
         border-color: rgba(105, 88, 204, 0.45);
+        transform: translateX(-50%);
     }
-    .portal-doladu:hover{ transform: translateX(-50%); }
+    .portal-doladu img{ width: 24px; height: 24px; }
+    .portal-name{ font-size: 14px; color: rgba(255,255,255,0.9); }
+    .portal-more{ max-height: 40px; opacity: 1; margin-top: 6px; }
+    .portal-desc{ display: none; }
+    .portal-go{ font-size: 9px; }
+    .portal-doladu:hover{ transform: translateX(-50%); width: auto; padding: 10px 18px; }
 }

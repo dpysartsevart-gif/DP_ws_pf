@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;500;700&family=Teko:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="css/style.css?v=14">
+   <link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 <!-- Boot sequence overlay -->
@@ -121,14 +121,18 @@
 <p class="role-subtitle sub-2"><span id="typed-subtitle-2"></span><span class="cursor-blink">|</span></p>
             </div>
 
-<!-- Портал на сторінку продукту. Це звичайне посилання на реальну
-     адресу /doladu/ — не підміна дизайну на JS: сторінку індексує пошук,
-     її можна кинути в Discord, і на неї посилається сам застосунок. -->
-<a class="portal-doladu" href="doladu/index.html" aria-label="DoLadu — QA software for 3D pipelines">
-    <img src="assets/doladu_256.png" alt="">
-    <span class="portal-txt">
+<!-- Портал на сторінку продукту. Звичайне посилання на реальну адресу:
+     сторінку індексує пошук, її можна кинути в Discord, на неї посилається
+     сам застосунок. Вигляд — ярличок, що звисає з верхнього краю; при
+     наведенні з'їжджає вниз, більшає і показує, що це взагалі таке. -->
+<a class="portal-doladu" href="doladu/index.html" aria-label="DoLadu — QA software for the 3D pipeline">
+    <span class="portal-head">
+        <img src="assets/doladu_256.png" alt="">
         <span class="portal-name">DOLADU</span>
-        <span class="portal-sub">QA SOFTWARE ↗</span>
+    </span>
+    <span class="portal-more">
+        <span class="portal-desc">QA software for the 3D pipeline. One scan over the whole project, one score, then the fixes.</span>
+        <span class="portal-go">OPEN PRODUCT PAGE ↗</span>
     </span>
 </a>
 
@@ -678,6 +682,6 @@
             <input type="text" id="term-input" autocomplete="off" spellcheck="false">
         </div>
     </div>
-<script src="js/script.js?v=14"></script>
+<script src="js/script.js?v=15"></script>
 </body>
 </html>
