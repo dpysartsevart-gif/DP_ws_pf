@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;500;700&family=Teko:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="css/style.css?v=15">
+   <link rel="stylesheet" href="css/style.css?v=16">
 </head>
 <body>
 <!-- Boot sequence overlay -->
@@ -121,6 +121,16 @@
 <p class="role-subtitle sub-2"><span id="typed-subtitle-2"></span><span class="cursor-blink">|</span></p>
             </div>
 
+<!-- Рядок статусу. На десктопі обгортка не створює власного блоку
+     (display: contents) — бейдж і портал позиціонуються як і раніше.
+     На телефоні це один рядок: статус зліва, портал справа. -->
+<div class="menu-meta">
+<div class="status-badge">
+    <span class="status-dot"></span>
+    <span class="status-label">STATUS:</span>
+    <span class="status-text">AVAILABLE FOR HIRE</span>
+</div>
+
 <!-- Портал на сторінку продукту. Звичайне посилання на реальну адресу:
      сторінку індексує пошук, її можна кинути в Discord, на неї посилається
      сам застосунок. Вигляд — ярличок, що звисає з верхнього краю; при
@@ -135,11 +145,6 @@
         <span class="portal-go">OPEN PRODUCT PAGE ↗</span>
     </span>
 </a>
-
-<div class="status-badge">
-    <span class="status-dot"></span>
-    <span class="status-label">STATUS:</span>
-    <span class="status-text">AVAILABLE FOR HIRE</span>
 </div>
 
 
@@ -682,6 +687,6 @@
             <input type="text" id="term-input" autocomplete="off" spellcheck="false">
         </div>
     </div>
-<script src="js/script.js?v=15"></script>
+<script src="js/script.js?v=16"></script>
 </body>
 </html>

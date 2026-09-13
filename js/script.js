@@ -325,7 +325,7 @@ window.addEventListener('popstate', (event) => {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX; mouseY = e.clientY;
 
-const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close, .shop-item, .shop-btn, .sp-buy, .contact-link');
+const target = e.target.closest('.menu-item, .dlc-btn, .buy-btn, .alt-toggle-btn, .project-slot, .vp-link, .lightbox-close, .shop-item, .shop-btn, .sp-buy, .contact-link, .portal-doladu');
             // 1. Очищаємо ефект ТІЛЬКИ з тих кнопок, на яких немає курсору
             document.querySelectorAll('.menu-item, .dlc-btn, .buy-btn').forEach(btn => {
                 if (btn !== target) {

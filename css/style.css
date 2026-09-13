@@ -2103,34 +2103,65 @@ body:has(.sp-gallery img:hover) .cursor-dot {
 .portal-doladu:hover .portal-more,
 .portal-doladu:focus-visible .portal-more{ max-height: 120px; opacity: 1; margin-top: 14px; }
 
-/* Курсор сайту реагує так само, як на решті кнопок */
+/* Приціл — золотий, як на решті кнопок: ярличок індиго, але курсор
+   належить сайту. Квадратну форму дає клас .magnetic зі script.js. */
 body:has(.portal-doladu:hover) .cursor-circle{
     transform: translate(-50%, -50%) scale(2.5);
-    border-color: #8b7ae0;
+    border-color: var(--primary-color);
 }
 body:has(.portal-doladu:hover) .cursor-dot{
-    background-color: #8b7ae0;
+    background-color: var(--primary-color);
     transform: translate(-50%, -50%) scale(0.5);
 }
 
-/* На телефоні наведення немає — показуємо компактний ярлик унизу,
-   уже розкритий настільки, щоб було зрозуміло, куди він веде. */
+/* Обгортка рядка статусу: на десктопі її ніби немає — бейдж і ярличок
+   далі позиціонуються відносно екрана, як і до неї. */
+.menu-meta{ display: contents; }
+
+/* ТЕЛЕФОН. Унизу місця немає: на iPhone у Safari (390x664) між CREDITS
+   і підказкою над DLC лишається 18px. Тому портал — маленька плашка
+   в рядку статусу, праворуч від AVAILABLE FOR HIRE: цей рядок від
+   висоти екрана не залежить.
+   :hover на тачі «залипає» після тапу і після повернення «назад»,
+   тому розгорнутий десктопний стан тут скасовано явно. */
 @media (max-width: 1000px) and (pointer: coarse){
-    .portal-doladu{
-        top: auto; bottom: 96px;
-        width: auto; max-width: 84%;
-        padding: 10px 18px;
-        border-top: 1px solid rgba(105, 88, 204, 0.45);
-        border-radius: 10px;
+    .menu-meta{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px 12px;
+        margin-bottom: 25px;
+    }
+    .menu-meta .status-badge{ margin-bottom: 0 !important; }
+
+    .portal-doladu,
+    .portal-doladu:hover,
+    .portal-doladu:focus-visible{
+        position: relative;
+        top: auto; left: auto;
+        width: auto;
+        padding: 6px 11px;
+        margin: -9px 0;          /* плашка вища за рядок, але меню не зсуває */
+        overflow: visible;
+        border: 1px solid rgba(105, 88, 204, 0.50);
+        border-radius: 8px;
         opacity: 1;
         background: rgba(105, 88, 204, 0.18);
-        border-color: rgba(105, 88, 204, 0.45);
-        transform: translateX(-50%);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+        transform: none;
     }
-    .portal-doladu img{ width: 24px; height: 24px; }
-    .portal-name{ font-size: 14px; color: rgba(255,255,255,0.9); }
-    .portal-more{ max-height: 40px; opacity: 1; margin-top: 6px; }
-    .portal-desc{ display: none; }
-    .portal-go{ font-size: 9px; }
-    .portal-doladu:hover{ transform: translateX(-50%); width: auto; padding: 10px 18px; }
+    .portal-doladu:active{ background: rgba(105, 88, 204, 0.34); }
+    /* Запас під палець: плашка 32px, а влучити можна в 48px */
+    .portal-doladu::before{ content: ''; position: absolute; inset: -8px -6px; }
+
+    .portal-head{ gap: 8px; }
+    .portal-doladu img,
+    .portal-doladu:hover img,
+    .portal-doladu:focus-visible img{ width: 18px; height: 18px; }
+    .portal-name,
+    .portal-doladu:hover .portal-name,
+    .portal-doladu:focus-visible .portal-name{ font-size: 12px; color: #fff; }
+    .portal-name::after{ content: ' ↗'; letter-spacing: 0; color: var(--accent-color); }
+    .portal-more{ display: none; }
 }
