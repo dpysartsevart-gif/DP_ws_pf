@@ -1222,7 +1222,8 @@ body::before {
         opacity: 0.6;
         width: 100%;
         position: fixed !important; /* Повертаємо фіксацію, щоб меню не стискалося */
-        bottom: 110px !important; /* Висить рівно над кнопкою DLC */
+        /* Верх нижнього стовпчика: над DOLADU, яке над DLC (змінні — в кінці файлу) */
+        bottom: calc(var(--m-dlc-bottom) + var(--m-dlc-h) + var(--m-portal-h) + 2 * var(--m-stack-gap)) !important;
         left: 0;
         z-index: 100;
     }
@@ -1470,7 +1471,7 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
         margin-bottom: 20px !important;
     }
     .scene-3d-mini, .cursor-dot, .cursor-circle, .footer-hint, .ticker-wrap { display: none !important; }
-    .dlc-wrapper { position: fixed !important; bottom: 50px !important; left: 50% !important; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0; top: auto; }
+    .dlc-wrapper { position: fixed !important; bottom: var(--m-dlc-bottom) !important; left: 50% !important; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; z-index: 100; margin: 0; top: auto; }
     .copyright-fixed { bottom: 15px !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; text-align: center !important; width: 100% !important; color: #666 !important; display: block !important; }
 
 
@@ -1484,9 +1485,18 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
         padding-bottom: 10px !important;
     }
     
+    /* Розмір залежить від висоти екрана: над меню тепер стоїть стовпчик
+       підказка + DOLADU + DLC, і на iPhone у Safari (390x664) повні 32px
+       під нього заїжджали. На високих телефонах (Pixel 7, 412x783) всі три
+       значення впираються в стелю — там меню таке ж, як було.
+       Перший рядок — запас для браузерів без svh. */
     .menu-item { 
-        font-size: 32px !important;
-        padding: 8px 0 !important;
+        font-size: clamp(22px, 8.6vh - 31px, 32px) !important;
+        font-size: clamp(22px, 8.6svh - 31px, 32px) !important;
+        padding: clamp(3px, 2.2vh - 8px, 8px) 0 !important;
+        padding: clamp(3px, 2.2svh - 8px, 8px) 0 !important;
+        margin-bottom: clamp(4px, 3.3vh - 12px, 12px) !important;
+        margin-bottom: clamp(4px, 3.3svh - 12px, 12px) !important;
         border-bottom: 1px solid rgba(255,255,255,0.1); 
         width: 100%; 
         line-height: 1 !important;
@@ -1503,7 +1513,8 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     .slot-thumb { width: 100px; height: 60px; }
     .p-title { font-size: 18px; }
     .settings-list { width: 100%; padding-left: 0; border: none; }
-    .dlc-btn { width: 100%; text-align: center; background: rgba(16, 16, 16, 0.95); border: 2px solid var(--primary-color); padding: 15px; font-size: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
+    /* Рамка 1px і ледь золота: товста жовта перетягувала увагу з меню */
+    .dlc-btn { width: 100%; height: var(--m-dlc-h); display: flex; align-items: center; justify-content: center; background: rgba(16, 16, 16, 0.95); border: 1px solid rgba(247, 213, 62, 0.22); padding: 0 15px; font-size: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
     #email-popup { display: none !important; }
     * { cursor: auto !important; }
 }
@@ -2114,54 +2125,85 @@ body:has(.portal-doladu:hover) .cursor-dot{
     transform: translate(-50%, -50%) scale(0.5);
 }
 
-/* Обгортка рядка статусу: на десктопі її ніби немає — бейдж і ярличок
-   далі позиціонуються відносно екрана, як і до неї. */
-.menu-meta{ display: contents; }
-
-/* ТЕЛЕФОН. Унизу місця немає: на iPhone у Safari (390x664) між CREDITS
-   і підказкою над DLC лишається 18px. Тому портал — маленька плашка
-   в рядку статусу, праворуч від AVAILABLE FOR HIRE: цей рядок від
-   висоти екрана не залежить.
-   :hover на тачі «залипає» після тапу і після повернення «назад»,
-   тому розгорнутий десктопний стан тут скасовано явно. */
+/* ТЕЛЕФОН. Нижній стовпчик знизу вгору:
+   копірайт → [ BUY DLC ] → DOLADU → «seriously, it's way better…».
+   Усі висоти явні, щоб відступи між ними не залежали від шрифтів,
+   які ще вантажаться. DOLADU такої ж ширини, як DLC: обидва — fixed
+   усередині #main-menu, 90% і по центру.
+   :hover на тачі «залипає» після тапу і після «назад», тому
+   розгорнутий десктопний стан тут скасовано явно. */
 @media (max-width: 1000px) and (pointer: coarse){
-    .menu-meta{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 18px 12px;
-        margin-bottom: 25px;
+    :root{
+        --m-dlc-bottom: 50px;
+        --m-dlc-h: 55px;
+        --m-portal-h: 48px;
+        --m-stack-gap: 10px;
     }
-    .menu-meta .status-badge{ margin-bottom: 0 !important; }
 
     .portal-doladu,
     .portal-doladu:hover,
     .portal-doladu:focus-visible{
-        position: relative;
-        top: auto; left: auto;
-        width: auto;
-        padding: 6px 11px;
-        margin: -9px 0;          /* плашка вища за рядок, але меню не зсуває */
-        overflow: visible;
-        border: 1px solid rgba(105, 88, 204, 0.50);
+        position: fixed;
+        top: auto;
+        left: 50%;
+        bottom: calc(var(--m-dlc-bottom) + var(--m-dlc-h) + var(--m-stack-gap));
+        z-index: 100;
+        width: 90%;
+        height: var(--m-portal-h);
+        padding: 0 16px;
+        flex-direction: row;
+        justify-content: center;
+        gap: 14px;
+        border: 1px solid rgba(105, 88, 204, 0.45);
         border-radius: 8px;
         opacity: 1;
-        background: rgba(105, 88, 204, 0.18);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-        transform: none;
+        background: rgba(105, 88, 204, 0.16);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 5px 20px rgba(0,0,0,0.6);
+        transform: translateX(-50%);
     }
-    .portal-doladu:active{ background: rgba(105, 88, 204, 0.34); }
-    /* Запас під палець: плашка 32px, а влучити можна в 48px */
-    .portal-doladu::before{ content: ''; position: absolute; inset: -8px -6px; }
+    .portal-doladu:active{ background: rgba(105, 88, 204, 0.32); }
 
-    .portal-head{ gap: 8px; }
     .portal-doladu img,
     .portal-doladu:hover img,
-    .portal-doladu:focus-visible img{ width: 18px; height: 18px; }
+    .portal-doladu:focus-visible img{ width: 22px; height: 22px; }
     .portal-name,
     .portal-doladu:hover .portal-name,
-    .portal-doladu:focus-visible .portal-name{ font-size: 12px; color: #fff; }
+    .portal-doladu:focus-visible .portal-name{ font-size: 15px; letter-spacing: 3px; color: #fff; }
+
+    /* «OPEN PRODUCT PAGE ↗» в тому ж рядку, через тонкий роздільник */
+    .portal-more,
+    .portal-doladu:hover .portal-more,
+    .portal-doladu:focus-visible .portal-more{
+        max-height: none;
+        opacity: 1;
+        margin-top: 0;
+        padding-left: 14px;
+        border-left: 1px solid rgba(255,255,255,0.16);
+    }
+    .portal-desc{ display: none; }
+    .portal-go{ font-size: 10px; letter-spacing: 2px; white-space: nowrap; }
+}
+
+/* Низькі екрани (iPhone SE у Safari, 375x553): стовпчик нижчий,
+   шапка щільніша — інакше CREDITS іде під кнопки. */
+@media (max-width: 1000px) and (pointer: coarse) and (max-height: 600px){
+    :root{
+        --m-dlc-bottom: 42px;
+        --m-dlc-h: 46px;
+        --m-portal-h: 42px;
+        --m-stack-gap: 8px;
+    }
+    .dlc-btn{ font-size: 16px; }
+    h1.glitch{ font-size: clamp(34px, 10.5vw, 44px) !important; }
+    .role-subtitle.sub-2{ margin-bottom: 12px !important; }
+    .status-badge{ margin-bottom: 14px !important; }
+}
+
+/* Вузькі телефони (320px): «OPEN PRODUCT PAGE» у кнопку не влазить —
+   лишаємо марку зі стрілкою. */
+@media (max-width: 349px) and (pointer: coarse){
+    .portal-more,
+    .portal-doladu:hover .portal-more,
+    .portal-doladu:focus-visible .portal-more{ display: none; }
     .portal-name::after{ content: ' ↗'; letter-spacing: 0; color: var(--accent-color); }
-    .portal-more{ display: none; }
 }
