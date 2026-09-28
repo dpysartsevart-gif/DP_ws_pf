@@ -155,26 +155,52 @@
 
     /* ---------- 3c. ВКЛАДКИ: одне зображення за раз ----------
        Текст прокручується, картинка стоїть (sticky) і змінюється:
-       попередня гасне, наступна напливає справа. Активним вважається
-       крок, найближчий до середини екрана — без стрибків на межах.   */
+       попередня гасне, наступна напливає справа.
+       Активний — крок, у який зараз потрапляє середина екрана (кроки
+       йдуть впритул, тож це однозначно й без стрибків на межах).
+       У довгому кроці два знімки: перша половина кроку — data-sub 0,
+       друга — data-sub 1. Разом із кроком перемикається вкладка
+       в смузі над секцією.                                          */
     var wsSteps  = [].slice.call(document.querySelectorAll('.ws__step'));
     var wsShots  = [].slice.call(document.querySelectorAll('.ws__shot'));
+    var wsTabs   = [].slice.call(document.querySelectorAll('.ws-tabs__tab'));
 
     if (wsSteps.length && wsShots.length) {
-        var wsCurrent = -1;
+        var wsKey = '';
 
         function wsUpdate() {
             var mid = window.innerHeight * 0.5;
-            var best = 0, bestDist = Infinity;
+            var best = -1, bestDist = Infinity, sub = 0;
             for (var i = 0; i < wsSteps.length; i++) {
                 var r = wsSteps[i].getBoundingClientRect();
-                var dist = Math.abs((r.top + r.bottom) / 2 - mid);
+                if (r.top <= mid && r.bottom > mid) { best = i; break; }
+                var dist = Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid));
                 if (dist < bestDist) { bestDist = dist; best = i; }
             }
-            if (best === wsCurrent) return;
-            wsCurrent = best;
+            var step = wsSteps[best];
+            var count = wsShots.filter(function (el) {
+                return el.getAttribute('data-i') === String(best);
+            }).length;
+            if (count > 1) {
+                var rs = step.getBoundingClientRect();
+                var prog = (mid - rs.top) / rs.height;
+                sub = Math.max(0, Math.min(count - 1, Math.floor(prog * count)));
+            }
+
+            var key = best + ':' + sub;
+            if (key === wsKey) return;
+            wsKey = key;
             wsSteps.forEach(function (el, i) { el.classList.toggle('is-active', i === best); });
-            wsShots.forEach(function (el, i) { el.classList.toggle('is-active', i === best); });
+            wsShots.forEach(function (el) {
+                el.classList.toggle('is-active',
+                    el.getAttribute('data-i') === String(best) &&
+                    (el.getAttribute('data-sub') || '0') === String(sub));
+            });
+            wsTabs.forEach(function (el) {
+                var on = el.getAttribute('data-i') === String(best);
+                el.classList.toggle('is-active', on);
+                if (on) el.setAttribute('aria-current', 'true'); else el.removeAttribute('aria-current');
+            });
         }
 
         var wsPending = 0;
@@ -183,6 +209,12 @@
             if (now - wsPending < 90) return;
             wsPending = now;
             wsUpdate();
+        }, { passive: true });
+        // Останній кадр після зупинки скролу — щоб тротлінг не «проковтнув» зміну
+        var wsIdle = 0;
+        window.addEventListener('scroll', function () {
+            clearTimeout(wsIdle);
+            wsIdle = setTimeout(wsUpdate, 140);
         }, { passive: true });
         window.addEventListener('resize', wsUpdate);
         wsUpdate();
