@@ -23,7 +23,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="assets/doladu_256.png">
 <link rel="apple-touch-icon" href="assets/doladu_256.png">
 
-<link rel="stylesheet" href="css/portal.css?v=15">
+<link rel="stylesheet" href="css/portal.css?v=16">
 <script>document.documentElement.className+=" js-reveal";</script>
 </head>
 <body>
@@ -155,13 +155,21 @@
     <!-- ============ 4 · ВИПРАВЛЯЄ, А НЕ ЛИШЕ СКАРЖИТЬСЯ ============ -->
     <section>
         <div class="container">
-            <div class="split">
-                <figure class="shot split__media reveal reveal--left">
-                    <img src="assets/shots/audit-02.jpg" width="1800" height="1387" loading="lazy" decoding="async"
-                         alt="DoLadu Project Audit: pivot, collision and normal problems listed by file, each with a fix button and a Fix all button per group">
-                    <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/audit-02.jpg</span></div>
-                    <figcaption><b>Project Audit</b> — every finding names its file, with a fix beside it and a Fix all per group.</figcaption>
-                </figure>
+            <div class="split split--stack">
+                <div class="split__media shots-stack">
+                    <figure class="shot reveal reveal--left">
+                        <img src="assets/shots/audit-01.jpg" width="1800" height="1380" loading="lazy" decoding="async"
+                             alt="DoLadu Project Audit: a score out of 100 and issues grouped by area — naming, texture sets, resolutions, poly budget, pivots">
+                        <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/audit-01.jpg</span></div>
+                        <figcaption><b>Project Audit</b> — a score out of 100, and every issue grouped by area.</figcaption>
+                    </figure>
+                    <figure class="shot reveal reveal--left">
+                        <img src="assets/shots/audit-02.jpg" width="1800" height="1387" loading="lazy" decoding="async"
+                             alt="DoLadu Project Audit: pivot, collision and normal problems listed by file, each with a fix button and a Fix all button per group">
+                        <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/audit-02.jpg</span></div>
+                        <figcaption><b>Project Audit</b> — every finding names its file, with a fix beside it and a Fix all per group.</figcaption>
+                    </figure>
+                </div>
 
                 <div class="split__text reveal" data-delay="1">
                     <p class="kicker kicker--pink">The difference</p>
@@ -336,14 +344,15 @@
                         </div>
                     </article>
 
-                    <article class="ws__step ws__step--long" id="ws-changelog-qa" data-i="5" style="--n:3">
+                    <article class="ws__step ws__step--long" id="ws-changelog-qa" data-i="5" style="--n:2">
                         <div class="ws__pin">
                             <p class="ws__tab" style="--tab:#FF5555">Changelog | QA</p>
                             <h3 class="h-mid">What changed,<br>and what's still wrong.</h3>
                             <p class="body-txt">
-                                One audit over the whole project: a score out of 100 and every issue grouped
-                                by area, with the file named. Beside it, what changed since the baseline you
-                                set, a CSV you can send, numbered snapshots, and undo for every file operation.
+                                What changed in the project since the baseline you set — files added, modified
+                                and deleted — beside the full warning scan, with every error and warning named
+                                by file and exported as Markdown, HTML or a CSV you can send. Numbered snapshots
+                                keep versions of the asset files, and every file operation can be undone.
                             </p>
                             <p class="ws__solves"><span>Solves</span> the review where nobody knows what changed since Tuesday.</p>
                         </div>
@@ -437,16 +446,11 @@
                             <figcaption><b>VFX Tools</b> — render cost estimated before the job goes to the farm.</figcaption>
                         </figure>
                         <figure class="shot ws__shot" data-i="5" data-sub="0">
-                            <img src="assets/shots/audit-01.jpg" width="1800" height="1380" loading="lazy" decoding="async" alt="DoLadu Project Audit: a score out of 100 and issues grouped by area — naming, texture sets, resolutions, poly budget, pivots">
-                            <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/audit-01.jpg</span></div>
-                            <figcaption><b>Project Audit</b> — a score out of 100, and every issue grouped by area.</figcaption>
-                        </figure>
-                        <figure class="shot ws__shot" data-i="5" data-sub="1">
                             <img src="assets/shots/changelog-01.jpg" width="1800" height="1385" loading="lazy" decoding="async" alt="DoLadu QA scan results: errors and warnings, each with its file and the limit it broke">
                             <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/changelog-01.jpg</span></div>
                             <figcaption><b>Changelog | QA</b> — every error and warning with its file; the report exports to CSV.</figcaption>
                         </figure>
-                        <figure class="shot ws__shot" data-i="5" data-sub="2">
+                        <figure class="shot ws__shot" data-i="5" data-sub="1">
                             <img src="assets/shots/changelog-02.jpg" width="1800" height="1378" loading="lazy" decoding="async" alt="DoLadu Changelog: files added, modified and deleted since the baseline, with an activity calendar">
                             <div class="shot__ph"><span class="ph-label">Screenshot slot</span><span class="ph-file">doladu/assets/shots/changelog-02.jpg</span></div>
                             <figcaption><b>Changelog | QA</b> — what changed in the project since the baseline.</figcaption>
