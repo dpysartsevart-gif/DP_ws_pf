@@ -182,8 +182,14 @@
                 return el.getAttribute('data-i') === String(best);
             }).length;
             if (count > 1) {
-                var rs = step.getBoundingClientRect();
-                var prog = (mid - rs.top) / rs.height;
+                /* Знімки ділять між собою лише той шлях, поки текст пришпилений:
+                   від моменту, коли верх кроку дійшов до середини екрана, і до
+                   того, як текст відпустить. Інакше останній знімок міняється
+                   вже після того, як текст виїхав. */
+                var rs  = step.getBoundingClientRect();
+                var pin = step.querySelector('.ws__pin');
+                var travel = rs.height - (pin ? pin.offsetHeight : 0);
+                var prog = travel > 0 ? (mid - rs.top) / travel : 0;
                 sub = Math.max(0, Math.min(count - 1, Math.floor(prog * count)));
             }
 
