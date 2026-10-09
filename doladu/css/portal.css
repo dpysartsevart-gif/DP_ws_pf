@@ -215,8 +215,8 @@ h1,h2,h3{ font-family:var(--sans); font-weight:700; line-height:1.02; letter-spa
    ============================================================ */
 .btn{
     display:inline-flex; align-items:center; gap:10px;
-    height:44px; padding:0 20px; border-radius:var(--r-btn);
-    font-family:var(--mono); font-weight:500; font-size:11px;
+    height:50px; padding:0 26px; border-radius:var(--r-btn);
+    font-family:var(--mono); font-weight:500; font-size:12.5px;
     letter-spacing:1px; text-transform:uppercase; text-decoration:none;
     transition: background .18s ease, border-color .18s ease, color .18s ease;
     white-space:nowrap;
@@ -226,26 +226,29 @@ h1,h2,h3{ font-family:var(--sans); font-weight:700; line-height:1.02; letter-spa
    кнопка читається з першого погляду, але без неону й без пульсації.
    Те саме індиго, що й скрізь; світлішає знизу вгору, як скло в застосунку. */
 .btn--primary{
-    background: linear-gradient(180deg, rgba(128,111,232,0.58) 0%, rgba(105,88,204,0.40) 100%);
-    border:1px solid rgba(164,150,246,0.62);
+    background: linear-gradient(180deg, rgba(112,172,242,0.50) 0%, rgba(72,132,212,0.34) 100%);
+    border:1px solid rgba(163,203,245,0.58);
     color: #fff;
     font-weight:600;
-    text-shadow: 0 1px 0 rgba(20,14,60,0.35);
+    text-shadow: 0 1px 0 rgba(10,24,52,0.40);
     box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.22),
-        0 6px 22px rgba(105,88,204,0.34);
+        0 6px 22px rgba(80,150,230,0.26);
     transition: background .2s ease, border-color .2s ease, box-shadow .25s ease, transform .2s ease;
 }
 .btn--primary:hover{
-    background: linear-gradient(180deg, rgba(146,130,246,0.72) 0%, rgba(118,101,220,0.52) 100%);
-    border-color: rgba(190,178,255,0.85);
+    background: linear-gradient(180deg, rgba(134,192,250,0.64) 0%, rgba(90,152,228,0.46) 100%);
+    border-color: rgba(196,224,255,0.85);
     box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.30),
-        0 8px 30px rgba(105,88,204,0.50);
+        0 8px 30px rgba(80,150,230,0.42);
     transform: translateY(-1px);
 }
-.btn--primary:active{ transform:none; background: linear-gradient(180deg, rgba(105,88,204,0.62), rgba(92,76,190,0.50)); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 3px 12px rgba(105,88,204,0.30); }
-.btn--primary:focus-visible{ outline:2px solid #A3CBF5; outline-offset:3px; }
+.btn--primary:active{ transform:none; background: linear-gradient(180deg, rgba(88,150,226,0.56), rgba(70,128,206,0.46)); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 3px 12px rgba(80,150,230,0.26); }
+.btn--primary:focus-visible{ outline:2px solid var(--pink); outline-offset:3px; }
+/* Стрілка в назві — рожева, третій колір марки */
+.btn__arrow{ color:var(--pink); font-size:1.25em; line-height:1; font-weight:700; text-shadow:none; transition:transform .2s ease; }
+.btn--primary:hover .btn__arrow{ transform:translate(2px,-2px); }
 
 .btn--ghost{
     background: rgba(255,255,255,0.02);
@@ -275,7 +278,7 @@ h1,h2,h3{ font-family:var(--sans); font-weight:700; line-height:1.02; letter-spa
 .brand{ display:flex; align-items:center; text-decoration:none; }
 .brand img{ height:26px; width:auto; display:block; }   /* лого з повною назвою */
 .topbar__right{ display:flex; align-items:center; gap:10px; }
-.topbar .btn{ height:34px; padding:0 14px; font-size:10px; }
+.topbar .btn{ height:40px; padding:0 18px; font-size:11px; }
 
 /* Повернення на портфоліо */
 .back-link{
@@ -316,11 +319,19 @@ h1,h2,h3{ font-family:var(--sans); font-weight:700; line-height:1.02; letter-spa
    ============================================================ */
 .split{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(30px,5vw,80px); align-items:center; }
 .split--reverse .split__media{ order:2; }
-/* Два знімки в одній колонці: текст пришпилений і тримається збоку,
-   поки вони по черзі пропливають повз. */
-.split--stack{ align-items:start; }
-.shots-stack{ display:grid; gap:clamp(22px,2.4vw,40px); }
-.split--stack .split__text{ position:sticky; top:calc(50vh - 190px); }
+/* Два знімки по черзі: сцена (текст + знімок) пришпилена по центру екрана,
+   а під нею прокручується доріжка. Висота доріжки росте з кількістю знімків. */
+.swap{ min-height:calc(40vh + 70vh * var(--n, 2)); }
+.swap__stage{ position:sticky; top:50vh; transform:translateY(-50%); }
+.swap__media{ display:grid; }
+.swap-shot{
+    grid-area:1 / 1; align-self:start; margin:0;
+    opacity:0; transform:translate3d(-42px,0,0) scale(.985);
+    transition:opacity .75s cubic-bezier(.22,.85,.3,1), transform .75s cubic-bezier(.22,.85,.3,1);
+    pointer-events:none;
+}
+.swap-shot .shot__ph{ aspect-ratio:1800 / 1383; }
+.swap-shot.is-active{ opacity:1; transform:translate3d(0,0,0) scale(1); pointer-events:auto; }
 .split--reverse .split__text{ order:1; }
 .split__text .kicker{ margin-bottom:20px; }
 .split__text h2{ margin-bottom:20px; }
@@ -507,7 +518,10 @@ footer{ border-top:1px solid rgba(255,255,255,0.06); padding:34px 0 46px;
    ============================================================ */
 @media (max-width: 900px){
     .split{ grid-template-columns:1fr; gap:34px; }
-    .split--stack .split__text{ position:static; }
+    .swap{ min-height:0; }
+    .swap__stage{ position:static; transform:none; }
+    .swap__media{ display:block; }
+    .swap-shot{ opacity:1; transform:none; pointer-events:auto; margin-bottom:18px; }
     .split--reverse .split__media,
     .split--reverse .split__text{ order:initial; }
     .buy__grid{ grid-template-columns:1fr; }
@@ -897,7 +911,7 @@ html:not(.js-reveal) .acc__panel{ height:auto; }
     border-top:1px solid rgba(255,255,255,0.08);
     display:flex; align-items:center; gap:14px; flex-wrap:wrap;
 }
-.btn--big{ height:52px; padding:0 26px; font-size:12px; }
+.btn--big{ height:58px; padding:0 32px; font-size:14px; }
 .buy__actions .buy__note{ margin-left:auto; max-width:38ch; text-align:right; }
 @media (max-width:860px){
     .buy__top{ grid-template-columns:1fr; }

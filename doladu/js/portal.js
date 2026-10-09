@@ -226,6 +226,38 @@
         wsUpdate();
     }
 
+    /* ---------- 3d. ЗНІМКИ ПО ЧЕРЗІ (не вкладки) ----------
+       Сцена пришпилена по центру, доки під нею їде доріжка [data-swap];
+       знімки ділять між собою шлях, поки сцена стоїть. На вузькому екрані
+       сцена звичайна (position не sticky) — тоді показано всі підряд.   */
+    var swaps = [].slice.call(document.querySelectorAll('[data-swap]'));
+    function swapUpdate() {
+        swaps.forEach(function (track) {
+            var stage = track.querySelector('.swap__stage');
+            var shots = [].slice.call(track.querySelectorAll('.swap-shot'));
+            if (!stage || shots.length < 2) return;
+            if (getComputedStyle(stage).position !== 'sticky') return;
+            var r = track.getBoundingClientRect();
+            var travel = r.height - stage.offsetHeight;
+            var p = travel > 0 ? (window.innerHeight / 2 - r.top) / travel : 0;
+            var k = Math.max(0, Math.min(shots.length - 1, Math.floor(p * shots.length)));
+            shots.forEach(function (el, i) { el.classList.toggle('is-active', i === k); });
+        });
+    }
+    if (swaps.length) {
+        var swapLast = 0, swapIdle = 0;
+        window.addEventListener('scroll', function () {
+            var now = Date.now();
+            clearTimeout(swapIdle);
+            swapIdle = setTimeout(swapUpdate, 140);
+            if (now - swapLast < 90) return;
+            swapLast = now;
+            swapUpdate();
+        }, { passive: true });
+        window.addEventListener('resize', swapUpdate);
+        swapUpdate();
+    }
+
     /* ---------- 4. ШАПКА: підкладка після скролу ---------- */
     var topbar = document.getElementById('topbar');
     if (topbar) {
