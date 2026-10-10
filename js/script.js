@@ -823,9 +823,9 @@ const journalScreen = document.getElementById('journal-screen');
             sub: 'Software for 3D Pipeline and QA',
             status: { text: 'AVAILABLE', tone: 'ok' },
             tags: ['DESKTOP APP', 'WINDOWS', 'WORKS OFFLINE', 'NO TELEMETRY'],
-            images: [],
+            images: ['doladu_audit.jpg'],
             desc: `
-                <p class="sp-lead">It saves you hours on every project — and your hours are your money.</p>
+                <p class="sp-lead">It saves you hours on every project — and your hours are your money. <a href="https://dpysartsev.art/doladu/index.html" target="_blank" rel="noopener noreferrer">Full product page ↗</a></p>
                 <p>A single control center for a 3D project. <strong>DOLADU</strong> ("to put things in order") scans an entire project in one pass, tells you what is broken, and gives you a button to fix it — instead of opening files one by one and hoping.</p>
                 <p>Every mistake caught before delivery is a revision you don't do for free, a re-export you don't run at midnight, and a client email you never have to write.</p>
                 <p class="sp-section">/// ONE PROJECT AUDIT</p>

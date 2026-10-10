@@ -1946,6 +1946,8 @@ h2 { font-size: 26px !important; margin-bottom: 15px !important; border: none !i
     margin-bottom: 20px !important;
 }
 .sp-desc strong { color: #fff; }
+.sp-desc a { color: var(--accent-color); text-decoration: none; border-bottom: 1px solid rgba(163, 203, 245, 0.4); white-space: nowrap; transition: color 0.2s, border-color 0.2s; }
+.sp-desc a:hover { color: var(--primary-color); border-bottom-color: var(--primary-color); }
 .sp-desc ul { list-style: none; margin: 10px 0 18px 0; }
 .sp-desc li { color: #ccc; font-size: 15px; line-height: 1.5; margin-bottom: 7px; padding-left: 18px; position: relative; }
 .sp-desc li::before { content: "▸"; color: var(--primary-color); position: absolute; left: 0; }
