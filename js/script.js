@@ -855,7 +855,7 @@ const journalScreen = document.getElementById('journal-screen');
                 ['ROLE', 'PRODUCT OWNER / ARCHITECT / QA']
             ],
             price: 'PRICING <span>— SEE STORE PAGE</span>',
-            link: 'https://doladu.lemonsqueezy.com/checkout',
+            link: 'https://doladu.lemonsqueezy.com/checkout/buy/a9c2a3e0-8431-41ec-8bfe-f57ba2a1a37d',
             btn: '[ OPEN STORE ↗ ]',
             tone: 'gold'
         },
