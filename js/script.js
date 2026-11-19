@@ -855,7 +855,7 @@ const journalScreen = document.getElementById('journal-screen');
                 ['ROLE', 'PRODUCT OWNER / ARCHITECT / QA']
             ],
             price: 'PRICING <span>— SEE STORE PAGE</span>',
-            link: 'https://doladu.lemonsqueezy.com/checkout/buy/a9c2a3e0-8431-41ec-8bfe-f57ba2a1a37d',
+            link: 'https://buy.polar.sh/polar_cl_NhGwPVQgYIbxmg7NK5MDjSxFiaqYhhoP7xu322Sx2zt',
             btn: '[ OPEN STORE ↗ ]',
             tone: 'gold'
         },
@@ -1814,7 +1814,7 @@ case 'doladu':
     printToTerminal('PAYOFF    : saves hours on every project.', 'term-sys');
     printToTerminal('            your hours are your money.', 'term-sys');
     printToTerminal('ROLE      : product owner / architect / QA');
-    printToTerminal('STORE     : doladu.lemonsqueezy.com');
+    printToTerminal('STORE     : polar.sh');
     break;
 case 'status':
     printToTerminal('> SYSTEM STATUS REPORT:', 'term-sys');
