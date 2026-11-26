@@ -660,6 +660,45 @@ function goBack() {
 
 // === JOURNAL DATA ===
     const journalData = {
+        'doladu': `
+            <div class="journal-entry-wrap">
+                <h3 class="journal-h3">/// DOLADU</h3>
+                <p class="journal-note">DEV LOG: why I built it, what it solves and where it is going.</p>
+                <div class="sp-desc">
+                    <h4 class="journal-h4">Why the idea of DoLadu came up</h4>
+                    <p>As a 3D artist, I know well that building a project means doing a lot of routine work. At the same time, the profession of a 3D artist is very demanding, and 3D art is still an art: the amount of knowledge and skill is huge, software is updated every six months or every year, new tools, pipelines and workflows keep appearing, and all of it has to be learned and kept in your head. When technical routine takes too much attention, energy and time, interest and engagement can drop. I wanted to speed up or remove that routine, so I could focus on the creative work without wasting extra energy.</p>
+
+                    <h4 class="journal-h4">Problems with the existing process</h4>
+                    <ul>
+                        <li><strong>Scattered tools and checks:</strong> the tools for checking errors or the state of a project live in different programs and windows, and sometimes you have to wait for the results.</li>
+                        <li><strong>Errors after the bake and costly iterations:</strong> 3D work is not a linear pipeline (high poly → low poly → UV → baking → texturing). It is a constant stream of iterations in every direction, going back to earlier stages to fix mistakes. When errors only show up after the bake, it is inconvenient and takes time.</li>
+                        <li><strong>Hard mesh checks and time tracking:</strong> a project collects many models from different stages and variations, and loading them into your main software to check them takes a long time. Keeping track of time is just as awkward: I did not always use time trackers and wrote down hours per stage in a notebook every day. Adding up the time by hand is tedious, yet you need that data to give a client more accurate information.</li>
+                        <li><strong>Slow alternatives:</strong> existing open libraries (for example, for remeshing or error checking) often take much longer.</li>
+                    </ul>
+
+                    <h4 class="journal-h4">How DoLadu solves these problems</h4>
+                    <ul>
+                        <li><strong>Everything in one window, on a fast engine:</strong> a dedicated engine was built for the product. It runs much faster than the alternatives and shows errors and potential problems right away, including before the bake, at the very start or while you work with meshes. All in one window: fast, precise and visual, helping you explain, show and fix a problem without unnecessary technical complexity.</li>
+                        <li><strong>Different stages, UVs and packers:</strong> there are tools for quick general information, error checking, the load your model puts on Unreal Engine, Unreal Engine naming, texel and normal checks, sequences, and LookDev and VFX tasks. There is also a separate UV analysis that shows errors visually, many automatic packer setups for specific tasks (tuned for hard surface, for organic models, or combined), and a dedicated algorithm that creates UVs for stylized hair — something that used to be done by hand and now takes a few clicks, including for procedural texturing.</li>
+                        <li><strong>Dashboard and automatic reports:</strong> a simple dashboard shows at least the state of the project, the current stage and the time spent in different programs. DoLadu tracks the time in your software by itself and builds an automated report for the client with one button.</li>
+                        <li><strong>Local and private:</strong> at this stage DoLadu has no AI, because the main goal was to make the software completely private and self-contained, working only on the user's own computer. Everyone works under NDAs and contracts, so local processing helps keep security requirements.</li>
+                        <li><strong>Easy start:</strong> just point it at the project folder. The program works only with that folder, scanning and checking 3D files, meshes, textures, images, video and VFX elements, and builds an accurate report.</li>
+                    </ul>
+
+                    <h4 class="journal-h4">Who it is for</h4>
+                    <ul>
+                        <li><strong>Freelance 3D artists:</strong> it helps with everyday client work — keeping project requirements in view, checking against them quickly and judging how close the result is to what is needed.</li>
+                        <li><strong>Small indie studios:</strong> they often have no internal system of their own, or not enough people for constant QA, so the tool saves the team a lot of time.</li>
+                        <li><strong>Beginners in 3D:</strong> it highlights mistakes while you work and right from the start, helping you understand what is wrong and why, and raising productivity, speed and quality.</li>
+                    </ul>
+
+                    <h4 class="journal-h4">Value and plans</h4>
+                    <p>The main goal of DoLadu is to give you a tool <strong>that saves time, and therefore money</strong>. It usually saves at least a few hours per project (and tens of hours on large ones), while a year of it costs only a few hours of your work.</p>
+                    <p>Development continues, and there are many long-term plans: even more tools, the ability to work on one project together, and modules for automatic and manual retopology (for regular models and for retopology of clothing from Marvelous Designer). There is a clear vision of how the product should look in the future, and how universally and in real time it will be able to integrate with different software.</p>
+                    <p><a href="https://getdoladu.com/" target="_blank" rel="noopener noreferrer">getdoladu.com ↗</a></p>
+                </div>
+            </div>
+        `,
         'blog': `
             <div class="journal-entry-wrap">
                 <h3 class="journal-h3" style="color: #ff3d00;">/// PERSONAL BLOG</h3>
@@ -772,9 +811,9 @@ const journalScreen = document.getElementById('journal-screen');
         });
     });
 
-// Автоматично завантажуємо ARTIST PATH при відкритті сторінки
-    if(journalContent && journalData['artist_path']) {
-        journalContent.innerHTML = journalData['artist_path'];
+// Автоматично завантажуємо статтю DOLADU при відкритті сторінки
+    if(journalContent && journalData['doladu']) {
+        journalContent.innerHTML = journalData['doladu'];
     }
 
 // Кнопка НАЗАД для мобільної версії Журналу
@@ -826,36 +865,38 @@ const journalScreen = document.getElementById('journal-screen');
             images: ['doladu_audit.jpg'],
             desc: `
                 <p class="sp-lead">It saves you hours on every project — and your hours are your money. <a href="https://getdoladu.com/" target="_blank" rel="noopener noreferrer">Full product page ↗</a></p>
-                <p>A single control center for a 3D project. <strong>DOLADU</strong> ("to put things in order") scans an entire project in one pass, tells you what is broken, and gives you a button to fix it — instead of opening files one by one and hoping.</p>
+                <p>Offline QA for 3D projects. <strong>DOLADU</strong> ("to put things in order") scans the whole project in one pass, scores it out of 100, fixes what it can in a click and shows you exactly where to look for the rest.</p>
                 <p>Every mistake caught before delivery is a revision you don't do for free, a re-export you don't run at midnight, and a client email you never have to write.</p>
                 <p class="sp-section">/// ONE PROJECT AUDIT</p>
-                <p>One scan → <strong>10 checks</strong> → a <strong>0–100 delivery score</strong> with a verdict: READY / MINOR ISSUES / NEEDS WORK / BLOCKED. Every finding in the report has its own repair button for that exact file. The scan is cached, so every other tool runs off it instantly.</p>
+                <p>Naming, normals, UVs, texel density, texture sizes and colour space, duplicates, pivots, scale, collision meshes and lightmap UVs — <strong>one scan, one number, then the list</strong>. Every finding names the file, and the fixable ones get a button. Safe mode writes copies; changes made in place are journaled and can be undone.</p>
                 <p class="sp-section">/// WHAT'S INSIDE</p>
                 <ul>
-                    <li><strong>Inspector</strong> — poly count vs. budget, n-gons, open edges, winding consistency, pivot &amp; axis checks, units and bounds, OBJ/FBX metadata, plus one-click fixes (Set Pivot, Fix Axis, Flip Green Channel).</li>
-                    <li><strong>3D Viewer</strong> — real-time viewer with SOLID / X-RAY / HIDDEN modes, texel density heatmap, 2D UV layout with UDIM grid and overlap audit, skeletal animation and morph targets.</li>
-                    <li><strong>Texture &amp; Mesh analysis</strong> — broken values, gamma, clipped blacks and whites; auto-adaptation of models between engines (orientation, scale, cm/m).</li>
-                    <li><strong>Project Tools</strong> — batch renaming to Unreal naming conventions (prefixes, texture suffixes), duplicate and heavy-file finder.</li>
-                    <li><strong>LookDev &amp; VFX</strong> — color and EXR analysis, HDRI hotspot finder, motion blur and depth-of-field calculators, color space / LUT checker, sequence gap finder, Copy-as-Python snippets.</li>
-                    <li><strong>Moodboard &amp; Project Health</strong> — reference board with automatic palette extraction, plus a visual metrics board for the whole project.</li>
-                    <li><strong>Dashboard</strong> — tasks, deadlines, progress and time tracking across <strong>16 DCC apps</strong>, with day / week / month statistics.</li>
-                    <li><strong>Team contract</strong> — one <strong>pipeline.json</strong> defines prefixes, poly budgets, required maps and texel density targets. The GUI and the headless CLI validate against the same file, so lead's rules survive all the way into CI.</li>
-                    <li><strong>Safety</strong> — every tool that writes to disk is journaled, and the Undo Center explains in plain words what a rollback will restore.</li>
+                    <li><strong>Inspector &amp; 3D View</strong> — poly count against your budget, pivot, winding, units and bounds. Mesh problems are painted on the exact faces, each kind in its own colour.</li>
+                    <li><strong>UV Editor</strong> — opens inside the 3D View: cut, unwrap, pin, pack and audit, including a dedicated layout for hair locks.</li>
+                    <li><strong>Bake</strong> — high-poly to finished maps: normal, AO, curvature, ID, height, colour and a packed ORM. Every pair is checked before a single ray is cast.</li>
+                    <li><strong>Project Tools</strong> — texture sets, batch renaming, resizing, format conversion, duplicates and snapshots across the whole project.</li>
+                    <li><strong>UE Tools</strong> — naming, Nanite and Lumen eligibility, lightmap UVs, collision meshes and texture VRAM against a budget.</li>
+                    <li><strong>LookDev &amp; VFX</strong> — PBR and lighting reference values, colour checks, EXR metadata, sequence gaps, render passes and render cost.</li>
+                    <li><strong>Changelog, Dashboard, Project Health</strong> — what changed since your baseline, time per program and stage, deadlines, client time reports and a delivery forecast.</li>
+                    <li><strong>Moodboard</strong> — reference boards with notes and colour tags; every board extracts its palette and exports .ase.</li>
+                    <li><strong>Team contract</strong> — one <strong>pipeline.json</strong> holds naming, budgets, required folders and texture maps. The app and the command-line check read the same file.</li>
                 </ul>
-                <p>Runs fully offline. No account, no cloud, no telemetry.</p>
+                <p class="sp-section">/// OWN GEOMETRY ENGINE</p>
+                <p><strong>Doladu3dr</strong> reads, checks and rewrites meshes. In a file-parsing benchmark on 767 real OBJ files it returned the same data as the open-source library trimesh in one seventh of the time.</p>
+                <p>Runs on your machine — no account, no cloud, no telemetry. The internet is used only to activate and check the licence and to look for updates; if the server is unreachable, DoLadu keeps working for seven days.</p>
             `,
             specs: [
-                ['TOOL ACTIONS', '161'],
-                ['WORK TABS', '9 (+ FAVORITES)'],
-                ['SUPPORTED FORMATS', '32'],
-                ['TEXTURE SUFFIX RULES', '162'],
-                ['DCC APPS MONITORED', '16'],
-                ['CACHED TOOL RUNTIME', '2.86 s → 0.06 s'],
+                ['PLATFORM', 'WINDOWS 10 64-BIT (1809) OR NEWER'],
+                ['MEMORY', '8 GB RAM'],
+                ['STORAGE', '1.5 GB FREE'],
+                ['MESHES', 'FBX · OBJ · GLB/GLTF · USD · ALEMBIC · PLY · STL'],
+                ['TEXTURES', 'PNG · TGA · TIFF · PSD · EXR · HDR'],
+                ['CACHES', 'VDB · ALEMBIC'],
                 ['WHAT IT BUYS YOU', 'HOURS BACK, EVERY PROJECT'],
                 ['ROLE', 'PRODUCT OWNER / ARCHITECT / QA']
             ],
-            price: 'PRICING <span>— SEE STORE PAGE</span>',
-            link: 'https://buy.polar.sh/polar_cl_NhGwPVQgYIbxmg7NK5MDjSxFiaqYhhoP7xu322Sx2zt',
+            price: '€179.99 / YEAR <span>— MONTHLY €29.99 · INDIE €599.99 (5 SEATS)</span>',
+            link: 'https://buy.polar.sh/polar_cl_NhGwPVQgYIbxmg7NK5MDjSxFiaqYhhoP7xu322Sx2zt?product_id=0d4da41b-909e-488f-9207-e2453c5d796a',
             btn: '[ OPEN STORE ↗ ]',
             tone: 'gold'
         },
